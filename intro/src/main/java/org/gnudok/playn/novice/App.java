@@ -1,4 +1,4 @@
-package org.gnudock.playn.novice;
+package org.gnudok.playn.novice;
 
 /**
  * Hello world!

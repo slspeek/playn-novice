@@ -1,4 +1,4 @@
-package org.gnudock.playn.novice;
+package org.gnudok.playn.novice;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
