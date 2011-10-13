@@ -1,0 +1,16 @@
+syntax: glob
+grapher/src/site/resources/*.png
+extras/*
+target/*
+*/target/*
+*/bin/*
+*.orig
+.settings/*
+server/.externalToolBuilders/*
+server/.settings/*
+peer/peer*.log*
+*~
+*/appengine-generated/*
+*/META-INF/MANIFEST.MF
+*/.externalToolBuilders
+
