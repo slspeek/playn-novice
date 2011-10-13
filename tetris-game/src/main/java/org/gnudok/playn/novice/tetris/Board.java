@@ -39,7 +39,7 @@ public class Board extends JPanel implements ActionListener {
 
        setFocusable(true);
        curPiece = new Shape();
-       timer = new Timer(400, this);
+       timer = new Timer(500, this);
        timer.start(); 
 
        statusbar =  parent.getStatusBar();
@@ -111,7 +111,7 @@ public class Board extends JPanel implements ActionListener {
         }
 
         if (curPiece.getShape() != Tetrominoes.NoShape) {
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < 5; ++i) {
                 int x = curX + curPiece.x(i);
                 int y = curY - curPiece.y(i);
                 drawSquare(g, 0 + x * squareWidth(),
@@ -147,7 +147,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void pieceDropped()
     {
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 5; ++i) {
             int x = curX + curPiece.x(i);
             int y = curY - curPiece.y(i);
             board[(y * BoardWidth) + x] = curPiece.getShape();
@@ -175,7 +175,7 @@ public class Board extends JPanel implements ActionListener {
 
     private boolean tryMove(Shape newPiece, int newX, int newY)
     {
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 5; ++i) {
             int x = newX + newPiece.x(i);
             int y = newY - newPiece.y(i);
             if (x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
@@ -225,10 +225,10 @@ public class Board extends JPanel implements ActionListener {
 
     private void drawSquare(Graphics g, int x, int y, Tetrominoes shape)
     {
-        Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102), 
-            new Color(102, 204, 102), new Color(102, 102, 204), 
-            new Color(204, 204, 102), new Color(204, 102, 204), 
-            new Color(102, 204, 204), new Color(218, 170, 0)
+        Color colors[] = { new Color(0, 0, 0), new Color(205, 102, 102), 
+            new Color(102, 205, 102), new Color(102, 102, 205), 
+            new Color(205, 205, 102), new Color(205, 102, 205), 
+            new Color(102, 205, 205), new Color(0, 0, 0), new Color(1, 1, 1), 
         };
 
 
