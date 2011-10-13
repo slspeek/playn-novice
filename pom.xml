@@ -12,5 +12,6 @@
   <module>2dintro</module>
   <module>tumble-item</module>
     <module>tetris-game</module>
+    <module>firework</module>
   </modules>
 </project>
