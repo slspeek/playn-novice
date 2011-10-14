@@ -31,7 +31,7 @@ public class Board extends JPanel implements ActionListener {
     int curY = 0;
     JLabel statusbar;
     Shape curPiece;
-    Tetrominoes[] board;
+    Tetrominoes[][] board;
 
 
 
@@ -39,11 +39,11 @@ public class Board extends JPanel implements ActionListener {
 
        setFocusable(true);
        curPiece = new Shape();
-       timer = new Timer(500, this);
+       timer = new Timer(400, this);
        timer.start(); 
 
        statusbar =  parent.getStatusBar();
-       board = new Tetrominoes[BoardWidth * BoardHeight];
+       board = new Tetrominoes[BoardWidth][BoardHeight];
        addKeyListener(new TAdapter());
        clearBoard();  
     }
@@ -60,7 +60,7 @@ public class Board extends JPanel implements ActionListener {
 
     int squareWidth() { return (int) getSize().getWidth() / BoardWidth; }
     int squareHeight() { return (int) getSize().getHeight() / BoardHeight; }
-    Tetrominoes shapeAt(int x, int y) { return board[(y * BoardWidth) + x]; }
+    Tetrominoes shapeAt(int x, int y) { return board[x][y]; }
 
 
     public void start()
@@ -141,8 +141,11 @@ public class Board extends JPanel implements ActionListener {
 
     private void clearBoard()
     {
-        for (int i = 0; i < BoardHeight * BoardWidth; ++i)
-            board[i] = Tetrominoes.NoShape;
+        for (int i = 0; i < BoardHeight; ++i) {
+        	for(int j = 0; j< BoardWidth; ++j){
+        		board[j][i] = Tetrominoes.NoShape;
+        	}
+        }
     }
 
     private void pieceDropped()
@@ -150,7 +153,7 @@ public class Board extends JPanel implements ActionListener {
         for (int i = 0; i < 5; ++i) {
             int x = curX + curPiece.x(i);
             int y = curY - curPiece.y(i);
-            board[(y * BoardWidth) + x] = curPiece.getShape();
+            board[x][y] = curPiece.getShape();
         }
 
         removeFullLines();
@@ -209,7 +212,7 @@ public class Board extends JPanel implements ActionListener {
                 ++numFullLines;
                 for (int k = i; k < BoardHeight - 1; ++k) {
                     for (int j = 0; j < BoardWidth; ++j)
-                         board[(k * BoardWidth) + j] = shapeAt(j, k + 1);
+                         board[j][k] = shapeAt(j, k + 1);
                 }
             }
         }
@@ -225,10 +228,10 @@ public class Board extends JPanel implements ActionListener {
 
     private void drawSquare(Graphics g, int x, int y, Tetrominoes shape)
     {
-        Color colors[] = { new Color(0, 0, 0), new Color(205, 102, 102), 
-            new Color(102, 205, 102), new Color(102, 102, 205), 
-            new Color(205, 205, 102), new Color(205, 102, 205), 
-            new Color(102, 205, 205), new Color(0, 0, 0), new Color(1, 1, 1), 
+        Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102), 
+            new Color(102, 204, 102), new Color(102, 102, 204), 
+            new Color(204, 204, 102), new Color(204, 102, 204), 
+            new Color(102, 204, 204), new Color(218, 170, 0)
         };
 
 
