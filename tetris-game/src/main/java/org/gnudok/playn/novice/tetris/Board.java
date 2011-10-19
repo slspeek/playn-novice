@@ -10,13 +10,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import org.gnudok.playn.novice.tetris.Shape.Tetrominoes;
 
-public class Board extends JPanel implements ActionListener {
+public class Board implements ActionListener, Paintable {
 
 	final int BoardWidth = 10;
 	final int BoardHeight = 22;
@@ -28,20 +26,18 @@ public class Board extends JPanel implements ActionListener {
 	int numLinesRemoved = 0;
 	int curX = 0;
 	int curY = 0;
-	JLabel statusbar;
 	Shape curPiece;
 	Tetrominoes[][] board;
+	private TetrisView tetrisView;
 
-	public Board(Tetris parent) {
-
-		setFocusable(true);
+	public Board(TetrisView tetrisView) {
+		this.tetrisView = tetrisView;
 		curPiece = new Shape();
 		timer = new Timer(400, this);
 		timer.start();
-
-		statusbar = parent.getStatusBar();
 		board = new Tetrominoes[BoardWidth][BoardHeight];
-		addKeyListener(new TAdapter());
+		tetrisView.addKeyListener(new TAdapter());
+		tetrisView.setPaintable(this);
 		clearBoard();
 	}
 
@@ -55,11 +51,11 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	int squareWidth() {
-		return (int) getSize().getWidth() / BoardWidth;
+		return (int) tetrisView.getSize().getWidth() / BoardWidth;
 	}
 
 	int squareHeight() {
-		return (int) getSize().getHeight() / BoardHeight;
+		return (int) tetrisView.getSize().getHeight() / BoardHeight;
 	}
 
 	Tetrominoes shapeAt(int x, int y) {
@@ -86,25 +82,25 @@ public class Board extends JPanel implements ActionListener {
 		isPaused = !isPaused;
 		if (isPaused) {
 			timer.stop();
-			statusbar.setText("paused");
+			tetrisView.setStatusText("paused");
 		} else {
 			timer.start();
-			statusbar.setText(String.valueOf(numLinesRemoved));
+			tetrisView.setStatusText(String.valueOf(numLinesRemoved));
 		}
-		repaint();
+		tetrisView.repaint();
 	}
 
-	public void paint(Graphics g) {
-		super.paint(g);
+	public void onPaint(TetrisGraphics g) {
+		//super.paint(g);
 
-		Dimension size = getSize();
+		Dimension size = tetrisView.getSize();
 		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
 
 		for (int i = 0; i < BoardHeight; ++i) {
 			for (int j = 0; j < BoardWidth; ++j) {
 				Tetrominoes shape = shapeAt(j, BoardHeight - i - 1);
 				if (shape != Tetrominoes.NoShape)
-					drawSquare(new TetrisGraphicsAWTImpl(g), 0 + j
+					drawSquare(g, 0 + j
 							* squareWidth(), boardTop + i * squareHeight(),
 							shape);
 			}
@@ -116,7 +112,7 @@ public class Board extends JPanel implements ActionListener {
 				Point curPoint = it.next();
 				int x = curX + curPoint.x;
 				int y = curY - curPoint.y;
-				drawSquare(new TetrisGraphicsAWTImpl(g), 0 + x * squareWidth(),
+				drawSquare(g, 0 + x * squareWidth(),
 						boardTop + (BoardHeight - y - 1) * squareHeight(),
 						curPiece.getShape());
 			}
@@ -170,7 +166,7 @@ public class Board extends JPanel implements ActionListener {
 			curPiece.setShape(Tetrominoes.NoShape);
 			timer.stop();
 			isStarted = false;
-			statusbar.setText("game over");
+			tetrisView.setStatusText("game over");
 		}
 	}
 
@@ -189,7 +185,7 @@ public class Board extends JPanel implements ActionListener {
 		curPiece = newPiece;
 		curX = newX;
 		curY = newY;
-		repaint();
+		tetrisView.repaint();
 		return true;
 	}
 
@@ -217,10 +213,10 @@ public class Board extends JPanel implements ActionListener {
 
 		if (numFullLines > 0) {
 			numLinesRemoved += numFullLines;
-			statusbar.setText(String.valueOf(numLinesRemoved));
+			tetrisView.setStatusText(String.valueOf(numLinesRemoved));
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
-			repaint();
+			tetrisView.repaint();
 		}
 	}
 
