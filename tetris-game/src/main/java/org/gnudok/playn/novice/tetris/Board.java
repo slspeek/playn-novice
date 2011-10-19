@@ -3,10 +3,12 @@ package org.gnudok.playn.novice.tetris;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -50,43 +52,6 @@ public class Board extends JPanel implements ActionListener {
 		} else {
 			oneLineDown();
 		}
-		showHint();
-	}
-
-	private void showHint() {
-		statusbar.setText(getLowestFree()[0] + ", " + getLowestFree()[1]);
-
-	}
-
-	private int[] getLowestFree() {
-		int lowest = Integer.MAX_VALUE;
-		int x = -1;
-		for (int i = 0; i < BoardWidth; i++) {
-			for (int j = 0; j < BoardHeight; j++) {
-				if (shapeAt(i, j) == Tetrominoes.NoShape) {
-					// System.out.println("(" + i + ", " + j + ")");
-					if (canSeeTheSky(i, j)) {
-						if (j < lowest) {
-							lowest = j;
-							x = i;
-						}
-					}
-				} else {
-					System.out.println("(" + i + ", " + j + ") was filled");
-				}
-			}
-		}
-		System.out.println("returning: " + x + ", " + lowest);
-		return new int[] { x, lowest };
-	}
-
-	private boolean canSeeTheSky(int i, int j) {
-		for (int k = j ; k < BoardHeight; k++) {
-			if (shapeAt(i, k)!= Tetrominoes.NoShape) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	int squareWidth() {
@@ -139,17 +104,20 @@ public class Board extends JPanel implements ActionListener {
 			for (int j = 0; j < BoardWidth; ++j) {
 				Tetrominoes shape = shapeAt(j, BoardHeight - i - 1);
 				if (shape != Tetrominoes.NoShape)
-					drawSquare(new TetrisGraphicsAWTImpl(g), 0 + j * squareWidth(), boardTop + i
-							* squareHeight(), shape);
+					drawSquare(new TetrisGraphicsAWTImpl(g), 0 + j
+							* squareWidth(), boardTop + i * squareHeight(),
+							shape);
 			}
 		}
 
 		if (curPiece.getShape() != Tetrominoes.NoShape) {
-			for (int i = 0; i < 5; ++i) {
-				int x = curX + curPiece.x(i);
-				int y = curY - curPiece.y(i);
-				drawSquare(new TetrisGraphicsAWTImpl(g), 0 + x * squareWidth(), boardTop
-						+ (BoardHeight - y - 1) * squareHeight(),
+			Iterator<Point> it = curPiece.shapeIterator();
+			while (it.hasNext()) {
+				Point curPoint = it.next();
+				int x = curX + curPoint.x;
+				int y = curY - curPoint.y;
+				drawSquare(new TetrisGraphicsAWTImpl(g), 0 + x * squareWidth(),
+						boardTop + (BoardHeight - y - 1) * squareHeight(),
 						curPiece.getShape());
 			}
 		}
@@ -179,9 +147,11 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private void pieceDropped() {
-		for (int i = 0; i < 5; ++i) {
-			int x = curX + curPiece.x(i);
-			int y = curY - curPiece.y(i);
+		Iterator<Point> it = curPiece.shapeIterator();
+		while (it.hasNext()) {
+			Point curPoint = it.next();
+			int x = curX + curPoint.x;
+			int y = curY - curPoint.y;
 			board[x][y] = curPiece.getShape();
 		}
 
@@ -205,9 +175,11 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private boolean tryMove(Shape newPiece, int newX, int newY) {
-		for (int i = 0; i < 5; ++i) {
-			int x = newX + newPiece.x(i);
-			int y = newY - newPiece.y(i);
+		Iterator<Point> it = newPiece.shapeIterator();
+		while (it.hasNext()) {
+			Point curPoint = it.next();
+			int x = newX + curPoint.x;
+			int y = newY - curPoint.y;
 			if (x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
 				return false;
 			if (shapeAt(x, y) != Tetrominoes.NoShape)

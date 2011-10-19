@@ -1,102 +1,110 @@
 package org.gnudok.playn.novice.tetris;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
-import java.lang.Math;
-
 
 public class Shape {
 
-    enum Tetrominoes { NoShape, ZShape, SShape, LineShape, 
-               TShape, SquareShape, LShape, MirroredLShape , AndreasCrux};
+	enum Tetrominoes {
+		NoShape, ZShape, SShape, LineShape, TShape, SquareShape, LShape, MirroredLShape, AndreasCrux
+	};
 
-    private Tetrominoes pieceShape;
-    private int coords[][];
-    static private int[][][] coordsTable;
+	private Tetrominoes pieceShape;
+	private List<Point> coordsNew = new ArrayList<Point>();
+	static private int[][][] coordsTable;
 
-    public Shape() {
+	public Shape() {
+		setShape(Tetrominoes.NoShape);
+	}
 
-        coords = new int[5][2];
-        setShape(Tetrominoes.NoShape);
+	public void setShape(Tetrominoes shape) {
 
-    }
+		coordsTable = new int[][][] {
+				{ { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+				{ { 0, -1 }, { 0, 0 }, { -1, 0 }, { -1, 1 }, { 0, 0 } },
+				{ { 0, -1 }, { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 0 } },
+				{ { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 0 } },
+				{ { -1, 0 }, { 0, 0 }, { 1, 0 }, { 0, 1 }, { 0, 0 } },
+				{ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 }, { 0, 0 } },
+				{ { -1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 } },
+				{ { 1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 } },
+				{ { 0, 1 }, { 0, 0 }, { 0, -1 }, { 1, 0 }, { 0, 0 } }, };
 
-    public void setShape(Tetrominoes shape) {
+		coordsNew.clear();
+		for (int i = 0; i < 5; i++) {
+			int x = coordsTable[shape.ordinal()][i][0];
+			int y = coordsTable[shape.ordinal()][i][1];
+			coordsNew.add(new Point(x, y));
+		}
+		pieceShape = shape;
 
-         coordsTable = new int[][][] {
-            { { 0, 0 },   { 0, 0 },   { 0, 0 },   { 0, 0 }, { 0, 0 } }, 
-            { { 0, -1 },  { 0, 0 },   { -1, 0 },  { -1, 1 }, { 0, 0 } },
-            { { 0, -1 },  { 0, 0 },   { 1, 0 },   { 1, 1 }, { 0, 0 } },
-            { { 0, -1 },  { 0, 0 },   { 0, 1 },   { 0, 2 } , { 0, 0 } },
-            { { -1, 0 },  { 0, 0 },   { 1, 0 },   { 0, 1 } , { 0, 0 } },
-            { { 0, 0 },   { 1, 0 },   { 0, 1 },   { 1, 1 } , { 0, 0 } },  
-            { { -1, -1 }, { 0, -1 },  { 0, 0 },   { 0, 1 } , { 0, 0 } },
-            { { 1, -1 },  { 0, -1 },  { 0, 0 },   { 0, 1 } , { 0, 0 } } ,
-            { { 0, 1 },   { 0, 0 },   { 0, -1},	  { 1, 0 } , { 0, 0} } ,
-        };
+	}
 
-        for (int i = 0; i < 5 ; i++) {
-            for (int j = 0; j < 2; ++j) {
-                coords[i][j] = coordsTable[shape.ordinal()][i][j];
-            }
-        }
-        pieceShape = shape;
+	private void addPoint(int x, int y) {
+		coordsNew.add(new Point(x, y));
+	}
 
-    }
+	public Iterator<Point> shapeIterator() {
+		return coordsNew.iterator();
+	}
 
-    private void setX(int index, int x) { coords[index][0] = x; }
-    private void setY(int index, int y) { coords[index][1] = y; }
-    public int x(int index) { return coords[index][0]; }
-    public int y(int index) { return coords[index][1]; }
-    public Tetrominoes getShape()  { return pieceShape; }
+	public Tetrominoes getShape() {
+		return pieceShape;
+	}
 
-    public void setRandomShape()
-    {
-        Random r = new Random();
-        int x = Math.abs(r.nextInt()) % 7 + 1;
-        Tetrominoes[] values = Tetrominoes.values(); 
-        setShape(values[x]);
-    }
+	public void setRandomShape() {
+		Random r = new Random();
+		int x = Math.abs(r.nextInt()) % 7 + 1;
+		Tetrominoes[] values = Tetrominoes.values();
+		setShape(values[x]);
+	}
 
-    public int minX()
-    {
-      int m = coords[0][0];
-      for (int i=0; i < 5; i++) {
-          m = Math.min(m, coords[i][0]);
-      }
-      return m;
-    }
+	public int minX() {
+		int m = coordsNew.get(0).x;
+		ListIterator<Point> it = coordsNew.listIterator();
+		while (it.hasNext()) {
+			Point current = it.next();
+			m = Math.min(m, current.x);
 
+		}
+		return m;
+	}
 
-    public int minY() 
-    {
-      int m = coords[0][1];
-      for (int i=0; i < 5; i++) {
-          m = Math.min(m, coords[i][1]);
-      }
-      return m;
-    }
+	public int minY() {
+		int m = coordsNew.get(0).y;
+		ListIterator<Point> it = coordsNew.listIterator();
+		while (it.hasNext()) {
+			Point current = it.next();
+			m = Math.min(m, current.y);
 
-    public Shape rotateLeft() 
-    {
-        Shape result = new Shape();
-        result.pieceShape = pieceShape;
+		}
+		return m;
+	}
 
-        for (int i = 0; i < 5; ++i) {
-            result.setX(i, y(i));
-            result.setY(i, -x(i));
-        }
-        return result;
-    }
+	public Shape rotateLeft() {
+		Shape result = new Shape();
+		result.pieceShape = pieceShape;
 
-    public Shape rotateRight()
-    {
-        Shape result = new Shape();
-        result.pieceShape = pieceShape;
+		ListIterator<Point> it = coordsNew.listIterator();
+		while (it.hasNext()) {
+			Point current = it.next();
+			result.addPoint(current.y, -current.x);
+		}
+		return result;
+	}
 
-        for (int i = 0; i < 5; ++i) {
-            result.setX(i, -y(i));
-            result.setY(i, x(i));
-        }
-        return result;
-    }
+	public Shape rotateRight() {
+		Shape result = new Shape();
+		result.pieceShape = pieceShape;
+		ListIterator<Point> it = coordsNew.listIterator();
+		while (it.hasNext()) {
+			Point current = it.next();
+			result.addPoint(-current.y, current.x);
+		}
+		return result;
+	}
 }
