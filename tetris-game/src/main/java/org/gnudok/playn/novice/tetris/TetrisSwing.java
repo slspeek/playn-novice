@@ -15,9 +15,10 @@ public class TetrisSwing extends JFrame {
 
     	TetrisView view = new TetrisViewSwingImpl();
         statusbar = new JLabel(" 0");
-        add(statusbar, BorderLayout.SOUTH);
+        getContentPane().add(statusbar, BorderLayout.SOUTH);
         Board board = new Board(view);
-        add(view.asCompenent());
+       addKeyListener(board.listener);
+        getContentPane().add(view.asCompenent());
         board.start();
 
         setSize(200, 400);
