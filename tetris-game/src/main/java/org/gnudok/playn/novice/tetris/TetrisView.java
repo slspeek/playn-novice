@@ -12,7 +12,7 @@ public interface TetrisView{
 
 		Dimension getSize();
 
-		void repaint();
+		void onRepaint();
 		
 		void setPaintable(Paintable p);
 		

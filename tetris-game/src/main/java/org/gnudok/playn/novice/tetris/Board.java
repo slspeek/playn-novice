@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Iterator;
 
 import javax.swing.Timer;
@@ -29,6 +30,7 @@ public class Board implements ActionListener, Paintable {
 	Shape curPiece;
 	Tetrominoes[][] board;
 	private TetrisView tetrisView;
+	public KeyListener listener = new TAdapter();
 
 	public Board(TetrisView tetrisView) {
 		this.tetrisView = tetrisView;
@@ -36,9 +38,10 @@ public class Board implements ActionListener, Paintable {
 		timer = new Timer(400, this);
 		timer.start();
 		board = new Tetrominoes[BoardWidth][BoardHeight];
-		tetrisView.addKeyListener(new TAdapter());
+		//tetrisView.addKeyListener(new TAdapter());
 		tetrisView.setPaintable(this);
 		clearBoard();
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -87,11 +90,11 @@ public class Board implements ActionListener, Paintable {
 			timer.start();
 			tetrisView.setStatusText(String.valueOf(numLinesRemoved));
 		}
-		tetrisView.repaint();
+		tetrisView.onRepaint();
 	}
 
 	public void onPaint(TetrisGraphics g) {
-		//super.paint(g);
+		// super.paint(g);
 
 		Dimension size = tetrisView.getSize();
 		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
@@ -99,10 +102,10 @@ public class Board implements ActionListener, Paintable {
 		for (int i = 0; i < BoardHeight; ++i) {
 			for (int j = 0; j < BoardWidth; ++j) {
 				Tetrominoes shape = shapeAt(j, BoardHeight - i - 1);
-				if (shape != Tetrominoes.NoShape)
-					drawSquare(g, 0 + j
-							* squareWidth(), boardTop + i * squareHeight(),
-							shape);
+
+				drawSquare(g, 0 + j * squareWidth(), boardTop + i
+						* squareHeight(), shape);
+
 			}
 		}
 
@@ -112,8 +115,8 @@ public class Board implements ActionListener, Paintable {
 				Point curPoint = it.next();
 				int x = curX + curPoint.x;
 				int y = curY - curPoint.y;
-				drawSquare(g, 0 + x * squareWidth(),
-						boardTop + (BoardHeight - y - 1) * squareHeight(),
+				drawSquare(g, 0 + x * squareWidth(), boardTop
+						+ (BoardHeight - y - 1) * squareHeight(),
 						curPiece.getShape());
 			}
 		}
@@ -185,7 +188,7 @@ public class Board implements ActionListener, Paintable {
 		curPiece = newPiece;
 		curX = newX;
 		curY = newY;
-		tetrisView.repaint();
+		tetrisView.onRepaint();
 		return true;
 	}
 
@@ -216,7 +219,7 @@ public class Board implements ActionListener, Paintable {
 			tetrisView.setStatusText(String.valueOf(numLinesRemoved));
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
-			tetrisView.repaint();
+			tetrisView.onRepaint();
 		}
 	}
 
@@ -243,9 +246,11 @@ public class Board implements ActionListener, Paintable {
 
 	}
 
-	class TAdapter extends KeyAdapter {
+	class TAdapter implements KeyListener {
+		
+		@Override
 		public void keyPressed(KeyEvent e) {
-
+			System.out.println("Huh");
 			if (!isStarted || curPiece.getShape() == Tetrominoes.NoShape) {
 				return;
 			}
@@ -284,6 +289,19 @@ public class Board implements ActionListener, Paintable {
 				break;
 			}
 
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			System.out.println("Huh");
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			System.out.println("Huh");
+			
 		}
 	}
 }

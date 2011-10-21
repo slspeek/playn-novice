@@ -9,29 +9,32 @@ import javax.swing.JPanel;
 
 public class TetrisViewSwingImpl extends JPanel implements TetrisView {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -110735668571632303L;
 	Paintable p;
 	@Override
 	public void setStatusText(String text) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
+	
 	@Override
 	public void addKeyListener(KeyListener listener) {
-		// TODO Auto-generated method stub
-
+		System.out.println("D'r in");
+		super.addKeyListener(listener);
 	}
 
 	@Override
 	public Dimension getSize() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getSize();
 	}
 
 	@Override
-	public void repaint() {
-		// TODO Auto-generated method stub
-
+	public void onRepaint() {
+		repaint();
 	}
 
 	
@@ -47,6 +50,7 @@ public class TetrisViewSwingImpl extends JPanel implements TetrisView {
 	}
 	
 	public void paint(Graphics g) {
+		super.repaint();
 		TetrisGraphics tg = new TetrisGraphicsAWTImpl(g);
 		p.onPaint(tg);
 	}
