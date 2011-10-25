@@ -40,7 +40,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>org.gnudok.playn.novice.tetris.Tetris</mainClass>
+							<mainClass>org.gnudok.playn.novice.tetris.TetrisSwing</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

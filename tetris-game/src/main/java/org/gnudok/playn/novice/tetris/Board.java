@@ -2,12 +2,9 @@ package org.gnudok.playn.novice.tetris;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
 
@@ -19,18 +16,26 @@ public class Board implements ActionListener, Paintable {
 
 	final int BoardWidth = 10;
 	final int BoardHeight = 22;
-
+	/** For the game loop */
 	Timer timer;
+	/** Determines whether a new piece needs to be inserted */
 	boolean isFallingFinished = false;
+	/** Game was started */
 	boolean isStarted = false;
+	/** Games was paused */
 	boolean isPaused = false;
+	/** Stores the score */
 	int numLinesRemoved = 0;
 	int curX = 0;
 	int curY = 0;
+	/** The shape that is currently falling */
 	Shape curPiece;
+	/** The board */
 	Tetrominoes[][] board;
+	/** The visual component */
 	private TetrisView tetrisView;
-	public KeyListener listener = new TAdapter();
+	/** The keyboard controlling */
+	public KeyListener listener = new TAdapter(this);
 
 	public Board(TetrisView tetrisView) {
 		this.tetrisView = tetrisView;
@@ -38,13 +43,14 @@ public class Board implements ActionListener, Paintable {
 		timer = new Timer(400, this);
 		timer.start();
 		board = new Tetrominoes[BoardWidth][BoardHeight];
-		//tetrisView.addKeyListener(new TAdapter());
+		// tetrisView.addKeyListener(new TAdapter());
 		tetrisView.setPaintable(this);
 		clearBoard();
-		
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
+
 		if (isFallingFinished) {
 			isFallingFinished = false;
 			newPiece();
@@ -78,7 +84,7 @@ public class Board implements ActionListener, Paintable {
 		timer.start();
 	}
 
-	private void pause() {
+	void pause() {
 		if (!isStarted)
 			return;
 
@@ -94,8 +100,6 @@ public class Board implements ActionListener, Paintable {
 	}
 
 	public void onPaint(TetrisGraphics g) {
-		// super.paint(g);
-
 		Dimension size = tetrisView.getSize();
 		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
 
@@ -122,7 +126,7 @@ public class Board implements ActionListener, Paintable {
 		}
 	}
 
-	private void dropDown() {
+	void dropDown() {
 		int newY = curY;
 		while (newY > 0) {
 			if (!tryMove(curPiece, curX, newY - 1))
@@ -132,7 +136,7 @@ public class Board implements ActionListener, Paintable {
 		pieceDropped();
 	}
 
-	private void oneLineDown() {
+	void oneLineDown() {
 		if (!tryMove(curPiece, curX, curY - 1))
 			pieceDropped();
 	}
@@ -173,7 +177,7 @@ public class Board implements ActionListener, Paintable {
 		}
 	}
 
-	private boolean tryMove(Shape newPiece, int newX, int newY) {
+	boolean tryMove(Shape newPiece, int newX, int newY) {
 		Iterator<Point> it = newPiece.shapeIterator();
 		while (it.hasNext()) {
 			Point curPoint = it.next();
@@ -192,7 +196,7 @@ public class Board implements ActionListener, Paintable {
 		return true;
 	}
 
-	private void removeFullLines() {
+	void removeFullLines() {
 		int numFullLines = 0;
 
 		for (int i = BoardHeight - 1; i >= 0; --i) {
@@ -221,6 +225,7 @@ public class Board implements ActionListener, Paintable {
 			curPiece.setShape(Tetrominoes.NoShape);
 			tetrisView.onRepaint();
 		}
+		
 	}
 
 	private void drawSquare(TetrisGraphics g, int x, int y, Tetrominoes shape) {
@@ -244,64 +249,5 @@ public class Board implements ActionListener, Paintable {
 		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x
 				+ squareWidth() - 1, y + 1);
 
-	}
-
-	class TAdapter implements KeyListener {
-		
-		@Override
-		public void keyPressed(KeyEvent e) {
-			System.out.println("Huh");
-			if (!isStarted || curPiece.getShape() == Tetrominoes.NoShape) {
-				return;
-			}
-
-			int keycode = e.getKeyCode();
-
-			if (keycode == 'p' || keycode == 'P') {
-				pause();
-				return;
-			}
-
-			if (isPaused)
-				return;
-
-			switch (keycode) {
-			case KeyEvent.VK_LEFT:
-				tryMove(curPiece, curX - 1, curY);
-				break;
-			case KeyEvent.VK_RIGHT:
-				tryMove(curPiece, curX + 1, curY);
-				break;
-			case KeyEvent.VK_DOWN:
-				tryMove(curPiece.rotateRight(), curX, curY);
-				break;
-			case KeyEvent.VK_UP:
-				tryMove(curPiece.rotateLeft(), curX, curY);
-				break;
-			case KeyEvent.VK_SPACE:
-				dropDown();
-				break;
-			case 'd':
-				oneLineDown();
-				break;
-			case 'D':
-				oneLineDown();
-				break;
-			}
-
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			System.out.println("Huh");
-		}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			System.out.println("Huh");
-			
-		}
 	}
 }
