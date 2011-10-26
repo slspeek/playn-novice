@@ -3,7 +3,8 @@ package org.gnudok.playn.novice.tetris;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import org.gnudok.playn.novice.tetris.Shape.Tetrominoes;
+import org.gnudok.playn.novice.tetris.game.Tetrominoes;
+
 
 class TAdapter extends KeyAdapter {
 
