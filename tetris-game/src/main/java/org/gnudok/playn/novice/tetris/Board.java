@@ -10,7 +10,8 @@ import java.util.Iterator;
 
 import javax.swing.Timer;
 
-import org.gnudok.playn.novice.tetris.Shape.Tetrominoes;
+import org.gnudok.playn.novice.tetris.game.Shape;
+import org.gnudok.playn.novice.tetris.game.Tetrominoes;
 
 public class Board implements ActionListener, Paintable {
 
