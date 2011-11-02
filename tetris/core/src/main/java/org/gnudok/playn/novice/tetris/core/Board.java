@@ -1,11 +1,9 @@
-package org.gnudok.playn.novice.tetris;
+package org.gnudok.playn.novice.tetris.core;
 
-import java.awt.Color;
+import static playn.core.PlayN.keyboard;
+
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 import java.util.Iterator;
 
 import javax.swing.Timer;
@@ -13,7 +11,10 @@ import javax.swing.Timer;
 import org.gnudok.playn.novice.tetris.game.Shape;
 import org.gnudok.playn.novice.tetris.game.Tetrominoes;
 
-public class Board implements ActionListener, Paintable {
+import playn.core.Canvas;
+import playn.core.Color;
+import playn.core.Keyboard;
+public class Board {
 
 	final int BoardWidth = 10;
 	final int BoardHeight = 22;
@@ -33,25 +34,20 @@ public class Board implements ActionListener, Paintable {
 	Shape curPiece;
 	/** The board */
 	Tetrominoes[][] board;
-	/** The visual component */
-	private TetrisView tetrisView;
 	/** The keyboard controlling */
-	public KeyListener listener = new TAdapter(this);
+	public Keyboard.Listener listener = new TAdapter(this);
+	Canvas canvas;
 
-	public Board(TetrisView tetrisView) {
-		this.tetrisView = tetrisView;
+	public Board(Canvas canvas) {
+		this.canvas = canvas;
+		keyboard().setListener(listener);
 		curPiece = new Shape();
-		//timer = new Timer(400, this);
-		//timer.start();
 		board = new Tetrominoes[BoardWidth][BoardHeight];
-		// tetrisView.addKeyListener(new TAdapter());
-		tetrisView.setPaintable(this);
 		clearBoard();
-
+		
 	}
 
-	public void actionPerformed(ActionEvent e) {
-
+	public void update() {
 		if (isFallingFinished) {
 			isFallingFinished = false;
 			newPiece();
@@ -61,11 +57,11 @@ public class Board implements ActionListener, Paintable {
 	}
 
 	int squareWidth() {
-		return (int) tetrisView.getSize().getWidth() / BoardWidth;
+		return (int) canvas.width() / BoardWidth;
 	}
 
 	int squareHeight() {
-		return (int) tetrisView.getSize().getHeight() / BoardHeight;
+		return (int) canvas.height() / BoardHeight;
 	}
 
 	Tetrominoes shapeAt(int x, int y) {
@@ -82,7 +78,7 @@ public class Board implements ActionListener, Paintable {
 		clearBoard();
 
 		newPiece();
-		timer.start();
+		//timer.start();
 	}
 
 	void pause() {
@@ -91,18 +87,17 @@ public class Board implements ActionListener, Paintable {
 
 		isPaused = !isPaused;
 		if (isPaused) {
-			timer.stop();
-			tetrisView.setStatusText("paused");
+			//timer.stop();
+			//tetrisView.setStatusText("paused");
 		} else {
-			timer.start();
-			tetrisView.setStatusText(String.valueOf(numLinesRemoved));
+			//timer.start();
+			//tetrisView.setStatusText(String.valueOf(numLinesRemoved));
 		}
-		tetrisView.onRepaint();
+		//tetrisView.onRepaint();
 	}
 
-	public void onPaint(TetrisGraphics g) {
-		Dimension size = tetrisView.getSize();
-		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
+	public void onPaint(Canvas g) {
+		int boardTop = (int) g.height() - BoardHeight * squareHeight();
 
 		for (int i = 0; i < BoardHeight; ++i) {
 			for (int j = 0; j < BoardWidth; ++j) {
@@ -174,7 +169,7 @@ public class Board implements ActionListener, Paintable {
 			curPiece.setShape(Tetrominoes.NoShape);
 			timer.stop();
 			isStarted = false;
-			tetrisView.setStatusText("game over");
+			//tetrisView.setStatusText("game over");
 		}
 	}
 
@@ -193,7 +188,7 @@ public class Board implements ActionListener, Paintable {
 		curPiece = newPiece;
 		curX = newX;
 		curY = newY;
-		tetrisView.onRepaint();
+		//tetrisView.onRepaint();
 		return true;
 	}
 
@@ -221,34 +216,36 @@ public class Board implements ActionListener, Paintable {
 
 		if (numFullLines > 0) {
 			numLinesRemoved += numFullLines;
-			tetrisView.setStatusText(String.valueOf(numLinesRemoved));
+			//tetrisView.setStatusText(String.valueOf(numLinesRemoved));
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
-			tetrisView.onRepaint();
+			//tetrisView.onRepaint();
 		}
 		
 	}
 
-	private void drawSquare(TetrisGraphics g, int x, int y, Tetrominoes shape) {
-		Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102),
-				new Color(102, 204, 102), new Color(102, 102, 204),
-				new Color(204, 204, 102), new Color(204, 102, 204),
-				new Color(102, 204, 204), new Color(218, 170, 0) };
+	private void drawSquare(Canvas g, int x, int y, Tetrominoes shape) {
+		int colors[] = { Color.rgb(0, 0, 0), Color.rgb(204, 102, 102),
+				Color.rgb(102, 204, 102), Color.rgb(102, 102, 204),
+				Color.rgb(204, 204, 102), Color.rgb(204, 102, 204),
+				Color.rgb(102, 204, 204), Color.rgb(218, 170, 0) };
 
-		Color color = colors[shape.ordinal()];
+		int color = colors[shape.ordinal()];
 
-		g.setColor(color);
+		g.setFillColor(color);
 		g.fillRect(x + 1, y + 1, squareWidth() - 2, squareHeight() - 2);
 
-		g.setColor(color.brighter());
+		//g.setColor(color.brighter());
+		g.setStrokeColor(color);
 		g.drawLine(x, y + squareHeight() - 1, x, y);
 		g.drawLine(x, y, x + squareWidth() - 1, y);
 
-		g.setColor(color.darker());
+		//g.setColor(color.darker());
 		g.drawLine(x + 1, y + squareHeight() - 1, x + squareWidth() - 1, y
 				+ squareHeight() - 1);
 		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x
 				+ squareWidth() - 1, y + 1);
 
 	}
+
 }
