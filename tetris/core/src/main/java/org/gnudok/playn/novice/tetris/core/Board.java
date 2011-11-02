@@ -2,11 +2,8 @@ package org.gnudok.playn.novice.tetris.core;
 
 import static playn.core.PlayN.keyboard;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Iterator;
-
-import javax.swing.Timer;
 
 import org.gnudok.playn.novice.tetris.game.Shape;
 import org.gnudok.playn.novice.tetris.game.Tetrominoes;
@@ -14,12 +11,11 @@ import org.gnudok.playn.novice.tetris.game.Tetrominoes;
 import playn.core.Canvas;
 import playn.core.Color;
 import playn.core.Keyboard;
+
 public class Board {
 
 	final int BoardWidth = 10;
 	final int BoardHeight = 22;
-	/** For the game loop */
-	Timer timer;
 	/** Determines whether a new piece needs to be inserted */
 	boolean isFallingFinished = false;
 	/** Game was started */
@@ -167,7 +163,6 @@ public class Board {
 
 		if (!tryMove(curPiece, curX, curY)) {
 			curPiece.setShape(Tetrominoes.NoShape);
-			timer.stop();
 			isStarted = false;
 			//tetrisView.setStatusText("game over");
 		}
