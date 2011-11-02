@@ -13,6 +13,7 @@ public class Tetris implements Game {
 
 	@Override
 	public void init() {
+		graphics().setSize(300, 500);
 		CanvasLayer canvasLayer = graphics().createCanvasLayer(200, 400);
 		canvasLayer.setTranslation(50, 50);
 		canvas = canvasLayer.canvas();
