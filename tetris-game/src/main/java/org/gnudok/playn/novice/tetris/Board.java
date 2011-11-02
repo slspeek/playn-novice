@@ -26,7 +26,7 @@ public class Board implements ActionListener, Paintable {
 	/** Games was paused */
 	boolean isPaused = false;
 	/** Stores the score */
-	int numLinesRemoved = 0;
+	int numLinesRemoved; // = 0;
 	int curX = 0;
 	int curY = 0;
 	/** The shape that is currently falling */
@@ -222,6 +222,10 @@ public class Board implements ActionListener, Paintable {
 		if (numFullLines > 0) {
 			numLinesRemoved += numFullLines;
 			tetrisView.setStatusText(String.valueOf(numLinesRemoved));
+			// JT
+			if (numLinesRemoved > 0)
+			    System.out.println("numLinesRemoved: " + numLinesRemoved);
+			// end JT
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
 			tetrisView.onRepaint();

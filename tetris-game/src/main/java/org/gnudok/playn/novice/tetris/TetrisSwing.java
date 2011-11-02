@@ -1,24 +1,19 @@
 package org.gnudok.playn.novice.tetris;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 
 public class TetrisSwing extends JFrame {
 
-    JLabel statusbar;
-
-
-    public TetrisSwing() {
-
+	public TetrisSwing() {
     	TetrisView view = new TetrisViewSwingImpl();
-        statusbar = new JLabel(" 0");
-        getContentPane().add(statusbar, BorderLayout.SOUTH);
+    	getContentPane().add(view.asCompenent(), BorderLayout.CENTER);
+    //add(, BorderLayout.CENTER);
         Board board = new Board(view);
-       addKeyListener(board.listener);
-        getContentPane().add(view.asCompenent());
+        addKeyListener(board.listener);
         board.start();
 
         setSize(200, 400);
@@ -26,15 +21,9 @@ public class TetrisSwing extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
    }
 
-   public JLabel getStatusBar() {
-       return statusbar;
-   }
-
-    public static void main(String[] args) {
-
+      public static void main(String[] args) {
         TetrisSwing game = new TetrisSwing();
         game.setLocationRelativeTo(null);
         game.setVisible(true);
-
     } 
 }
