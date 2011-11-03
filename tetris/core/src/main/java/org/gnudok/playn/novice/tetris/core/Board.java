@@ -2,11 +2,8 @@ package org.gnudok.playn.novice.tetris.core;
 
 import static playn.core.PlayN.keyboard;
 
-import java.awt.Point;
 import java.util.Iterator;
 
-import org.gnudok.playn.novice.tetris.game.Shape;
-import org.gnudok.playn.novice.tetris.game.Tetrominoes;
 
 import playn.core.Canvas;
 import playn.core.Color;

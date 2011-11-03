@@ -4,7 +4,6 @@ package org.gnudok.playn.novice.tetris.core;
 
 
 
-import org.gnudok.playn.novice.tetris.game.Tetrominoes;
 
 import playn.core.Keyboard;
 import playn.core.Keyboard.Event;
