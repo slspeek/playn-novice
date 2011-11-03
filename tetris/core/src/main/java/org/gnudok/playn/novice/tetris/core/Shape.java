@@ -1,6 +1,6 @@
-package org.gnudok.playn.novice.tetris.game;
+package org.gnudok.playn.novice.tetris.core;
 
-import java.awt.Point;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
