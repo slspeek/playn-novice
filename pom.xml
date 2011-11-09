@@ -14,6 +14,7 @@
 		<module>tetris-game</module>
 		<module>firework</module>
     <module>tetris</module>
+    <module>clean-code-polymorphy</module>
   </modules>
 	<reporting>
 		<plugins>
