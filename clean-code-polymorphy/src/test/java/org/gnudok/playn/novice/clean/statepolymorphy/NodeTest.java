@@ -1,4 +1,6 @@
-package org.gnudok.playn.novice.clean;
+package org.gnudok.playn.novice.clean.statepolymorphy;
+
+import org.gnudok.playn.novice.clean.statepolymorphy.Node;
 
 import junit.framework.TestCase;
 
