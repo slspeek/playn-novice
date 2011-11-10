@@ -1,4 +1,4 @@
-package org.gnudok.playn.novice.clean;
+package org.gnudok.playn.novice.clean.statepolymorphy;
 
 /**
  * TODO Put here a description of what this class does.
