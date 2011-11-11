@@ -2,14 +2,14 @@ package org.gnudok.playn.novice.clean.classpolymorphy;
 
 public class ValueNode extends AbstractNode {
 
-	private double value;
+	private int value;
 
-	public ValueNode(double value){
+	public ValueNode(int value){
 		this.value = value;
 	}
 	
 	@Override
-	public double evaluate() {
+	public int evaluate() {
 		return value;
 	}
 
