@@ -12,4 +12,11 @@ public class ValueNode extends AbstractNode {
 	public double evaluate() {
 		return value;
 	}
+
+	@Override
+	public String prettyString() {
+		return String.valueOf(value);
+	}
+	
+	
 }

@@ -20,5 +20,10 @@ public class AdditionNode extends OpNode {
 	public double evaluate() {
 		return (this.left.evaluate() + this.right.evaluate());
 	}
-   
+	
+	@Override
+	public String prettyString() {
+		return "(" + left.prettyString() + "+" + right.prettyString() + ")";
+	}
+
 }
