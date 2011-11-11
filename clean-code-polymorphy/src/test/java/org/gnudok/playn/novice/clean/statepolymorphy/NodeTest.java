@@ -15,12 +15,14 @@ public class NodeTest extends TestCase {
 	Node one = new Node(1);
 	Node two = new Node(2);
 	Node addition = new Node(one, two, '+');
-	
 	Node three = new Node(3);
+	Node four = new Node(two, two, '+');
 	Node six = new Node(two, three, '*');
-	
-	
 	Node seven = new Node(one, six, '+');
+	Node eight = new Node(four, four, '+');
+	Node twelve = new Node(four, three, '*');
+	Node twentyfour = new Node(three, eight, '*');
+	Node quotient = new Node(twentyfour, two, '/');
 	
 	
 	protected void setUp() throws Exception {
@@ -33,6 +35,14 @@ public class NodeTest extends TestCase {
 	
 	public void testSeven() {
 		assertEquals(7d, seven.evaluate());
+	}
+	
+	public void testTwelve() {
+		assertEquals(12d, twelve.evaluate());
+	}
+	
+	public void testTwentyfour() {
+		assertEquals(12d, quotient.evaluate());
 	}
 	
 	public void testFailure() {
