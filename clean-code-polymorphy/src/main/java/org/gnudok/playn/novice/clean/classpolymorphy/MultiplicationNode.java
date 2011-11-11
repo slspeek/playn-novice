@@ -15,7 +15,7 @@ public class MultiplicationNode extends OpNode {
 	 * @param right
 	 */
 	public MultiplicationNode(AbstractNode left, AbstractNode right) {
-		super(left, right);
+		super(left, right, new MultiplicationOperator());
 	}
 
 	@Override

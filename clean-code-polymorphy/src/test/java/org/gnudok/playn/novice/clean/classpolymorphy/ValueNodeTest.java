@@ -10,7 +10,7 @@ public class ValueNodeTest extends TestCase {
 
 	public void testEvaluate() {
 		AbstractNode node = new ValueNode(5);
-		assertEquals(5d, node.evaluate());
+		assertEquals(5, node.evaluate());
 	}
 
 }

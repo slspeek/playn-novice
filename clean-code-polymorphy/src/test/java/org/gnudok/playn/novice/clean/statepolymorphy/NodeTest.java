@@ -22,7 +22,6 @@ public class NodeTest extends TestCase {
 	Node eight = new Node(four, four, '+');
 	Node twelve = new Node(four, three, '*');
 	Node twentyfour = new Node(three, eight, '*');
-	Node quotient = new Node(twentyfour, two, '/');
 	
 	
 	protected void setUp() throws Exception {
@@ -39,10 +38,6 @@ public class NodeTest extends TestCase {
 	
 	public void testTwelve() {
 		assertEquals(12d, twelve.evaluate());
-	}
-	
-	public void testTwentyfour() {
-		assertEquals(12d, quotient.evaluate());
 	}
 	
 	public void testFailure() {

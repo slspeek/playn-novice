@@ -15,7 +15,7 @@ public class MultiplicationNodeTest extends TestCase {
 	MultiplicationNode product = new MultiplicationNode(two, six);
 	
 	public void testEvaluate() {
-		assertEquals(12d, product.evaluate());
+		assertEquals(12, product.evaluate());
 	}
 	
 	
