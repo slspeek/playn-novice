@@ -19,13 +19,13 @@ public class MultiplicationNode extends OpNode {
 	}
 
 	@Override
-	public double evaluate() {
+	public int evaluate() {
 			return (this.left.evaluate() * this.right.evaluate());
 	}
 
 	@Override
 	public String prettyString() {
-		return "(" + left.prettyString() + "*" + right.prettyString() + ")";
+		return left.prettyString() + "*" + right.prettyString();
 	}
 
 }

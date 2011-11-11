@@ -14,5 +14,7 @@ public abstract class OpNode extends AbstractNode {
 	public OpNode(AbstractNode left, AbstractNode right) {
 		this.left = left;
 		this.right = right;
+		left.parent = this;
+		right.parent = this;
 	}
 }
