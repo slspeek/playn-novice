@@ -9,7 +9,7 @@ package org.gnudok.playn.novice.clean.classpolymorphy;
 public abstract class AbstractNode {
 	
 	
-	protected AbstractNode parent;
+	protected OpNode parent;
 		
 	public abstract int evaluate();
 	

@@ -12,7 +12,7 @@ public class AdditionNode extends OpNode {
 	 * @param right
 	 */
 	public AdditionNode(AbstractNode left, AbstractNode right) {
-		super(left, right);
+		super(left, right, new AdditionOperator());
 	}
 
 	@Override
@@ -22,8 +22,13 @@ public class AdditionNode extends OpNode {
 
 	@Override
 	public String prettyString() {
-		if (parent instanceof MultiplicationNode) {
-			return "(" + left.prettyString() + "+" + right.prettyString() + ")";
+		if (parent != null) {
+			if (operator.compareTo(parent.operator) < 0) {
+				return "(" + left.prettyString() + "+" + right.prettyString()
+						+ ")";
+			} else {
+				return left.prettyString() + "+" + right.prettyString();
+			}
 		} else {
 			return left.prettyString() + "+" + right.prettyString();
 		}

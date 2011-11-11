@@ -10,11 +10,17 @@ public abstract class OpNode extends AbstractNode {
 
 	protected AbstractNode left;
 	protected AbstractNode right;
+	protected AbstractOperator operator;
 	
-	public OpNode(AbstractNode left, AbstractNode right) {
+	public OpNode(AbstractNode left, AbstractNode right, AbstractOperator operator) {
 		this.left = left;
 		this.right = right;
 		left.parent = this;
 		right.parent = this;
+		this.operator = operator;
+	}
+	
+	public int evaluate() {
+		return operator.combine(left.evaluate(), right.evaluate());
 	}
 }
