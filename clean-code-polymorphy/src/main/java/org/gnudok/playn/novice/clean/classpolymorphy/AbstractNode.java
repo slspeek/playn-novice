@@ -11,4 +11,5 @@ public abstract class AbstractNode {
 	
 	public abstract double evaluate();
 	
+	public abstract String prettyString();
 }

@@ -23,4 +23,9 @@ public class MultiplicationNode extends OpNode {
 			return (this.left.evaluate() * this.right.evaluate());
 	}
 
+	@Override
+	public String prettyString() {
+		return "(" + left.prettyString() + "*" + right.prettyString() + ")";
+	}
+
 }
