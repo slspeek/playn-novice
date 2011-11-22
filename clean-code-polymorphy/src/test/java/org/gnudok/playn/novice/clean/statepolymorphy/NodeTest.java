@@ -47,7 +47,7 @@ public class NodeTest extends TestCase {
 			fail();
 			
 		} catch (NullPointerException npe) {
-			
+				//
 		}
 	}
 	

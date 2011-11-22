@@ -22,11 +22,11 @@ public class AdditionNode extends OpNode {
 
 	@Override
 	public String prettyString() {
-		if (parent != null) {
+		if (parent != null) {	// there is a parent operation
 			if (operator.compareTo(parent.operator) < 0) {
 				return "(" + left.prettyString() + "+" + right.prettyString()
 						+ ")";
-			} else {
+			} else {					// no parent operation
 				return left.prettyString() + "+" + right.prettyString();
 			}
 		} else {
