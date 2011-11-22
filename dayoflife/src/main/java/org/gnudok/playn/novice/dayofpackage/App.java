@@ -28,8 +28,8 @@ public class App
 	// represent Bithdate dat in string 
 	public class BirthDateToString extends String 
 	{
-		String birthdateString = new String();		// stupid 	
-		public Date getBirthDateString()
+		protected String birthdateString = new String();		// stupid 	
+		public String getBirthDateString()
 		{
 			return birthdateString;
 		}	
@@ -43,6 +43,7 @@ public class App
     	 Date now = new Date();
          long nowLong = now.getTime();
          System.out.println("Value is " + nowLong);
+         myBirthDate = new BirthDate();
     	 //System.out.println( "Hello World!" );
     }
 }
