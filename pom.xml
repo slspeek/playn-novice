@@ -15,6 +15,7 @@
 		<module>firework</module>
     <module>tetris</module>
     <module>clean-code-polymorphy</module>
+    <module>dayoflife</module>
   </modules>
 	<reporting>
 		<plugins>
