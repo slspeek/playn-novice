@@ -16,6 +16,7 @@
     <module>tetris</module>
     <module>clean-code-polymorphy</module>
     <module>dayoflife</module>
+    <module>calculator</module>
   </modules>
 	<reporting>
 		<plugins>
