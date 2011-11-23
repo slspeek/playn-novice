@@ -1,8 +1,10 @@
-package org.gnudok.playn.novice.dayofpackage;
+package org.gnudok.playn.novice.dayoflife;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import org.gnudok.playn.novice.dayoflife.DateParser;
 
 import junit.framework.TestCase;
 
