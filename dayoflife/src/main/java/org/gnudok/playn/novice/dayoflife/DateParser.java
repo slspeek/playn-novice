@@ -1,4 +1,4 @@
-package org.gnudok.playn.novice.dayofpackage;
+package org.gnudok.playn.novice.dayoflife;
 
 import java.text.DateFormat;
 import java.text.ParseException;
