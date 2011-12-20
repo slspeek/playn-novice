@@ -19,6 +19,7 @@ import static playn.core.PlayN.assetManager;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.pointer;
 
+import playn.core.Keyboard;
 import playn.core.PlayN;
 import playn.core.GroupLayer;
 import playn.core.Image;
@@ -84,7 +85,20 @@ public class PeasDemo extends Demo {
         }
       }
     });
+    PlayN.keyboard().setListener(new Keyboard.Adapter() {
+        @Override
+        public void onKeyDown(Keyboard.Event event) {
+         System.out.println("Hello " + event.key());
+        }
+
+        @Override
+        public void onKeyUp(Keyboard.Event event) {
+        	System.out.println("Up Hello " + event.key());
+         
+        }
+      });
   }
+
 
   @Override
   public void shutdown() {
