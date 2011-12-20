@@ -85,18 +85,34 @@ public class PeasDemo extends Demo {
         }
       }
     });
+
     PlayN.keyboard().setListener(new Keyboard.Adapter() {
         @Override
         public void onKeyDown(Keyboard.Event event) {
-         System.out.println("Hello " + event.key());
+        	switch ( event.key()) 
+        	{
+                  	case ESCAPE:
+                  		System.out.println("Down " + event.key());
+                  		break;
+                  	case UP:
+                  		break;
+                  	case DOWN:
+                  		break;
+                  	case SPACE:
+                  		break;
+                  		
+              }
+              
+        	//System.out.println("Hello " + event.key());
         }
 
         @Override
         public void onKeyUp(Keyboard.Event event) {
         	System.out.println("Up Hello " + event.key());
-         
         }
-      });
+  
+    });
+  
   }
 
 
