@@ -102,8 +102,7 @@ public class PeasDemo extends Demo {
                   		break;
                   		
               }
-              
-        	//System.out.println("Hello " + event.key());
+             
         }
 
         @Override
