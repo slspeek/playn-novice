@@ -13,14 +13,10 @@
 		<module>tumble-item</module>
 		<module>tetris-game</module>
 		<module>firework</module>
-		<module>showcase</module>
     <module>tetris</module>
     <module>clean-code-polymorphy</module>
     <module>dayoflife</module>
     <module>calculator</module>
-    <module>pong</module>
-    <module>restitution</module>
-    <module>rgbgame</module>
   </modules>
 	<reporting>
 		<plugins>
