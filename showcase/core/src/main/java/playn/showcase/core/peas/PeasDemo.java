@@ -19,17 +19,19 @@ import static playn.core.PlayN.assetManager;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.pointer;
 
+import java.util.Random;
+
 import org.jbox2d.common.Vec2;
 
-import playn.core.Keyboard;
-import playn.core.PlayN;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
+import playn.core.Keyboard;
+import playn.core.PlayN;
 import playn.core.Pointer;
 import playn.core.ResourceCallback;
-
 import playn.showcase.core.Demo;
+import playn.showcase.core.peas.entities.Bat;
 import playn.showcase.core.peas.entities.Pea;
 
 public class PeasDemo extends Demo {
@@ -48,7 +50,7 @@ public class PeasDemo extends Demo {
 	PeaWorld world = null;
 	boolean worldLoaded = false;
 
-	Pea bat;
+Bat bat;
 
 	@Override
 	public String name() {
@@ -75,7 +77,7 @@ public class PeasDemo extends Demo {
 					public void done(PeaWorld resource) {
 						world = resource;
 						worldLoaded = true;
-						bat = new Pea(world, world.world, 19, 28, 0);
+						bat = new Bat(world, world.world, 19, 28, 0);
 						world.add(bat);
 
 					}
@@ -94,6 +96,8 @@ public class PeasDemo extends Demo {
 				if (worldLoaded) {
 					Pea pea = new Pea(world, world.world, physUnitPerScreenUnit
 							* event.x(), physUnitPerScreenUnit * event.y(), 0);
+					Random rnd = new Random();
+					pea.setLinearVelocity(10*rnd.nextFloat(), rnd.nextFloat() *10  );
 					world.add(pea);
 				}
 			}
