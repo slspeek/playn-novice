@@ -24,12 +24,7 @@ import playn.core.Game;
 import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.PlayN;
-
 import playn.showcase.core.peas.PeasDemo;
-import playn.showcase.core.snake.SnakeDemo;
-import playn.showcase.core.sprites.SpritesDemo;
-import playn.showcase.core.swirl.SwirlDemo;
-import playn.showcase.core.text.TextDemo;
 
 /**
  * The main entry point for the showcase "game".
@@ -42,11 +37,7 @@ public class Showcase implements Game
 
   public List<Demo> demos = new ArrayList<Demo>(); {
     // add your demo here to enable it in the showcase
-    demos.add(new SpritesDemo());
     demos.add(new PeasDemo());
-    demos.add(new SwirlDemo());
-    demos.add(new SnakeDemo());
-    demos.add(new TextDemo());
   }
 
   public void activateDemo(Demo demo) {
@@ -80,8 +71,9 @@ public class Showcase implements Game
         }
       }
     });
-
-    activateDemo(menuDemo);
+    if (demos.size() == 1) {
+    	activateDemo(demos.get(0));
+    }
   }
 
   @Override

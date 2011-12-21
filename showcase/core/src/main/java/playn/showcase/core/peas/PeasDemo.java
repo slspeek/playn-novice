@@ -22,6 +22,8 @@ import static playn.core.PlayN.pointer;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.joints.PrismaticJoint;
+import org.jbox2d.dynamics.joints.PrismaticJointDef;
 
 import playn.core.GroupLayer;
 import playn.core.Image;
@@ -38,7 +40,7 @@ public class PeasDemo extends Demo {
 
 	// scale difference between screen space (pixels) and world space (physics).
 	public static float physUnitPerScreenUnit = 1 / 26.666667f;
-	
+
 	int DELTA = 1;
 
 	ImageLayer bgLayer;
@@ -50,7 +52,8 @@ public class PeasDemo extends Demo {
 	PeaWorld world = null;
 	boolean worldLoaded = false;
 
-Bat bat;
+	Bat bat;
+	org.jbox2d.dynamics.joints.PrismaticJoint joint;
 
 	@Override
 	public String name() {
@@ -97,7 +100,8 @@ Bat bat;
 					Pea pea = new Pea(world, world.world, physUnitPerScreenUnit
 							* event.x(), physUnitPerScreenUnit * event.y(), 0);
 					Random rnd = new Random();
-					pea.setLinearVelocity(10*rnd.nextFloat(), rnd.nextFloat() *10  );
+					pea.setLinearVelocity(10 * rnd.nextFloat(),
+							rnd.nextFloat() * 10);
 					world.add(pea);
 				}
 			}
@@ -109,15 +113,20 @@ Bat bat;
 				switch (event.key()) {
 				case LEFT:
 					Vec2 oldPos = bat.getBody().getPosition();
-					System.out.println("Bat old position: " + bat.getBody().getPosition());
+					System.out.println("Bat old position: "
+							+ bat.getBody().getPosition());
 					bat.setPos(Math.max(0, oldPos.x - DELTA), oldPos.y);
-					System.out.println("Bat position: " + bat.getBody().getPosition());
+					System.out.println("Bat position: "
+							+ bat.getBody().getPosition());
 					break;
 				case RIGHT:
 					oldPos = bat.getBody().getPosition();
-					System.out.println("Bat old position: " + bat.getBody().getPosition());
-					bat.setPos(Math.min(PeaWorld.width - 3, oldPos.x + DELTA), oldPos.y);
-					System.out.println("Bat position: " + bat.getBody().getPosition());
+					System.out.println("Bat old position: "
+							+ bat.getBody().getPosition());
+					bat.setPos(Math.min(PeaWorld.width - 3, oldPos.x + DELTA),
+							oldPos.y);
+					System.out.println("Bat position: "
+							+ bat.getBody().getPosition());
 					break;
 
 				}
