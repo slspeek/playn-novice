@@ -9,6 +9,7 @@
 	<url>http://maven.apache.org</url>
 	<modules>
 		<module>intro</module>
+    <module>showcase</module>
 		<module>2dintro</module>
 		<module>tumble-item</module>
 		<module>tetris-game</module>
