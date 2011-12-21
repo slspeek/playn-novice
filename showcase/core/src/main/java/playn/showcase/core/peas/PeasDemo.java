@@ -51,8 +51,10 @@ public class PeasDemo extends Demo {
 
   @Override
   public void init() {
+	 
+	 graphics().setSize(1024, 768);
     // load and show our background image
-    Image bgImage = assetManager().getImage("peas/images/bg.png");
+    Image bgImage = assetManager().getImage("peas/images/Zwart.png");
     bgLayer = graphics().createImageLayer(bgImage);
     graphics().rootLayer().add(bgLayer);
 
