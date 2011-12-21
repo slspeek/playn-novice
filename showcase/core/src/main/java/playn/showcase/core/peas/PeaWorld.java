@@ -46,8 +46,8 @@ public class PeaWorld implements ContactListener {
   public GroupLayer staticLayerFront;
 
   // size of world
-  private static int width = 24;
-  private static int height = 18;
+  private static int width = 41;
+  private static int height = 33;
 
   // box2d object containing physics world
   protected World world;
