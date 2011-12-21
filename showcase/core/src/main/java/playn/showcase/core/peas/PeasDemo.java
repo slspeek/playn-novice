@@ -19,6 +19,8 @@ import static playn.core.PlayN.assetManager;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.pointer;
 
+import org.jbox2d.common.Vec2;
+
 import playn.core.Keyboard;
 import playn.core.PlayN;
 import playn.core.GroupLayer;
@@ -32,112 +34,122 @@ import playn.showcase.core.peas.entities.Pea;
 
 public class PeasDemo extends Demo {
 
-  // scale difference between screen space (pixels) and world space (physics).
-  public static float physUnitPerScreenUnit = 1 / 26.666667f;
+	// scale difference between screen space (pixels) and world space (physics).
+	public static float physUnitPerScreenUnit = 1 / 26.666667f;
+	
+	int DELTA = 1;
 
-  ImageLayer bgLayer;
+	ImageLayer bgLayer;
 
-  // main layer that holds the world. note: this gets scaled to world space
-  GroupLayer worldLayer;
+	// main layer that holds the world. note: this gets scaled to world space
+	GroupLayer worldLayer;
 
-  // main world
-  PeaWorld world = null;
-  boolean worldLoaded = false;
+	// main world
+	PeaWorld world = null;
+	boolean worldLoaded = false;
 
-  @Override
-  public String name() {
-    return "Pea Physics";
-  }
+	Pea bat;
 
-  @Override
-  public void init() {
-	 
-	 graphics().setSize(1024, 768);
-    // load and show our background image
-    Image bgImage = assetManager().getImage("peas/images/Zwart.png");
-    bgLayer = graphics().createImageLayer(bgImage);
-    graphics().rootLayer().add(bgLayer);
+	@Override
+	public String name() {
+		return "Pea Physics";
+	}
 
-    // create our world layer (scaled to "world space")
-    worldLayer = graphics().createGroupLayer();
-    worldLayer.setScale(1f / physUnitPerScreenUnit);
-    graphics().rootLayer().add(worldLayer);
+	@Override
+	public void init() {
 
-    PeaLoader.CreateWorld("peas/levels/level1.json", worldLayer, new ResourceCallback<PeaWorld>() {
-      @Override
-      public void done(PeaWorld resource) {
-        world = resource;
-        worldLoaded = true;
-      }
+		graphics().setSize(1024, 768);
+		// load and show our background image
+		Image bgImage = assetManager().getImage("peas/images/Zwart.png");
+		bgLayer = graphics().createImageLayer(bgImage);
+		graphics().rootLayer().add(bgLayer);
 
-      @Override
-      public void error(Throwable err) {
-        PlayN.log().error("Error loading pea world: " + err.getMessage());
-      }
-    });
+		// create our world layer (scaled to "world space")
+		worldLayer = graphics().createGroupLayer();
+		worldLayer.setScale(1f / physUnitPerScreenUnit);
+		graphics().rootLayer().add(worldLayer);
 
-    // hook up our pointer listener
-    pointer().setListener(new Pointer.Adapter() {
-      @Override
-      public void onPointerStart(Pointer.Event event) {
-        if (worldLoaded) {
-          Pea pea = new Pea(world, world.world, physUnitPerScreenUnit * event.x(),
-                            physUnitPerScreenUnit * event.y(), 0);
-          world.add(pea);
-        }
-      }
-    });
+		PeaLoader.CreateWorld("peas/levels/level1.json", worldLayer,
+				new ResourceCallback<PeaWorld>() {
+					@Override
+					public void done(PeaWorld resource) {
+						world = resource;
+						worldLoaded = true;
+						bat = new Pea(world, world.world, 19, 28, 0);
+						world.add(bat);
 
-    PlayN.keyboard().setListener(new Keyboard.Adapter() {
-        @Override
-        public void onKeyDown(Keyboard.Event event) {
-        	switch ( event.key()) 
-        	{
-                  	case ESCAPE:
-                  		System.out.println("Down " + event.key());
-                  		break;
-                  	case UP:
-                  		break;
-                  	case DOWN:
-                  		break;
-                  	case SPACE:
-                  		break;
-                  		
-              }
-             
-        }
+					}
 
-        @Override
-        public void onKeyUp(Keyboard.Event event) {
-        	System.out.println("Up Hello " + event.key());
-        }
-  
-    });
-  
-  }
+					@Override
+					public void error(Throwable err) {
+						PlayN.log().error(
+								"Error loading pea world: " + err.getMessage());
+					}
+				});
 
+		// hook up our pointer listener
+		pointer().setListener(new Pointer.Adapter() {
+			@Override
+			public void onPointerStart(Pointer.Event event) {
+				if (worldLoaded) {
+					Pea pea = new Pea(world, world.world, physUnitPerScreenUnit
+							* event.x(), physUnitPerScreenUnit * event.y(), 0);
+					world.add(pea);
+				}
+			}
+		});
 
-  @Override
-  public void shutdown() {
-    bgLayer.destroy();
-    bgLayer = null;
-    worldLayer.destroy();
-    worldLayer = null;
-    world = null;
-    worldLoaded = false;
-  }
+		PlayN.keyboard().setListener(new Keyboard.Adapter() {
+			@Override
+			public void onKeyDown(Keyboard.Event event) {
+				switch (event.key()) {
+				case LEFT:
+					Vec2 oldPos = bat.getBody().getPosition();
+					System.out.println("Bat old position: " + bat.getBody().getPosition());
+					bat.setPos(Math.max(0, oldPos.x - DELTA), oldPos.y);
+					System.out.println("Bat position: " + bat.getBody().getPosition());
+					break;
+				case RIGHT:
+					oldPos = bat.getBody().getPosition();
+					System.out.println("Bat old position: " + bat.getBody().getPosition());
+					bat.setPos(Math.min(PeaWorld.width - 3, oldPos.x + DELTA), oldPos.y);
+					System.out.println("Bat position: " + bat.getBody().getPosition());
+					break;
 
-  @Override
-  public void paint(float alpha) {
-    if (worldLoaded) {
-      world.paint(alpha);
-    }
-  }
+				}
 
-  @Override
-  public void update(float delta) {
-    if (worldLoaded) {
-      world.update(delta);
-    }
-  }
+			}
+
+			@Override
+			public void onKeyUp(Keyboard.Event event) {
+				System.out.println("Up Hello " + event.key());
+			}
+
+		});
+
+	}
+
+	@Override
+	public void shutdown() {
+		bgLayer.destroy();
+		bgLayer = null;
+		worldLayer.destroy();
+		worldLayer = null;
+		world = null;
+		worldLoaded = false;
+	}
+
+	@Override
+	public void paint(float alpha) {
+		if (worldLoaded) {
+			world.paint(alpha);
+		}
+	}
+
+	@Override
+	public void update(float delta) {
+		if (worldLoaded) {
+			world.update(delta);
+		}
+	}
 }

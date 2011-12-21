@@ -46,8 +46,8 @@ public class PeaWorld implements ContactListener {
   public GroupLayer staticLayerFront;
 
   // size of world
-  private static int width = 41;
-  private static int height = 33;
+ static int width = 41;
+  static int height = 33;
 
   // box2d object containing physics world
   protected World world;
@@ -68,7 +68,7 @@ public class PeaWorld implements ContactListener {
     scaledLayer.add(staticLayerFront);
 
     // create the physics world
-    Vec2 gravity = new Vec2(0.0f, 10.0f);
+    Vec2 gravity = new Vec2(0.0f, 0.0f);
     world = new World(gravity, true);
     world.setWarmStarting(true);
     world.setAutoClearForces(true);
