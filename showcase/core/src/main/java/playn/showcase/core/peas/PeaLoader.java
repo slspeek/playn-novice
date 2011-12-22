@@ -57,57 +57,7 @@ public class PeaLoader {
           }
         });
 
-        // parse the level
-        Json.Object document = PlayN.json().parse(resource);
-
-        // previous Portal (used for linking portals)
-        Portal lastPortal = null;
-
-        // parse the entities, adding each asset to the asset watcher
-        Json.Array jsonEntities = document.getArray("Entities");
-        for (int i = 0; i < jsonEntities.length(); i++) {
-          Json.Object jsonEntity = jsonEntities.getObject(i);
-          String type = jsonEntity.getString("type");
-          float x = (float) jsonEntity.getNumber("x");
-          float y = (float) jsonEntity.getNumber("y");
-          float a = (float) jsonEntity.getNumber("a");
-
-          Entity entity = null;
-          if (Pea.TYPE.equalsIgnoreCase(type)) {
-            entity = new Pea(peaWorld, peaWorld.world, x, y, a);
-          } else if (Block.TYPE.equalsIgnoreCase(type)) {
-            entity = new Block(peaWorld, peaWorld.world, x, y, a);
-          } else if (BlockRightRamp.TYPE.equalsIgnoreCase(type)) {
-            entity = new BlockRightRamp(peaWorld, peaWorld.world, x, y, a);
-          } else if (BlockLeftRamp.TYPE.equalsIgnoreCase(type)) {
-            entity = new BlockLeftRamp(peaWorld, peaWorld.world, x, y, a);
-          } else if (BlockGel.TYPE.equalsIgnoreCase(type)) {
-            entity = new BlockGel(peaWorld, peaWorld.world, x, y, a);
-          } else if (BlockSpring.TYPE.equalsIgnoreCase(type)) {
-            entity = new BlockSpring(peaWorld, peaWorld.world, x, y, a);
-          } else if (Cloud1.TYPE.equalsIgnoreCase(type)) {
-            entity = new Cloud1(peaWorld);
-          } else if (Cloud3.TYPE.equalsIgnoreCase(type)) {
-            entity = new Cloud3(peaWorld);
-          } else if (FakeBlock.TYPE.equalsIgnoreCase(type)) {
-            entity = new FakeBlock(peaWorld, x, y, a);
-          } else if (Portal.TYPE.equalsIgnoreCase(type)) {
-            entity = new Portal(peaWorld, peaWorld.world, x, y, a);
-            if (lastPortal == null) {
-              lastPortal = (Portal) entity;
-            } else {
-              lastPortal.other = (Portal) entity;
-              ((Portal) entity).other = lastPortal;
-              lastPortal = null;
-            }
-          }
-
-          if (entity != null) {
-            assetWatcher.add(entity.getImage());
-            peaWorld.add(entity);
-          }
-        }
-
+       
         // start the watcher (it will call the callback when everything is
         // loaded)
         assetWatcher.start();

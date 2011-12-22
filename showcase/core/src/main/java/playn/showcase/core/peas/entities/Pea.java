@@ -44,8 +44,8 @@ public class Pea extends DynamicPhysicsEntity {
     circleShape.m_radius = getRadius();
     fixtureDef.shape = circleShape;
     fixtureDef.density = 0.4f;
-    fixtureDef.friction = 0.1f;
-    fixtureDef.restitution = 0.35f;
+    fixtureDef.friction = 0.0f;
+    fixtureDef.restitution = 1f;
     circleShape.m_p.set(0, 0);
     body.createFixture(fixtureDef);
     body.setLinearDamping(0.2f);

@@ -18,6 +18,7 @@
     <module>clean-code-polymorphy</module>
     <module>dayoflife</module>
     <module>calculator</module>
+    <module>pong</module>
   </modules>
 	<reporting>
 		<plugins>
