@@ -23,13 +23,13 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
-import playn.showcase.core.peas.PeaWorld;
+import playn.showcase.core.peas.PongWorld;
 
 public class BlockRightRamp extends Block {
   @SuppressWarnings("hiding")
   public static String TYPE = "BlockRightRamp";
 
-  public BlockRightRamp(PeaWorld peaWorld, World world, float x, float y, float angle) {
+  public BlockRightRamp(PongWorld peaWorld, World world, float x, float y, float angle) {
     super(peaWorld, world, x, y, angle);
   }
 

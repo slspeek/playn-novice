@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package playn.showcase.core.peas.entities;
+package pong.entities;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 
-import playn.showcase.core.peas.PongWorld;
+import pong.core.PongWorld;
 
 public abstract class DynamicPhysicsEntity extends Entity implements PhysicsEntity {
   // for calculating interpolation

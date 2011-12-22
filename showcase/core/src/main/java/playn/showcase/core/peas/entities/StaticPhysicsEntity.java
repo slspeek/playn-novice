@@ -18,12 +18,12 @@ package playn.showcase.core.peas.entities;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 
-import playn.showcase.core.peas.PeaWorld;
+import playn.showcase.core.peas.PongWorld;
 
 public abstract class StaticPhysicsEntity extends Entity implements PhysicsEntity {
   private Body body;
 
-  public StaticPhysicsEntity(final PeaWorld peaWorld, World world, float x, float y, float angle) {
+  public StaticPhysicsEntity(final PongWorld peaWorld, World world, float x, float y, float angle) {
     super(peaWorld, x, y, angle);
     body = initPhysicsBody(world, x, y, angle);
   }
@@ -39,11 +39,11 @@ public abstract class StaticPhysicsEntity extends Entity implements PhysicsEntit
   }
 
   @Override
-  public void initPreLoad(final PeaWorld peaWorld) {
+  public void initPreLoad(final PongWorld peaWorld) {
   }
 
   @Override
-  public void initPostLoad(final PeaWorld peaWorld) {
+  public void initPostLoad(final PongWorld peaWorld) {
     peaWorld.staticLayerBack.add(layer);
   }
 

@@ -15,12 +15,12 @@
  */
 package playn.showcase.core.peas.entities;
 
-import playn.showcase.core.peas.PeaWorld;
+import playn.showcase.core.peas.PongWorld;
 
 public class Cloud1 extends Entity {
   public static String TYPE = "Cloud1";
 
-  public Cloud1(PeaWorld peaWorld) {
+  public Cloud1(PongWorld peaWorld) {
     super(peaWorld, 0, 0, 0);
     y = (float) (Math.random() * getMaximumHeight());
     x = (float) (Math.random() * getMaximumWidth());
@@ -72,11 +72,11 @@ public class Cloud1 extends Entity {
   }
 
   @Override
-  public void initPreLoad(PeaWorld peaWorld) {
+  public void initPreLoad(PongWorld peaWorld) {
     peaWorld.dynamicLayer.add(layer);
   }
 
   @Override
-  public void initPostLoad(PeaWorld peaWorld) {
+  public void initPostLoad(PongWorld peaWorld) {
   }
 }

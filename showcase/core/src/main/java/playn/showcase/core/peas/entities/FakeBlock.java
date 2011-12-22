@@ -15,12 +15,12 @@
  */
 package playn.showcase.core.peas.entities;
 
-import playn.showcase.core.peas.PeaWorld;
+import playn.showcase.core.peas.PongWorld;
 
 public class FakeBlock extends Entity {
   public static String TYPE = "FakeBlock";
 
-  public FakeBlock(PeaWorld peaWorld, float x, float y, float angle) {
+  public FakeBlock(PongWorld peaWorld, float x, float y, float angle) {
     super(peaWorld, x, y, angle);
   }
 
@@ -58,11 +58,11 @@ public class FakeBlock extends Entity {
   }
 
   @Override
-  public void initPreLoad(PeaWorld peaWorld) {
+  public void initPreLoad(PongWorld peaWorld) {
     peaWorld.staticLayerBack.add(layer);
   }
 
   @Override
-  public void initPostLoad(PeaWorld peaWorld) {
+  public void initPostLoad(PongWorld peaWorld) {
   }
 }

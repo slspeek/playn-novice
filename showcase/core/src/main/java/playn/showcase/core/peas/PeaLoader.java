@@ -30,14 +30,14 @@ import playn.showcase.core.peas.entities.Cloud1;
 import playn.showcase.core.peas.entities.Cloud3;
 import playn.showcase.core.peas.entities.Entity;
 import playn.showcase.core.peas.entities.FakeBlock;
-import playn.showcase.core.peas.entities.Pea;
+import playn.showcase.core.peas.entities.Ball;
 import playn.showcase.core.peas.entities.Portal;
 
 public class PeaLoader {
 
   public static void CreateWorld(String level, final GroupLayer worldLayer,
-      final ResourceCallback<PeaWorld> callback) {
-    final PeaWorld peaWorld = new PeaWorld(worldLayer);
+      final ResourceCallback<PongWorld> callback) {
+    final PongWorld peaWorld = new PongWorld(worldLayer);
 
     // load the level
     PlayN.assetManager().getText(level, new ResourceCallback<String>() {

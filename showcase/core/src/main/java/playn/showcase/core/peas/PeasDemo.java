@@ -34,7 +34,7 @@ import playn.core.Pointer;
 import playn.core.ResourceCallback;
 import playn.showcase.core.Demo;
 import playn.showcase.core.peas.entities.Bat;
-import playn.showcase.core.peas.entities.Pea;
+import playn.showcase.core.peas.entities.Ball;
 
 public class PeasDemo extends Demo {
 
@@ -49,7 +49,7 @@ public class PeasDemo extends Demo {
 	GroupLayer worldLayer;
 
 	// main world
-	PeaWorld world = null;
+	PongWorld world = null;
 	boolean worldLoaded = false;
 
 	Bat bat;
@@ -63,7 +63,7 @@ public class PeasDemo extends Demo {
 	@Override
 	public void init() {
 
-		graphics().setSize( (int) (PeaWorld.width/physUnitPerScreenUnit), (int) (PeaWorld.height/physUnitPerScreenUnit));
+		graphics().setSize( (int) (PongWorld.width/physUnitPerScreenUnit), (int) (PongWorld.height/physUnitPerScreenUnit));
 		// load and show our background image
 		Image bgImage = assetManager().getImage("peas/images/Zwart.png");
 		bgLayer = graphics().createImageLayer(bgImage);
@@ -75,12 +75,12 @@ public class PeasDemo extends Demo {
 		graphics().rootLayer().add(worldLayer);
 
 		PeaLoader.CreateWorld("peas/levels/level1.json", worldLayer,
-				new ResourceCallback<PeaWorld>() {
+				new ResourceCallback<PongWorld>() {
 					@Override
-					public void done(PeaWorld resource) {
+					public void done(PongWorld resource) {
 						world = resource;
 						worldLoaded = true;
-						bat = new Bat(world, world.world, PeaWorld.width/2, PeaWorld.height -2, 0);
+						bat = new Bat(world, world.world, PongWorld.width/2, PongWorld.height -2, 0);
 						world.add(bat);
 
 					}
@@ -97,7 +97,7 @@ public class PeasDemo extends Demo {
 			@Override
 			public void onPointerStart(Pointer.Event event) {
 				if (worldLoaded) {
-					Pea pea = new Pea(world, world.world, physUnitPerScreenUnit
+					Ball pea = new Ball(world, world.world, physUnitPerScreenUnit
 							* event.x(), physUnitPerScreenUnit * event.y(), 0);
 					Random rnd = new Random();
 					pea.setLinearVelocity(10 * rnd.nextFloat() - 5,
@@ -123,7 +123,7 @@ public class PeasDemo extends Demo {
 					oldPos = bat.getBody().getPosition();
 					System.out.println("Bat old position: "
 							+ bat.getBody().getPosition());
-					bat.setPos(Math.min(PeaWorld.width - 3, oldPos.x + DELTA),
+					bat.setPos(Math.min(PongWorld.width - 3, oldPos.x + DELTA),
 							oldPos.y);
 					System.out.println("Bat position: "
 							+ bat.getBody().getPosition());

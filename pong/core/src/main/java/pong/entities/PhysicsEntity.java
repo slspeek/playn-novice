@@ -13,25 +13,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package playn.showcase.core.peas.entities;
+package pong.entities;
 
-import playn.showcase.core.peas.PongWorld;
+import org.jbox2d.dynamics.Body;
 
-public class Cloud3 extends Cloud1 {
-  @SuppressWarnings("hiding")
-  public static String TYPE = "Cloud3";
+public interface PhysicsEntity {
 
-  public Cloud3(PongWorld peaWorld) {
-    super(peaWorld);
-  }
+  public Body getBody();
 
-  @Override
-  float getVelocity() {
-    return 0.002f;
-  }
-
-  @Override
-  String getImageName() {
-    return "Cloud3.png";
+  public interface HasContactListener {
+    public void contact(PhysicsEntity other);
   }
 }
