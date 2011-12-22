@@ -46,8 +46,8 @@ public class PeaWorld implements ContactListener {
   public GroupLayer staticLayerFront;
 
   // size of world
- static int width = 41;
-  static int height = 33;
+ static int width = 38;
+  static int height = 29;
 
   // box2d object containing physics world
   protected World world;
@@ -56,7 +56,7 @@ public class PeaWorld implements ContactListener {
   private HashMap<Body, PhysicsEntity> bodyEntityLUT = new HashMap<Body, PhysicsEntity>();
   private Stack<Contact> contacts = new Stack<Contact>();
 
-  private static boolean showDebugDraw = false;
+  private static boolean showDebugDraw = true;
   private DebugDrawBox2D debugDraw;
 
   public PeaWorld(GroupLayer scaledLayer) {
@@ -79,6 +79,12 @@ public class PeaWorld implements ContactListener {
     PolygonShape groundShape = new PolygonShape();
     groundShape.setAsEdge(new Vec2(0, height), new Vec2(width, height));
     ground.createFixture(groundShape, 0.0f);
+    
+    // create the ceil
+    Body ceiling = world.createBody(new BodyDef());
+    PolygonShape ceilingShape = new PolygonShape();
+    ceilingShape.setAsEdge(new Vec2(0, 1), new Vec2(width, 	1));
+    ceiling.createFixture(ceilingShape, 0.0f);
 
     // create the walls
     Body wallLeft = world.createBody(new BodyDef());

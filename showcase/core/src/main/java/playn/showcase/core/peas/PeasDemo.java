@@ -63,7 +63,7 @@ public class PeasDemo extends Demo {
 	@Override
 	public void init() {
 
-		graphics().setSize(1024, 768);
+		graphics().setSize( (int) (PeaWorld.width/physUnitPerScreenUnit), (int) (PeaWorld.height/physUnitPerScreenUnit));
 		// load and show our background image
 		Image bgImage = assetManager().getImage("peas/images/Zwart.png");
 		bgLayer = graphics().createImageLayer(bgImage);
@@ -80,7 +80,7 @@ public class PeasDemo extends Demo {
 					public void done(PeaWorld resource) {
 						world = resource;
 						worldLoaded = true;
-						bat = new Bat(world, world.world, 19, 28, 0);
+						bat = new Bat(world, world.world, PeaWorld.width/2, PeaWorld.height -2, 0);
 						world.add(bat);
 
 					}
@@ -100,8 +100,8 @@ public class PeasDemo extends Demo {
 					Pea pea = new Pea(world, world.world, physUnitPerScreenUnit
 							* event.x(), physUnitPerScreenUnit * event.y(), 0);
 					Random rnd = new Random();
-					pea.setLinearVelocity(10 * rnd.nextFloat(),
-							rnd.nextFloat() * 10);
+					pea.setLinearVelocity(10 * rnd.nextFloat() - 5,
+							rnd.nextFloat() * 10 - 5);
 					world.add(pea);
 				}
 			}
