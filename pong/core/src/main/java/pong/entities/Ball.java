@@ -25,52 +25,52 @@ import org.jbox2d.dynamics.World;
 
 import pong.core.PongWorld;
 
-
 public class Ball extends DynamicPhysicsEntity {
+	public static String TYPE = "Ball";
 
-  public Ball(PongWorld pongWorld, World world, float x, float y, float angle) {
-    super(pongWorld, world, x, y, angle);
-  }
+	public Ball(PongWorld pongWorld, World world, float x, float y, float angle) {
+		super(pongWorld, world, x, y, angle);
+	}
 
-  @Override
-  Body initPhysicsBody(World world, float x, float y, float angle) {
-    FixtureDef fixtureDef = new FixtureDef();
-    BodyDef bodyDef = new BodyDef();
-    bodyDef.type = BodyType.DYNAMIC;
-    bodyDef.position = new Vec2(0, 0);
-    Body body = world.createBody(bodyDef);
+	@Override
+	Body initPhysicsBody(World world, float x, float y, float angle) {
+		FixtureDef fixtureDef = new FixtureDef();
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DYNAMIC;
+		bodyDef.position = new Vec2(0, 0);
+		Body body = world.createBody(bodyDef);
 
-    CircleShape circleShape = new CircleShape();
-    circleShape.m_radius = getRadius();
-    fixtureDef.shape = circleShape;
-    fixtureDef.density = 0.4f;
-    fixtureDef.friction = 0.0f;
-    fixtureDef.restitution = 1f;
-    circleShape.m_p.set(0, 0);
-    body.createFixture(fixtureDef);
-    body.setLinearDamping(0.0f);
-    body.setTransform(new Vec2(x, y), angle);
-    return body;
-  }
+		CircleShape circleShape = new CircleShape();
+		circleShape.m_radius = getRadius();
+		fixtureDef.shape = circleShape;
+		fixtureDef.density = 0.4f;
+		fixtureDef.friction = 0.0f;
+		fixtureDef.restitution = 1f;
+		circleShape.m_p.set(0, 0);
+		body.createFixture(fixtureDef);
+		body.setLinearDamping(0.0f);
+		body.setTransform(new Vec2(x, y), angle);
+		return body;
+	}
 
-  @Override
-  float getWidth() {
-    return 2 * getRadius();
-  }
+	@Override
+	float getWidth() {
+		return 2 * getRadius();
+	}
 
-  @Override
-  float getHeight() {
-    return 2 * getRadius();
-  }
+	@Override
+	float getHeight() {
+		return 2 * getRadius();
+	}
 
-  float getRadius() {
-    //return 1.50f;
-    return 0.5f;
-  }
+	float getRadius() {
+		// return 1.50f;
+		return 0.5f;
+	}
 
-  @Override
-  public String getImageName() {
-    //return "chrome.png";
-    return "pea.png";
-  }
+	@Override
+	public String getImageName() {
+		// return "chrome.png";
+		return "pea.png";
+	}
 }
