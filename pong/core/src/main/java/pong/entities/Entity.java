@@ -13,17 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package playn.showcase.core.peas.entities;
+package pong.entities;
 
 import static playn.core.PlayN.assetManager;
 import static playn.core.PlayN.graphics;
-
-import playn.core.PlayN;
 import playn.core.Image;
 import playn.core.ImageLayer;
+import playn.core.PlayN;
 import playn.core.ResourceCallback;
+import pong.core.PongWorld;
 
-import playn.showcase.core.peas.PongWorld;
 
 public abstract class Entity {
   ImageLayer layer;
@@ -34,7 +33,7 @@ public abstract class Entity {
     this.x = px;
     this.y = py;
     this.angle = pangle;
-    image = assetManager().getImage("peas/images/" + getImageName());
+    image = assetManager().getImage("images/" + getImageName());
     layer = graphics().createImageLayer(image);
     initPreLoad(peaWorld);
     image.addCallback(new ResourceCallback<Image>() {

@@ -23,7 +23,7 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
-import playn.showcase.core.peas.PeaWorld;
+import playn.showcase.core.peas.PongWorld;
 
 public class Portal extends StaticPhysicsEntity implements PhysicsEntity.HasContactListener {
   public static String TYPE = "Portal";
@@ -33,7 +33,7 @@ public class Portal extends StaticPhysicsEntity implements PhysicsEntity.HasCont
   private static int maxHysteresis = 10;
   private static int hysteresis = 0;
 
-  public Portal(PeaWorld peaWorld, World world, float x, float y, float angle) {
+  public Portal(PongWorld peaWorld, World world, float x, float y, float angle) {
     super(peaWorld, world, x, y, angle);
   }
 
@@ -64,7 +64,7 @@ public class Portal extends StaticPhysicsEntity implements PhysicsEntity.HasCont
   }
 
   @Override
-  public void initPostLoad(final PeaWorld peaWorld) {
+  public void initPostLoad(final PongWorld peaWorld) {
     layer.setRotation(0f); // total hack so we can portal horizontally but not rotate the image
     peaWorld.staticLayerFront.add(layer);
   }

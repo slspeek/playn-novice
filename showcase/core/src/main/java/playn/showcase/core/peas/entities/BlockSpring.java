@@ -28,7 +28,7 @@ import org.jbox2d.dynamics.joints.MouseJointDef;
 import static playn.core.PlayN.graphics;
 
 import playn.core.ImageLayer;
-import playn.showcase.core.peas.PeaWorld;
+import playn.showcase.core.peas.PongWorld;
 
 public class BlockSpring extends Entity implements PhysicsEntity {
   public static String TYPE = "BlockSpring";
@@ -37,7 +37,7 @@ public class BlockSpring extends Entity implements PhysicsEntity {
   MouseJoint mj;
   Body body;
 
-  public BlockSpring(PeaWorld peaWorld, World world, float x, float y, float angle) {
+  public BlockSpring(PongWorld peaWorld, World world, float x, float y, float angle) {
     super(peaWorld, x, y, angle);
 
     // add the spring joint
@@ -55,11 +55,11 @@ public class BlockSpring extends Entity implements PhysicsEntity {
   }
 
   @Override
-  public void initPreLoad(final PeaWorld peaWorld) {
+  public void initPreLoad(final PongWorld peaWorld) {
   }
 
   @Override
-  public void initPostLoad(final PeaWorld peaWorld) {
+  public void initPostLoad(final PongWorld peaWorld) {
     layerBase = graphics().createImageLayer(layer.image());
 
     // set our layer base settings/source

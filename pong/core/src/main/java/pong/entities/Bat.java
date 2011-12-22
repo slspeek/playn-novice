@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package playn.showcase.core.peas.entities;
+package pong.entities;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -23,7 +23,7 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
-import playn.showcase.core.peas.PongWorld;
+import pong.core.PongWorld;
 
 public class Bat extends DynamicPhysicsEntity{
   public static String TYPE = "Bat";

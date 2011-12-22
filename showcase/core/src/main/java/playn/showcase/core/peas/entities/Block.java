@@ -23,12 +23,12 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
-import playn.showcase.core.peas.PeaWorld;
+import playn.showcase.core.peas.PongWorld;
 
 public class Block extends StaticPhysicsEntity {
   public static String TYPE = "Block";
 
-  public Block(final PeaWorld peaWorld, World world, float x, float y, float angle) {
+  public Block(final PongWorld peaWorld, World world, float x, float y, float angle) {
     super(peaWorld, world, x, y, angle);
   }
 
