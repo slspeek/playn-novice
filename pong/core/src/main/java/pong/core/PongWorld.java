@@ -52,6 +52,8 @@ public class PongWorld implements ContactListener {
 
 	// box2d object containing physics world
 	protected World world;
+	
+	public Body ground;
 
 	private List<Entity> entities = new ArrayList<Entity>(0);
 	private HashMap<Body, PhysicsEntity> bodyEntityLUT = new HashMap<Body, PhysicsEntity>();
@@ -76,7 +78,7 @@ public class PongWorld implements ContactListener {
 		world.setContactListener(this);
 
 		// create the ground
-		Body ground = world.createBody(new BodyDef());
+		ground = world.createBody(new BodyDef());
 		PolygonShape groundShape = new PolygonShape();
 		groundShape.setAsEdge(new Vec2(0, HEIGHT), new Vec2(WIDTH, HEIGHT));
 		ground.createFixture(groundShape, 0.0f);

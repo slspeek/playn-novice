@@ -7,6 +7,9 @@ import static playn.core.PlayN.pointer;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.joints.LineJoint;
+import org.jbox2d.dynamics.joints.LineJointDef;
+import org.jbox2d.dynamics.joints.PrismaticJoint;
 
 import playn.core.Game;
 import playn.core.GroupLayer;
@@ -31,6 +34,8 @@ public class PongGame implements Game {
 	boolean worldLoaded = false;
 
 	Bat bat;
+	
+	LineJoint joint;
 
 	@Override
 	public void init() {
@@ -102,6 +107,25 @@ public class PongGame implements Game {
 
 		});
 
+		initJoint();
+	}
+
+	private void initJoint() {
+		LineJointDef jd = new LineJointDef();
+		
+		// Bouncy limit
+		Vec2 axis = new Vec2(1.0f, 0.0f);
+		axis.normalize();
+		jd.initialize(world.ground, bat.getBody(), new Vec2(0.0f, 8.5f), axis);
+		
+		jd.motorSpeed = 0.0f;
+		jd.maxMotorForce = 100.0f;
+		jd.enableMotor = true;
+		jd.lowerTranslation = -4.0f;
+		jd.upperTranslation = 4.0f;
+		jd.enableLimit = true;
+		joint = (LineJoint) world.world.createJoint(jd);
+		
 	}
 
 	@Override
