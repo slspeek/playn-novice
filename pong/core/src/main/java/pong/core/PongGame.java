@@ -41,13 +41,12 @@ public class PongGame implements Game {
 	boolean worldLoaded = false;
 
 	Bat bat;
-	
+
 	LineJoint joint;
-	
+	protected boolean ballLoaded;
 
 	@Override
 	public void init() {
-		
 
 		graphics().setSize(
 				(int) (PongWorld.WIDTH / PongWorld.physUnitPerScreenUnit),
@@ -64,15 +63,16 @@ public class PongGame implements Game {
 
 		world = new PongWorld(worldLayer);
 		worldLoaded = true;
-		
-		bat = new Bat(world, world.world, PongWorld.WIDTH/2, PongWorld.HEIGHT -2, 0);
+
+		bat = new Bat(world, world.world, PongWorld.WIDTH / 2,
+				PongWorld.HEIGHT - 2, 0);
 		world.add(bat);
-		
+
 		// hook up our pointer listener
 		pointer().setListener(new Pointer.Adapter() {
 			@Override
 			public void onPointerStart(Pointer.Event event) {
-				if (worldLoaded) {
+				if (!ballLoaded && worldLoaded) {
 					Ball pea = new Ball(world, world.world,
 							PongWorld.physUnitPerScreenUnit * event.x(),
 							PongWorld.physUnitPerScreenUnit * event.y(), 0);
@@ -80,7 +80,18 @@ public class PongGame implements Game {
 					pea.setLinearVelocity(10 * rnd.nextFloat() - 5,
 							rnd.nextFloat() * 10 - 5);
 					world.add(pea);
+					ballLoaded = true;
+				} else {
+					float x = event.x();
+					Vec2 oldPos = bat.getBody().getPosition();
+					System.out.println("Mouse Bat old position: "
+							+ bat.getBody().getPosition());
+					Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
+					bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
+					System.out.println("Mouse Bat new position: "
+							+ newPos);
 				}
+
 			}
 		});
 
@@ -122,12 +133,12 @@ public class PongGame implements Game {
 
 	private void initJoint() {
 		LineJointDef jd = new LineJointDef();
-		
+
 		// Bouncy limit
 		Vec2 axis = new Vec2(1.0f, 0.0f);
 		axis.normalize();
 		jd.initialize(world.ground, bat.getBody(), new Vec2(0.0f, 8.5f), axis);
-		
+
 		jd.motorSpeed = 0.0f;
 		jd.maxMotorForce = 100.0f;
 		jd.enableMotor = true;
@@ -135,7 +146,7 @@ public class PongGame implements Game {
 		jd.upperTranslation = 4.0f;
 		jd.enableLimit = true;
 		joint = (LineJoint) world.world.createJoint(jd);
-		
+
 	}
 
 	@Override

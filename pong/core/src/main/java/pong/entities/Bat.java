@@ -30,7 +30,7 @@ import pong.core.PongWorld;
 
 public class Bat extends DynamicPhysicsEntity implements
 		PhysicsEntity.HasContactListener {
-	private static final float SPEED_INCREASE_FACTOR = 3f;
+	private static final float SPEED_INCREASE_FACTOR = 1.3f;
 	public static String TYPE = "Bat";
 	Sound ding;
 	public Bat(final PongWorld peaWorld, World world, float x, float y,
