@@ -28,7 +28,7 @@ import playn.core.Sound;
 import pong.entities.Ball;
 import pong.entities.Bat;
 
-public class PongGame implements Game, ContactListener {
+public class PongGame implements Game {
 
 	int DELTA = 1;
 	ImageLayer bgLayer;
@@ -43,12 +43,11 @@ public class PongGame implements Game, ContactListener {
 	Bat bat;
 	
 	LineJoint joint;
-	Sound ding;
+	
 
 	@Override
 	public void init() {
-		// load a sound that we'll play when placing sprites
-	    ding = assetManager().getSound("images/ding");
+		
 
 		graphics().setSize(
 				(int) (PongWorld.WIDTH / PongWorld.physUnitPerScreenUnit),
@@ -65,7 +64,6 @@ public class PongGame implements Game, ContactListener {
 
 		world = new PongWorld(worldLayer);
 		worldLoaded = true;
-		world.world.setContactListener(this);
 		
 		bat = new Bat(world, world.world, PongWorld.WIDTH/2, PongWorld.HEIGHT -2, 0);
 		world.add(bat);
@@ -158,37 +156,4 @@ public class PongGame implements Game, ContactListener {
 	public int updateRate() {
 		return 25;
 	}
-	
-	// Box2d's begin contact
-	@Override
-	public void beginContact(Contact contact) {
-		//System.out.println("Begin contact");
-		Fixture fA = contact.getFixtureA();
-		Fixture fB = contact.getFixtureA();
-		
-		Body bB = fB.getBody();
-		Body bA = fA.getBody();
-		Body bBat = bat.getBody();
-		if (bB.equals(bBat) || bA.equals(bBat)) {
-			System.out.println("Bat hit");
-			ding.play();
-		}
-		//contacts.push(contact);
-	}
-
-	// Box2d's end contact
-	@Override
-	public void endContact(Contact contact) {
-	}
-
-	// Box2d's pre solve
-	@Override
-	public void preSolve(Contact contact, Manifold oldManifold) {
-	}
-
-	// Box2d's post solve
-	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-	}
-	
 }

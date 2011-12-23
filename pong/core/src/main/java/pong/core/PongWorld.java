@@ -41,9 +41,7 @@ import pong.entities.Entity;
 import pong.entities.PhysicsEntity;
 
 public class PongWorld implements ContactListener {
-	public GroupLayer staticLayerBack;
 	public GroupLayer dynamicLayer;
-	public GroupLayer staticLayerFront;
 
 	// scale difference between screen space (pixels) and world space (physics).
 	public static final float physUnitPerScreenUnit = 1 / 26.666667f;
@@ -64,19 +62,15 @@ public class PongWorld implements ContactListener {
 	private DebugDrawBox2D debugDraw;
 
 	public PongWorld(GroupLayer scaledLayer) {
-		staticLayerBack = graphics().createGroupLayer();
-		scaledLayer.add(staticLayerBack);
 		dynamicLayer = graphics().createGroupLayer();
 		scaledLayer.add(dynamicLayer);
-		staticLayerFront = graphics().createGroupLayer();
-		scaledLayer.add(staticLayerFront);
 
 		// create the physics world
 		Vec2 gravity = new Vec2(0.0f, 0.0f);
 		world = new World(gravity, true);
 		world.setWarmStarting(true);
 		world.setAutoClearForces(true);
-		//world.setContactListener(this);
+		world.setContactListener(this);
 
 		// create the ground
 		ground = world.createBody(new BodyDef());
@@ -172,18 +166,12 @@ public class PongWorld implements ContactListener {
 	// Box2d's begin contact
 	@Override
 	public void beginContact(Contact contact) {
-		System.out.println("Begin contact");
-		Fixture fA = contact.getFixtureA();
-		Fixture fB = contact.getFixtureA();
-		
-		Body bB = fB.getBody();
 		contacts.push(contact);
 	}
 
 	// Box2d's end contact
 	@Override
 	public void endContact(Contact contact) {
-		System.out.println("End contact");
 	}
 
 	// Box2d's pre solve
