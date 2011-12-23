@@ -30,6 +30,7 @@ import pong.core.PongWorld;
 
 public class Bat extends DynamicPhysicsEntity implements
 		PhysicsEntity.HasContactListener {
+	private static final float SPEED_INCREASE_FACTOR = 3f;
 	public static String TYPE = "Bat";
 	Sound ding;
 	public Bat(final PongWorld peaWorld, World world, float x, float y,
@@ -93,6 +94,9 @@ public class Bat extends DynamicPhysicsEntity implements
 	public void contact(PhysicsEntity other) {
 		System.out.println("Bat contacted");
 		ding.play();
+		Vec2 velocity = other.getBody().getLinearVelocity();
+		Vec2 newSpeed = new Vec2(velocity.x * SPEED_INCREASE_FACTOR, velocity.y * SPEED_INCREASE_FACTOR);
+		other.getBody().setLinearVelocity(newSpeed);
 
 	}
 }
