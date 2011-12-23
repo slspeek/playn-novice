@@ -1,4 +1,5 @@
 syntax: glob
+*/.gwt-log
 grapher/src/site/resources/*.png
 extras/*
 target/*

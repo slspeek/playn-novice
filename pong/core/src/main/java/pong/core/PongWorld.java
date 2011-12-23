@@ -30,6 +30,7 @@ import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
@@ -75,7 +76,7 @@ public class PongWorld implements ContactListener {
 		world = new World(gravity, true);
 		world.setWarmStarting(true);
 		world.setAutoClearForces(true);
-		world.setContactListener(this);
+		//world.setContactListener(this);
 
 		// create the ground
 		ground = world.createBody(new BodyDef());
@@ -171,12 +172,18 @@ public class PongWorld implements ContactListener {
 	// Box2d's begin contact
 	@Override
 	public void beginContact(Contact contact) {
+		System.out.println("Begin contact");
+		Fixture fA = contact.getFixtureA();
+		Fixture fB = contact.getFixtureA();
+		
+		Body bB = fB.getBody();
 		contacts.push(contact);
 	}
 
 	// Box2d's end contact
 	@Override
 	public void endContact(Contact contact) {
+		System.out.println("End contact");
 	}
 
 	// Box2d's pre solve
