@@ -6,16 +6,9 @@ import static playn.core.PlayN.pointer;
 
 import java.util.Random;
 
-import org.jbox2d.callbacks.ContactImpulse;
-import org.jbox2d.callbacks.ContactListener;
-import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.Fixture;
-import org.jbox2d.dynamics.contacts.Contact;
 import org.jbox2d.dynamics.joints.LineJoint;
 import org.jbox2d.dynamics.joints.LineJointDef;
-import org.jbox2d.dynamics.joints.PrismaticJoint;
 
 import playn.core.Game;
 import playn.core.GroupLayer;
@@ -24,7 +17,6 @@ import playn.core.ImageLayer;
 import playn.core.Keyboard;
 import playn.core.PlayN;
 import playn.core.Pointer;
-import playn.core.Sound;
 import pong.entities.Ball;
 import pong.entities.Bat;
 
