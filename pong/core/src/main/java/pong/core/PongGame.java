@@ -95,7 +95,7 @@ public class PongGame implements Game {
 					Vec2 oldPos = bat.getBody().getPosition();
 					System.out.println("Bat old position: "
 							+ bat.getBody().getPosition());
-					bat.setPos(Math.max(0, oldPos.x - DELTA), oldPos.y);
+					bat.setPos(Math.max(1, oldPos.x - DELTA), oldPos.y);
 					System.out.println("Bat position: "
 							+ bat.getBody().getPosition());
 					break;
@@ -103,19 +103,24 @@ public class PongGame implements Game {
 					oldPos = bat.getBody().getPosition();
 					System.out.println("Bat old position: "
 							+ bat.getBody().getPosition());
-					bat.setPos(Math.min(PongWorld.WIDTH - 3, oldPos.x + DELTA),
+					bat.setPos(Math.min(PongWorld.WIDTH - 1, oldPos.x + DELTA),
 							oldPos.y);
 					System.out.println("Bat position: "
 							+ bat.getBody().getPosition());
 					break;
-
+				case Q:	// EXIT GAME
+					//PongGame.this.finalize();
+					//pointer().setListener(null);    	// destroy mouse listener object
+					//this.setListener(null);	// destroy keyboard listener
+					System.exit(0);
+					break;
 				}
 
 			}
 
 			@Override
 			public void onKeyUp(Keyboard.Event event) {
-				System.out.println("Up Hello " + event.key());
+				System.out.println("onKeyUp: " + event.key());
 			}
 
 		});
