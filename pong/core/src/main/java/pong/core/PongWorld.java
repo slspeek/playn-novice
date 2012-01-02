@@ -30,13 +30,16 @@ import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
 import playn.core.CanvasLayer;
 import playn.core.DebugDrawBox2D;
+import playn.core.Font;
 import playn.core.GroupLayer;
+import playn.core.Layer;
+import playn.core.TextFormat;
+import playn.core.TextLayout;
 import pong.entities.Entity;
 import pong.entities.PhysicsEntity;
 
@@ -51,7 +54,7 @@ public class PongWorld implements ContactListener {
 
 	// box2d object containing physics world
 	protected World world;
-	
+
 	public Body ground;
 
 	private List<Entity> entities = new ArrayList<Entity>(0);
@@ -60,11 +63,30 @@ public class PongWorld implements ContactListener {
 
 	private static boolean showDebugDraw = false;
 	private DebugDrawBox2D debugDraw;
+	private TextLayout textLayout;
 
 	public PongWorld(GroupLayer scaledLayer) {
 		dynamicLayer = graphics().createGroupLayer();
 		scaledLayer.add(dynamicLayer);
 
+		
+		Font font = graphics().createFont("Helvetica", Font.Style.PLAIN, 32);
+		TextFormat format = new TextFormat().withFont(font).withTextColor(0xFF006600);
+		TextLayout layout = graphics().layoutText("Do your best", format);
+		
+		float textWidth = layout.width() * physUnitPerScreenUnit;
+		System.out.println(textWidth);
+		float mainWidth = WIDTH;
+		float textXOffset = (mainWidth - textWidth) / 2.0f;
+		
+		Layer layer = createTextLayer(layout);
+		dynamicLayer.add(layer);
+		layer.setOrigin(0,00);
+		layer.setScale(0.1f);
+		
+		layer.setTranslation(textXOffset, 0);
+	    scaledLayer.add(layer);
+		
 		// create the physics world
 		Vec2 gravity = new Vec2(0.0f, 0.0f);
 		world = new World(gravity, true);
@@ -110,6 +132,14 @@ public class PongWorld implements ContactListener {
 			debugDraw.setCamera(0, 0, 1f / physUnitPerScreenUnit);
 			world.setDebugDraw(debugDraw);
 		}
+	}
+
+	protected static Layer createTextLayer(TextLayout layout) {
+		CanvasLayer layer = graphics().createCanvasLayer(
+				(int) Math.ceil(layout.width()),
+				(int) Math.ceil(layout.height()));
+		layer.canvas().drawText(layout, 0, 0);
+		return layer;
 	}
 
 	public void update(float delta) {

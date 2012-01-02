@@ -63,7 +63,7 @@ public class PongGame implements Game {
 		// hook up our pointer listener
 		pointer().setListener(new Pointer.Adapter() {
 			@Override
-			public void onPointerStart(Pointer.Event event) {
+			public void onPointerDrag(Pointer.Event event) {
 				if (!ballLoaded && worldLoaded) {
 					Ball pea = new Ball(world, world.world,
 							PongWorld.physUnitPerScreenUnit * event.x(),
