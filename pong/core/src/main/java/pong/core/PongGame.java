@@ -112,7 +112,8 @@ public class PongGame implements Game {
 					//PongGame.this.finalize();
 					//pointer().setListener(null);    	// destroy mouse listener object
 					//this.setListener(null);	// destroy keyboard listener
-					System.exit(0);
+					// System.exit(0);
+					System.out.println("EXIT GAME, not yet working");
 					break;
 				}
 
