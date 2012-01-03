@@ -33,9 +33,11 @@ public class Bat extends DynamicPhysicsEntity implements
 	private static final float SPEED_INCREASE_FACTOR = 1.3f;
 	public static String TYPE = "Bat";
 	Sound ding;
-	public Bat(final PongWorld peaWorld, World world, float x, float y,
+	PongWorld pongWorld;
+	public Bat(final PongWorld pongWorld, World world, float x, float y,
 			float angle) {
-		super(peaWorld, world, x, y, angle);
+		super(pongWorld, world, x, y, angle);
+		this.pongWorld = pongWorld;
 		// load a sound that we'll play when placing sprites
 	    ding = assetManager().getSound("images/ding");
 	}
@@ -94,6 +96,7 @@ public class Bat extends DynamicPhysicsEntity implements
 	public void contact(PhysicsEntity other) {
 		System.out.println("Bat contacted");
 		ding.play();
+		pongWorld.scoreBoard.increaseScore();
 		Vec2 velocity = other.getBody().getLinearVelocity();
 		Vec2 newSpeed = new Vec2(velocity.x * SPEED_INCREASE_FACTOR, velocity.y * SPEED_INCREASE_FACTOR);
 		other.getBody().setLinearVelocity(newSpeed);

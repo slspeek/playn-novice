@@ -36,6 +36,7 @@ public class PongGame implements Game {
 
 	LineJoint joint;
 	protected boolean ballLoaded;
+	int score = 0;
 
 	@Override
 	public void init() {
@@ -65,13 +66,13 @@ public class PongGame implements Game {
 			@Override
 			public void onPointerDrag(Pointer.Event event) {
 				if (!ballLoaded && worldLoaded) {
-					Ball pea = new Ball(world, world.world,
+					Ball ball = new Ball(world, world.world,
 							PongWorld.physUnitPerScreenUnit * event.x(),
 							PongWorld.physUnitPerScreenUnit * event.y(), 0);
 					Random rnd = new Random();
-					pea.setLinearVelocity(10 * rnd.nextFloat() - 5,
+					ball.setLinearVelocity(10 * rnd.nextFloat() - 5,
 							rnd.nextFloat() * 10 - 5);
-					world.add(pea);
+					world.add(ball);
 					ballLoaded = true;
 				} else {
 					float x = event.x();
@@ -115,6 +116,7 @@ public class PongGame implements Game {
 					// System.exit(0);
 					System.out.println("EXIT GAME, not yet working");
 					break;
+				
 				}
 
 			}
