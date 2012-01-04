@@ -10,6 +10,6 @@ public class PongGameJava {
   public static void main(String[] args) {
     JavaPlatform platform = JavaPlatform.register();
     platform.assetManager().setPathPrefix("pong/resources");
-    PlayN.run(new PongGame());
+    PlayN.run(new PongGameJavaExt());
   }
 }
