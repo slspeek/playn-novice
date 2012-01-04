@@ -70,15 +70,18 @@ public class PongGame implements Game {
 							PongWorld.physUnitPerScreenUnit * event.x(),
 							PongWorld.physUnitPerScreenUnit * event.y(), 0);
 					Random rnd = new Random();
-					ball.setLinearVelocity(10 * rnd.nextFloat() - 5,
-							rnd.nextFloat() * 10 - 5);
+					ball.setLinearVelocity(10,10);
 					world.add(ball);
 					ballLoaded = true;
 				} else {
 					float x = event.x();
 					Vec2 oldPos = bat.getBody().getPosition();
+					System.out.println("Mouse Bat old position: "
+							+ bat.getBody().getPosition());
 					Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
 					bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
+					System.out.println("Mouse Bat new position: "
+							+ newPos);
 				}
 
 			}
@@ -90,13 +93,27 @@ public class PongGame implements Game {
 				switch (event.key()) {
 				case LEFT:
 					Vec2 oldPos = bat.getBody().getPosition();
+					System.out.println("Bat old position: "
+							+ bat.getBody().getPosition());
 					bat.setPos(Math.max(1, oldPos.x - DELTA), oldPos.y);
+					System.out.println("Bat position: "
+							+ bat.getBody().getPosition());
 					break;
 				case RIGHT:
 					oldPos = bat.getBody().getPosition();
-				
+					System.out.println("Bat old position: "
+							+ bat.getBody().getPosition());
 					bat.setPos(Math.min(PongWorld.WIDTH - 1, oldPos.x + DELTA),
 							oldPos.y);
+					System.out.println("Bat position: "
+							+ bat.getBody().getPosition());
+					
+//					break;
+//				case P:
+//					PongGame.this.finalize();
+//					pointer().setListener(null);    	// destroy mouse listener object
+//					this.setListener(null);	// destroy keyboard listener
+					
 					break;
 				case Q:	// EXIT GAME
 					//pointer().setListener(null);    	// destroy mouse listener object
@@ -109,8 +126,14 @@ public class PongGame implements Game {
 
 			}
 
+			private void setListener(Object object) {
+				// TODO Auto-generated method stub
+				
+			}
+
 			@Override
 			public void onKeyUp(Keyboard.Event event) {
+				System.out.println("onKeyUp: " + event.key());
 			}
 
 		});

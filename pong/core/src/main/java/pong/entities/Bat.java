@@ -98,8 +98,13 @@ public class Bat extends DynamicPhysicsEntity implements
 		ding.play();
 		pongWorld.scoreBoard.increaseScore();
 		Vec2 velocity = other.getBody().getLinearVelocity();
-		Vec2 newSpeed = new Vec2(velocity.x * SPEED_INCREASE_FACTOR, velocity.y * SPEED_INCREASE_FACTOR);
+		Vec2 newSpeed = newSpeed(velocity);
 		other.getBody().setLinearVelocity(newSpeed);
 
 	}
+	
+	Vec2 newSpeed(Vec2 speed) {
+		return speed;
+	}
+	
 }
