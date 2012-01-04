@@ -25,7 +25,7 @@ import org.jbox2d.dynamics.World;
 
 import pong.core.PongWorld;
 
-public class Ball extends DynamicPhysicsEntity {
+public class Ball extends DynamicPhysicsEntity implements PhysicsEntity.HasContactListener {
 	public static String TYPE = "Ball";
 
 	public Ball(PongWorld pongWorld, World world, float x, float y, float angle) {
@@ -72,5 +72,9 @@ public class Ball extends DynamicPhysicsEntity {
 	public String getImageName() {
 		// return "chrome.png";
 		return "pea.png";
+	}
+	
+	@Override
+	public void contact(PhysicsEntity other) {
 	}
 }

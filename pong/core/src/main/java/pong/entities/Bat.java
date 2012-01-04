@@ -99,6 +99,8 @@ public class Bat extends DynamicPhysicsEntity implements
 		Vec2 velocity = other.getBody().getLinearVelocity();
 		Vec2 newSpeed = newSpeed(velocity);
 		other.getBody().setLinearVelocity(newSpeed);
+		
+		
 
 	}
 

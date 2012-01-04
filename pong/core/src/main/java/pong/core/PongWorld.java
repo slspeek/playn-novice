@@ -65,8 +65,8 @@ public class PongWorld implements ContactListener {
 	public PongWorld(GroupLayer scaledLayer) {
 		dynamicLayer = graphics().createGroupLayer();
 		scaledLayer.add(dynamicLayer);
-	    scaledLayer.add(scoreBoard.getLayer());
-	    scaledLayer.add(messageBoard.getLayer());
+	    dynamicLayer.add(scoreBoard.getLayer());
+	    dynamicLayer.add(messageBoard.getLayer());
 		
 		// create the physics world
 		Vec2 gravity = new Vec2(0.0f, 0.0f);
