@@ -84,6 +84,7 @@ public class PongGame implements Game {
 						ball.setLinearVelocity(1, 10);
 						world.add(ball);
 						ballLoaded = true;
+						world.messageBoard.setMessage("          ");
 					}
 
 					break;

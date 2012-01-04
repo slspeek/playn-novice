@@ -53,6 +53,7 @@ public class PongWorld implements ContactListener {
 
 	public Body ground;
 	public ScoreBoard scoreBoard = new ScoreBoard();
+	public MessageBoard messageBoard = new MessageBoard();
 
 	private List<Entity> entities = new ArrayList<Entity>(0);
 	private HashMap<Body, PhysicsEntity> bodyEntityLUT = new HashMap<Body, PhysicsEntity>();
@@ -65,6 +66,7 @@ public class PongWorld implements ContactListener {
 		dynamicLayer = graphics().createGroupLayer();
 		scaledLayer.add(dynamicLayer);
 	    scaledLayer.add(scoreBoard.getLayer());
+	    scaledLayer.add(messageBoard.getLayer());
 		
 		// create the physics world
 		Vec2 gravity = new Vec2(0.0f, 0.0f);

@@ -7,44 +7,34 @@ import playn.core.Layer;
 import playn.core.TextFormat;
 import playn.core.TextLayout;
 
-public class ScoreBoard {
+public class MessageBoard {
 
 	private CanvasLayer layer;
-	private String scoreString = "000";
+	private String message = "Press SPACE to start";
 	private TextLayout layout;
-	private int score = 0;
 
-	public ScoreBoard() {
+	public MessageBoard() {
 		init();
-		setScore(String.valueOf(score));
+		setMessage(message);
 	}
 	
 	public void init() {
 		layer = createTextLayer();
 	}
 	
-	public void increaseScore() {
-		setScore(String.valueOf(++score));
-	}
-	
-	private void setScore(String score) {
-		this.scoreString = score;
+	public void setMessage(String message) {
+		this.message = message;
 		Font font = graphics().createFont("Helvetica", Font.Style.PLAIN, 32);
-		TextFormat format = new TextFormat().withFont(font).withTextColor(0xFF006600);
-		layout = graphics().layoutText(score, format);
+		TextFormat format = new TextFormat().withFont(font).withTextColor(0xFF006600).withWrapping(200, TextFormat.Alignment.CENTER);
+		layout = graphics().layoutText(message, format);
 		
-		layer.canvas().clear();
-		layer.canvas().drawText(layout, 0, 0);
-		
-		float textWidth = layout.width() * PongWorld.physUnitPerScreenUnit;
-		float mainWidth = PongWorld.WIDTH;
+		float textWidth = layout.width();//* PongWorld.physUnitPerScreenUnit;
+		float mainWidth = PongWorld.WIDTH;// * PongWorld.physUnitPerScreenUnit;
 		float textXOffset = (mainWidth - textWidth) / 2.0f;
-		
-		
-		layer.setOrigin(0,00);
 		layer.setScale(0.1f);
 		
-		layer.setTranslation(textXOffset, 0);
+		layer.canvas().clear();
+		layer.canvas().drawText(layout, textXOffset, PongWorld.HEIGHT/2);
 	}
 	
 	public Layer getLayer() {
