@@ -30,10 +30,10 @@ import pong.core.PongWorld;
 
 public class Bat extends DynamicPhysicsEntity implements
 		PhysicsEntity.HasContactListener {
-	private static final float SPEED_INCREASE_FACTOR = 1.3f;
 	public static String TYPE = "Bat";
 	Sound ding;
 	PongWorld pongWorld;
+	
 	public Bat(final PongWorld pongWorld, World world, float x, float y,
 			float angle) {
 		super(pongWorld, world, x, y, angle);
@@ -94,12 +94,28 @@ public class Bat extends DynamicPhysicsEntity implements
 
 	@Override
 	public void contact(PhysicsEntity other) {
-		System.out.println("Bat speed:" + getBody().getLinearVelocity());
 		ding.play();
 		pongWorld.scoreBoard.increaseScore();
 		Vec2 velocity = other.getBody().getLinearVelocity();
-		Vec2 newSpeed = new Vec2(velocity.x * SPEED_INCREASE_FACTOR, velocity.y * SPEED_INCREASE_FACTOR);
+		Vec2 newSpeed = newSpeed(velocity);
 		other.getBody().setLinearVelocity(newSpeed);
 
+	}
+
+	private Vec2 newSpeed(Vec2 velocity) {
+		float vx = velocity.x;
+		float vy = velocity.y;
+		if (vy < 0) {
+			vy -= 1f;
+		} else {
+			vy += 1f;
+		}
+		if (vx < 0) {
+			vx -= 1f;
+		} else {
+			vx += 1f;
+		}
+		Vec2 newSpeed = new Vec2(vx,vy);
+		return newSpeed;
 	}
 }
