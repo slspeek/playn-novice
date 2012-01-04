@@ -77,12 +77,8 @@ public class PongGame implements Game {
 				} else {
 					float x = event.x();
 					Vec2 oldPos = bat.getBody().getPosition();
-					System.out.println("Mouse Bat old position: "
-							+ bat.getBody().getPosition());
 					Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
 					bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
-					System.out.println("Mouse Bat new position: "
-							+ newPos);
 				}
 
 			}
@@ -94,20 +90,13 @@ public class PongGame implements Game {
 				switch (event.key()) {
 				case LEFT:
 					Vec2 oldPos = bat.getBody().getPosition();
-					System.out.println("Bat old position: "
-							+ bat.getBody().getPosition());
 					bat.setPos(Math.max(1, oldPos.x - DELTA), oldPos.y);
-					System.out.println("Bat position: "
-							+ bat.getBody().getPosition());
 					break;
 				case RIGHT:
 					oldPos = bat.getBody().getPosition();
-					System.out.println("Bat old position: "
-							+ bat.getBody().getPosition());
+				
 					bat.setPos(Math.min(PongWorld.WIDTH - 1, oldPos.x + DELTA),
 							oldPos.y);
-					System.out.println("Bat position: "
-							+ bat.getBody().getPosition());
 					break;
 				case Q:	// EXIT GAME
 					//pointer().setListener(null);    	// destroy mouse listener object
@@ -122,7 +111,6 @@ public class PongGame implements Game {
 
 			@Override
 			public void onKeyUp(Keyboard.Event event) {
-				System.out.println("onKeyUp: " + event.key());
 			}
 
 		});
