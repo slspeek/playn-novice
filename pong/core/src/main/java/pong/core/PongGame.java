@@ -110,10 +110,9 @@ public class PongGame implements Game {
 							+ bat.getBody().getPosition());
 					break;
 				case Q:	// EXIT GAME
-					//PongGame.this.finalize();
 					//pointer().setListener(null);    	// destroy mouse listener object
 					//this.setListener(null);	// destroy keyboard listener
-					// System.exit(0);
+					// System.exit(0);		// works, but....
 					System.out.println("EXIT GAME, not yet working");
 					break;
 				
