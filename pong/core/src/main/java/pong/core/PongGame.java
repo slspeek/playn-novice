@@ -31,9 +31,7 @@ public class PongGame implements Game {
 	// main world
 	PongWorld world = null;
 	boolean worldLoaded = false;
-
 	Bat bat;
-
 	LineJoint joint;
 	protected boolean ballLoaded;
 	int score = 0;
@@ -65,24 +63,11 @@ public class PongGame implements Game {
 		pointer().setListener(new Pointer.Adapter() {
 			@Override
 			public void onPointerDrag(Pointer.Event event) {
-				if (!ballLoaded && worldLoaded) {
-					Ball ball = new Ball(world, world.world,
-							PongWorld.physUnitPerScreenUnit * event.x(),
-							PongWorld.physUnitPerScreenUnit * event.y(), 0);
-					Random rnd = new Random();
-					ball.setLinearVelocity(10,10);
-					world.add(ball);
-					ballLoaded = true;
-				} else {
-					float x = event.x();
-					Vec2 oldPos = bat.getBody().getPosition();
-					System.out.println("Mouse Bat old position: "
-							+ bat.getBody().getPosition());
-					Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
-					bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
-					System.out.println("Mouse Bat new position: "
-							+ newPos);
-				}
+
+				float x = event.x();
+				Vec2 oldPos = bat.getBody().getPosition();
+				Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
+				bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
 
 			}
 		});
@@ -91,49 +76,37 @@ public class PongGame implements Game {
 			@Override
 			public void onKeyDown(Keyboard.Event event) {
 				switch (event.key()) {
+				case SPACE:
+					if (!ballLoaded && worldLoaded) {
+						Ball ball = new Ball(world, world.world,
+								PongWorld.WIDTH / 2,
+								PongWorld.HEIGHT / 2, (float)Math.PI/4);
+						ball.setLinearVelocity(1, 10);
+						world.add(ball);
+						ballLoaded = true;
+					}
+
+					break;
 				case LEFT:
 					Vec2 oldPos = bat.getBody().getPosition();
-					System.out.println("Bat old position: "
-							+ bat.getBody().getPosition());
 					bat.setPos(Math.max(1, oldPos.x - DELTA), oldPos.y);
-					System.out.println("Bat position: "
-							+ bat.getBody().getPosition());
 					break;
 				case RIGHT:
 					oldPos = bat.getBody().getPosition();
-					System.out.println("Bat old position: "
-							+ bat.getBody().getPosition());
+
 					bat.setPos(Math.min(PongWorld.WIDTH - 1, oldPos.x + DELTA),
 							oldPos.y);
-					System.out.println("Bat position: "
-							+ bat.getBody().getPosition());
-					
-//					break;
-//				case P:
-//					PongGame.this.finalize();
-//					pointer().setListener(null);    	// destroy mouse listener object
-//					this.setListener(null);	// destroy keyboard listener
-					
 					break;
-				case Q:	// EXIT GAME
-					//pointer().setListener(null);    	// destroy mouse listener object
-					//this.setListener(null);	// destroy keyboard listener
-					// System.exit(0);		// works, but....
-					System.out.println("EXIT GAME, not yet working");
+				case Q:
+					quit();
 					break;
-				
+
 				}
 
 			}
 
-			private void setListener(Object object) {
-				// TODO Auto-generated method stub
-				
-			}
-
 			@Override
 			public void onKeyUp(Keyboard.Event event) {
-				System.out.println("onKeyUp: " + event.key());
 			}
 
 		});
@@ -176,5 +149,9 @@ public class PongGame implements Game {
 	@Override
 	public int updateRate() {
 		return 25;
+	}
+
+	protected void quit() {
+		System.out.println("EXIT GAME, not yet working");
 	}
 }
