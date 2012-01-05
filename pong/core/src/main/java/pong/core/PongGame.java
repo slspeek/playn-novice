@@ -4,6 +4,8 @@ import static playn.core.PlayN.assetManager;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.pointer;
 
+import java.util.Random;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.joints.LineJoint;
 import org.jbox2d.dynamics.joints.LineJointDef;
@@ -22,6 +24,7 @@ public class PongGame implements Game {
 
 	int DELTA = 9;
 	ImageLayer bgLayer;
+	float INITIAL_BALL_SPEED = 10f;
 
 	// main layer that holds the world. note: this gets scaled to world space
 	GroupLayer worldLayer;
@@ -75,14 +78,20 @@ public class PongGame implements Game {
 			public void onKeyDown(Keyboard.Event event) {
 				switch (event.key()) {
 				case SPACE:
-					if (!ballLoaded && worldLoaded) {
+					if ( !ballLoaded && worldLoaded) {
 						Ball ball = new Ball(world, world.world,
 								PongWorld.WIDTH / 2,
 								PongWorld.HEIGHT / 2, (float)Math.PI/4);
-						ball.setLinearVelocity(-2, 10);
+						
+						Random r = new Random();
+						float alfa = (float) (r.nextFloat() * Math.PI/2);
+						float vx = (float) (INITIAL_BALL_SPEED * Math.cos(Math.PI/4+alfa));
+						float vy = (float) (INITIAL_BALL_SPEED * Math.sin(Math.PI/4+alfa));
+
+						ball.setLinearVelocity(vx, vy);
 						world.add(ball);
 						ballLoaded = true;
-						world.messageBoard.setMessage("          ");
+						world.messageBoard.setMessage("                  ");
 					}
 
 					break;
