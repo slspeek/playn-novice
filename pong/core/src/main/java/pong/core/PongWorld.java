@@ -37,7 +37,9 @@ import playn.core.CanvasLayer;
 import playn.core.DebugDrawBox2D;
 import playn.core.GroupLayer;
 import pong.entities.Entity;
+import pong.entities.Ground;
 import pong.entities.PhysicsEntity;
+import pong.entities.StaticPhysicsEntity;
 
 public class PongWorld implements ContactListener {
 	public GroupLayer staticLayerBack;
@@ -52,7 +54,7 @@ public class PongWorld implements ContactListener {
 	// box2d object containing physics world
 	protected World world;
 
-	public Body ground;
+	public StaticPhysicsEntity ground;
 	public ScoreBoard scoreBoard = new ScoreBoard();
 	public MessageBoard messageBoard = new MessageBoard();
 
@@ -79,11 +81,9 @@ public class PongWorld implements ContactListener {
 		world.setContactListener(this);
 
 		// create the ground
-		ground = world.createBody(new BodyDef());
-		PolygonShape groundShape = new PolygonShape();
-		groundShape.setAsEdge(new Vec2(0, HEIGHT), new Vec2(WIDTH, HEIGHT));
-		ground.createFixture(groundShape, 0.0f);
-
+		ground = new Ground(this, world, WIDTH/2, HEIGHT - 0.2f, 0);
+		add(ground);
+		System.out.println("After ground");
 		// create the ceil
 		Body ceiling = world.createBody(new BodyDef());
 		PolygonShape ceilingShape = new PolygonShape();
@@ -116,6 +116,7 @@ public class PongWorld implements ContactListener {
 			debugDraw.setCamera(0, 0, 1f / physUnitPerScreenUnit);
 			world.setDebugDraw(debugDraw);
 		}
+		System.out.println("End of init");
 	}
 
 	public void update(float delta) {
