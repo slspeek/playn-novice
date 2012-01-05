@@ -4,8 +4,6 @@ import static playn.core.PlayN.assetManager;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.pointer;
 
-import java.util.Random;
-
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.joints.LineJoint;
 import org.jbox2d.dynamics.joints.LineJointDef;
@@ -81,7 +79,7 @@ public class PongGame implements Game {
 						Ball ball = new Ball(world, world.world,
 								PongWorld.WIDTH / 2,
 								PongWorld.HEIGHT / 2, (float)Math.PI/4);
-						ball.setLinearVelocity(1, 10);
+						ball.setLinearVelocity(-2, 10);
 						world.add(ball);
 						ballLoaded = true;
 						world.messageBoard.setMessage("          ");
@@ -127,7 +125,7 @@ public class PongGame implements Game {
 		// Bouncy limit
 		Vec2 axis = new Vec2(1.0f, 0.0f);
 		axis.normalize();
-		jd.initialize(world.ground, bat.getBody(), new Vec2(0.0f, 8.5f), axis);
+		jd.initialize(world.ground.getBody(), bat.getBody(), new Vec2(0.0f, 8.5f), axis);
 
 		jd.motorSpeed = 0.0f;
 		jd.maxMotorForce = 100.0f;
