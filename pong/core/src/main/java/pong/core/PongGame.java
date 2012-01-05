@@ -22,7 +22,7 @@ import pong.entities.Bat;
 
 public class PongGame implements Game {
 
-	int DELTA = 1;
+	int DELTA = 9;
 	ImageLayer bgLayer;
 
 	// main layer that holds the world. note: this gets scaled to world space
@@ -89,14 +89,13 @@ public class PongGame implements Game {
 
 					break;
 				case LEFT:
-					Vec2 oldPos = bat.getBody().getPosition();
-					bat.setPos(Math.max(1, oldPos.x - DELTA), oldPos.y);
+					increaseSpeed(false, bat);
 					break;
 				case RIGHT:
-					oldPos = bat.getBody().getPosition();
-
-					bat.setPos(Math.min(PongWorld.WIDTH - 1, oldPos.x + DELTA),
-							oldPos.y);
+					increaseSpeed(true, bat);
+					break;
+				case X:
+					bat.getBody().setLinearVelocity(new Vec2(0,0));
 					break;
 				case Q:
 					quit();
@@ -104,6 +103,13 @@ public class PongGame implements Game {
 
 				}
 
+			}
+
+			private void increaseSpeed(boolean right, Bat bat) {
+				Vec2 oldSpeed = bat.getBody().getLinearVelocity();
+				float vx = oldSpeed.x;
+				float newVx = vx + (right ? DELTA: -DELTA);
+				bat.getBody().setLinearVelocity(new Vec2(newVx, oldSpeed.y));
 			}
 
 			@Override
@@ -128,7 +134,7 @@ public class PongGame implements Game {
 		jd.enableMotor = true;
 		jd.lowerTranslation = -4.0f;
 		jd.upperTranslation = 4.0f;
-		jd.enableLimit = true;
+		//jd.enableLimit = true;
 		joint = (LineJoint) world.world.createJoint(jd);
 
 	}
@@ -153,6 +159,5 @@ public class PongGame implements Game {
 	}
 
 	protected void quit() {
-		System.out.println("EXIT GAME, not yet working");
 	}
 }

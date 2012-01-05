@@ -40,6 +40,7 @@ import pong.entities.Entity;
 import pong.entities.PhysicsEntity;
 
 public class PongWorld implements ContactListener {
+	public GroupLayer staticLayerBack;
 	public GroupLayer dynamicLayer;
 
 	// scale difference between screen space (pixels) and world space (physics).
@@ -63,11 +64,13 @@ public class PongWorld implements ContactListener {
 	private DebugDrawBox2D debugDraw;
 
 	public PongWorld(GroupLayer scaledLayer) {
+		staticLayerBack = graphics().createGroupLayer();
+		scaledLayer.add(staticLayerBack);
 		dynamicLayer = graphics().createGroupLayer();
 		scaledLayer.add(dynamicLayer);
-	    dynamicLayer.add(scoreBoard.getLayer());
-	    dynamicLayer.add(messageBoard.getLayer());
-		
+		dynamicLayer.add(scoreBoard.getLayer());
+		dynamicLayer.add(messageBoard.getLayer());
+
 		// create the physics world
 		Vec2 gravity = new Vec2(0.0f, 0.0f);
 		world = new World(gravity, true);
@@ -115,7 +118,6 @@ public class PongWorld implements ContactListener {
 		}
 	}
 
-	
 	public void update(float delta) {
 		for (Entity e : entities) {
 			e.update(delta);

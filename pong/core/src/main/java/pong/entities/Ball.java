@@ -76,5 +76,6 @@ public class Ball extends DynamicPhysicsEntity implements PhysicsEntity.HasConta
 	
 	@Override
 	public void contact(PhysicsEntity other) {
+		
 	}
 }
