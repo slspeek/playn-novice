@@ -11,7 +11,7 @@
   <classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpcore/4.0.1/httpcore-4.0.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/jlayer/jlayer/1.0.1/jlayer-1.0.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/json/json/20080701/json-20080701.jar"/>
-  <classpathentry kind="var" path="M2_REPO/junit/junit/4.8.1/junit-4.8.1.jar" sourcepath="M2_REPO/junit/junit/4.8.1/junit-4.8.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/4.8.1/junit-4.8.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/khronos/opengl-api/gl1.1-android-2.1_r1/opengl-api-gl1.1-android-2.1_r1.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/googlecode/playn/playn-android/1.0-SNAPSHOT/playn-android-1.0-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/googlecode/playn/playn-core/1.0-SNAPSHOT/playn-core-1.0-SNAPSHOT.jar"/>
