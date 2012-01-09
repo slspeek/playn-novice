@@ -35,7 +35,7 @@ public class PongGame implements Game {
 	Bat bat;
 	LineJoint joint;
 	protected boolean ballLoaded;
-	int score = 0;
+	int score = 100;
 
 	@Override
 	public void init() {

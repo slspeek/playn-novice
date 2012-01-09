@@ -57,6 +57,22 @@ public class InterSectorTest {
 		assertEquals(expectedCollision, col.getPosition());
 		assertEquals(1f, col.getTime());
 	}
+
+	// JT: latest
+	// Collision with direction of ball to player side
+	// Velocity y is positive...
+	@Test
+	public void testGetCollisionVerticalVerySimpleInverse() {
+		float HEIGHT = 29f;
+		float c = HEIGHT;
+		Vec2 ballPos = new Vec2(1f,28f);
+		Vec2 ballVel = new Vec2(0f, 1f);
+		
+		Vec2 expectedCollision = new Vec2(1f,c);
+		Collision col = interSector.getCollisionOnVertical(ballPos, ballVel, c);
+		assertEquals(expectedCollision, col.getPosition());
+		assertEquals(1f, col.getTime());
+	}
 	
 	@Test
 	public void testGetCollisionVerticalDiagonal() {
