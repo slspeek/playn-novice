@@ -45,7 +45,8 @@ public class ScoreBoard {
 		layer.setScale(0.1f);
 		
 		layer.setTranslation(textXOffset, 0);
-	}
+
+    }
 	
 	public Layer getLayer() {
 		return layer;
