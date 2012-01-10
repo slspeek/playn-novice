@@ -2,11 +2,16 @@ package pong.core;
 
 import org.jbox2d.common.Vec2;
 
+/**
+ * Calculates the intersection between where the ball collides and grabs the
+ * horizontal and vertical position.
+ * 
+ */
 public class InterSector {
 
 	float WIDTH = 6;
-	
-	Collision getCollision(Vec2 pos, Vec2 vel, float c) {
+
+	public Collision getCollision(Vec2 pos, Vec2 vel, float c) {
 		Collision firstGuess = getCollisionOnHorizontal(pos, vel, c);
 		float xc = firstGuess.getPosition().x;
 		if (xc < 0) {
@@ -15,8 +20,9 @@ public class InterSector {
 			Vec2 newPosition = secondGuess.getPosition();
 			Vec2 newSpeed = new Vec2(-vel.x, vel.y);
 			Collision collision = getCollision(newPosition, newSpeed, c);
-			return new Collision(collision.getPosition(), firstAmountOfTime + collision.getTime());
-		} else if (0 <= xc && xc < WIDTH){
+			return new Collision(collision.getPosition(), firstAmountOfTime
+					+ collision.getTime());
+		} else if (0 <= xc && xc < WIDTH) {
 			return firstGuess;
 		} else {
 			Collision secondGuess = getCollisionOnVertical(pos, vel, WIDTH);
@@ -24,10 +30,11 @@ public class InterSector {
 			Vec2 newPosition = secondGuess.getPosition();
 			Vec2 newSpeed = new Vec2(-vel.x, vel.y);
 			Collision collision = getCollision(newPosition, newSpeed, c);
-			return new Collision(collision.getPosition(), firstAmountOfTime + collision.getTime());
+			return new Collision(collision.getPosition(), firstAmountOfTime
+					+ collision.getTime());
 		}
 	}
-	
+
 	Collision getCollisionOnHorizontal(Vec2 ballPos, Vec2 ballVel, float c) {
 		float x = ballPos.x + ((c - ballPos.y / ballVel.y) * ballVel.x);
 		Vec2 returnValue = new Vec2(x, c);
