@@ -20,6 +20,12 @@ import playn.core.Pointer;
 import pong.entities.Ball;
 import pong.entities.Bat;
 
+/**
+ * PlayN Entry Point
+ * 
+ * @author youssef
+ * 
+ */
 public class PongGame implements Game {
 
 	int DELTA = 9;
@@ -78,15 +84,17 @@ public class PongGame implements Game {
 			public void onKeyDown(Keyboard.Event event) {
 				switch (event.key()) {
 				case SPACE:
-					if ( !ballLoaded && worldLoaded) {
+					if (!ballLoaded && worldLoaded) {
 						Ball ball = new Ball(world, world.world,
-								PongWorld.WIDTH / 2,
-								PongWorld.HEIGHT / 2, (float)Math.PI/4);
-						
+								PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2,
+								(float) Math.PI / 4);
+
 						Random r = new Random();
-						float alfa = (float) (r.nextFloat() * Math.PI/2);
-						float vx = (float) (INITIAL_BALL_SPEED * Math.cos(Math.PI/4+alfa));
-						float vy = (float) (INITIAL_BALL_SPEED * Math.sin(Math.PI/4+alfa));
+						float alfa = (float) (r.nextFloat() * Math.PI / 2);
+						float vx = (float) (INITIAL_BALL_SPEED * Math
+								.cos(Math.PI / 4 + alfa));
+						float vy = (float) (INITIAL_BALL_SPEED * Math
+								.sin(Math.PI / 4 + alfa));
 
 						ball.setLinearVelocity(vx, vy);
 						world.add(ball);
@@ -102,7 +110,7 @@ public class PongGame implements Game {
 					increaseSpeed(true, bat);
 					break;
 				case X:
-					bat.getBody().setLinearVelocity(new Vec2(0,0));
+					bat.getBody().setLinearVelocity(new Vec2(0, 0));
 					break;
 				case Q:
 					quit();
@@ -115,7 +123,7 @@ public class PongGame implements Game {
 			private void increaseSpeed(boolean right, Bat bat) {
 				Vec2 oldSpeed = bat.getBody().getLinearVelocity();
 				float vx = oldSpeed.x;
-				float newVx = vx + (right ? DELTA: -DELTA);
+				float newVx = vx + (right ? DELTA : -DELTA);
 				bat.getBody().setLinearVelocity(new Vec2(newVx, oldSpeed.y));
 			}
 
@@ -134,14 +142,15 @@ public class PongGame implements Game {
 		// Bouncy limit
 		Vec2 axis = new Vec2(1.0f, 0.0f);
 		axis.normalize();
-		jd.initialize(world.ground.getBody(), bat.getBody(), new Vec2(0.0f, 8.5f), axis);
+		jd.initialize(world.ground.getBody(), bat.getBody(), new Vec2(0.0f,
+				8.5f), axis);
 
 		jd.motorSpeed = 0.0f;
 		jd.maxMotorForce = 100.0f;
 		jd.enableMotor = true;
 		jd.lowerTranslation = -4.0f;
 		jd.upperTranslation = 4.0f;
-		//jd.enableLimit = true;
+		// jd.enableLimit = true;
 		joint = (LineJoint) world.world.createJoint(jd);
 
 	}

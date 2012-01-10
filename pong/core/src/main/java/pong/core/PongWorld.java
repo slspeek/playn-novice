@@ -41,6 +41,12 @@ import pong.entities.Ground;
 import pong.entities.PhysicsEntity;
 import pong.entities.StaticPhysicsEntity;
 
+/**
+ * Creates the world we play in.
+ * 
+ * @author youssef
+ * 
+ */
 public class PongWorld implements ContactListener {
 	public GroupLayer staticLayerBack;
 	public GroupLayer dynamicLayer;
@@ -81,7 +87,7 @@ public class PongWorld implements ContactListener {
 		world.setContactListener(this);
 
 		// create the ground
-		ground = new Ground(this, world, WIDTH/2, HEIGHT - 0.2f, 0);
+		ground = new Ground(this, world, WIDTH / 2, HEIGHT - 0.2f, 0);
 		add(ground);
 		System.out.println("After ground");
 		// create the ceil

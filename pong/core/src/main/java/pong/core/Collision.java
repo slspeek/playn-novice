@@ -2,6 +2,12 @@ package pong.core;
 
 import org.jbox2d.common.Vec2;
 
+/**
+ * Holds the time and position at the collision point.
+ * 
+ * @author youssef
+ * 
+ */
 public class Collision {
 
 	private final Vec2 position;
