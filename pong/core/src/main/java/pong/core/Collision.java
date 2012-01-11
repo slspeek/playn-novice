@@ -26,5 +26,4 @@ public class Collision {
 	public float getTime() {
 		return time;
 	}
-
 }

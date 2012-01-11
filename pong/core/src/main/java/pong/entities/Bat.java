@@ -15,16 +15,10 @@
  */
 package pong.entities;
 
-import static playn.core.PlayN.assetManager;
-
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.FixtureDef;
-import org.jbox2d.dynamics.World;
-
+import org.jbox2d.dynamics.*;
+import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
 import pong.core.PongWorld;
 
@@ -99,9 +93,6 @@ public class Bat extends DynamicPhysicsEntity implements
 		Vec2 velocity = other.getBody().getLinearVelocity();
 		Vec2 newSpeed = newSpeed(velocity);
 		other.getBody().setLinearVelocity(newSpeed);
-		
-		
-
 	}
 
 	private Vec2 newSpeed(Vec2 velocity) {
