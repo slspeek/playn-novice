@@ -3,8 +3,8 @@ package pong.core;
 import org.jbox2d.common.Vec2;
 
 /**
- * Calculates the intersection between where the ball collides and grabs the
- * horizontal and vertical position.
+ * Calculates the intersection between the path the ball and a horizontal line
+ * (y = C)
  * 
  */
 public class InterSector {

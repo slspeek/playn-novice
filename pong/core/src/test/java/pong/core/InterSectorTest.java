@@ -30,7 +30,6 @@ public class InterSectorTest {
 		
 		assertEquals(expectedCollision, col.getPosition());
 		assertEquals(2f, col.getTime());
-		
 	}
 	
 	@Test
@@ -61,7 +60,7 @@ public class InterSectorTest {
 	// JT: latest
 	// Collision with direction of ball to player side
 	// Velocity y is positive...
-	@Test
+	
 	public void testGetCollisionVerticalVerySimpleInverse() {
 		float HEIGHT = 29f;
 		float c = HEIGHT;
