@@ -11,6 +11,14 @@ public class InterSector {
 
 	float WIDTH = 6;
 
+        /**
+         * Calculates the intersection of the path of ball and the horizontal
+         * line y=c
+         * @param pos The position of the ball
+         * @param vel The velocity of the ball
+         * @param c The horizontal line y=c
+         * @return The time and place of intersection
+         */
 	public Collision getCollision(Vec2 pos, Vec2 vel, float c) {
 		Collision firstGuess = getCollisionOnHorizontal(pos, vel, c);
 		float xc = firstGuess.getPosition().x;
