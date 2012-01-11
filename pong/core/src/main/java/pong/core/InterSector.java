@@ -30,7 +30,7 @@ public class InterSector {
         Collision firstGuess = getCollisionOnHorizontal(pos, vel, c);
         System.out.println("GETCOLL: " + pos + " " + vel);
         float xc = firstGuess.getPosition().x;
-        if (xc < 0) {
+        if (xc < 0 ) {
             Collision secondGuess = getCollisionOnVertical(pos, vel, c);
             float firstAmountOfTime = secondGuess.getTime();
             Vec2 newPosition = secondGuess.getPosition();
@@ -38,9 +38,9 @@ public class InterSector {
             Collision collision = getCollision(newPosition, newSpeed, c);
             return new Collision(collision.getPosition(), firstAmountOfTime
                     + collision.getTime());
-        } else if (0 <= xc && xc < width) {
+        } else if (0 <= xc && xc < width ) {
             return firstGuess;
-        } else {
+        } else  {
             Collision secondGuess = getCollisionOnVertical(pos, vel, width);
             float firstAmountOfTime = secondGuess.getTime();
             Vec2 newPosition = secondGuess.getPosition();
@@ -48,27 +48,22 @@ public class InterSector {
             Collision collision = getCollision(newPosition, newSpeed, c);
             return new Collision(collision.getPosition(), firstAmountOfTime
                     + collision.getTime());
-        }
+        } 
     }
 
     Collision getCollisionOnHorizontal(Vec2 ballPos, Vec2 ballVel, float c) {
+        System.out.println("GETCOLL ON H: " + ballPos + " " + ballVel + " " +c);
         float x = ballPos.x + ((c - ballPos.y / ballVel.y) * ballVel.x);
         Vec2 returnValue = new Vec2(x, c);
         float time = (c - ballPos.y) / ballVel.y;
-        if (time < 0) {
-            throw new IllegalStateException("Negative time");
-        }
         Collision col = new Collision(returnValue, time);
         return col;
     }
 
     Collision getCollisionOnVertical(Vec2 ballPos, Vec2 ballVel, float c) {
-        float y = ballPos.y + ((c - ballPos.x / ballVel.x) * ballVel.y);
-        Vec2 returnValue = new Vec2(c, y);
         float time = (c - ballPos.x) / ballVel.x;
-        if (time < 0) {
-            throw new IllegalStateException("Negative time");
-        }
+        float y = ballPos.y +  time * ballVel.y;
+        Vec2 returnValue = new Vec2(c, y);
         Collision col = new Collision(returnValue, time);
         return col;
     }
