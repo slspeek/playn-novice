@@ -7,6 +7,7 @@ import static playn.core.PlayN.pointer;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.LineJoint;
 import org.jbox2d.dynamics.joints.LineJointDef;
 
@@ -37,16 +38,16 @@ public class PongGame implements Game {
     PongWorld world = null;
     boolean worldLoaded = false;
     Bat bat;
+    Bat botBat;
+    Ball ball;
     LineJoint joint;
     protected boolean ballLoaded;
     int score = 100;
+    private int BAT_MARGIN = 1;
 
     @Override
     public void init() {
-
-        graphics().setSize(
-                (int) (PongWorld.WIDTH / PongWorld.physUnitPerScreenUnit),
-                (int) (PongWorld.HEIGHT / PongWorld.physUnitPerScreenUnit));
+  
         // load and show our background image
         Image bgImage = assetManager().getImage("images/Black.png");
         bgLayer = graphics().createImageLayer(bgImage);
@@ -61,9 +62,12 @@ public class PongGame implements Game {
         worldLoaded = true;
 
         bat = new Bat(world, world.world, PongWorld.WIDTH / 2,
-                PongWorld.HEIGHT - 2, 0);
+                PongWorld.HEIGHT - BAT_MARGIN, 0);
         world.add(bat);
 
+        botBat = new Bat(world, world.world, PongWorld.WIDTH / 2,
+                BAT_MARGIN, 0);
+        world.add(botBat);
         // hook up our pointer listener
         pointer().setListener(new Pointer.Adapter() {
 
@@ -85,7 +89,7 @@ public class PongGame implements Game {
                 switch (event.key()) {
                     case SPACE:
                         if (!ballLoaded && worldLoaded) {
-                            Ball ball = new Ball(world, world.world,
+                            ball = new Ball(world, world.world,
                                     PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2,
                                     (float) Math.PI / 4);
 
@@ -163,6 +167,8 @@ public class PongGame implements Game {
     public void update(float delta) {
         if (worldLoaded) {
             world.update(delta);
+
+            dealWithAIBotBat();
         }
     }
 
@@ -172,5 +178,19 @@ public class PongGame implements Game {
     }
 
     protected void quit() {
+    }
+
+    private void dealWithAIBotBat() {
+        if (ball != null) {
+            InterSector ai = new InterSector(PongWorld.WIDTH, PongWorld.HEIGHT);
+            final Body body = ball.getBody();
+            final Vec2 position = body.getPosition();
+            final Vec2 linearVelocity = body.getLinearVelocity();
+            if (linearVelocity.y < 0 && position.y > BAT_MARGIN && position.y < PongWorld.HEIGHT - 4 * BAT_MARGIN) {
+                System.out.println("AI " + position.y);
+                Collision coll = ai.getCollision(position, linearVelocity, BAT_MARGIN);
+                botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
+            }
+        }
     }
 }

@@ -50,10 +50,10 @@ public class PongWorld implements ContactListener {
     public GroupLayer staticLayerBack;
     public GroupLayer dynamicLayer;
     // scale difference between screen space (pixels) and world space (physics).
-    public static final float physUnitPerScreenUnit = 1 / 26.666667f;
+    public static final float physUnitPerScreenUnit = (float)1.0/(640.0f/40.0f);
     // size of world
-    static public final int WIDTH = 38;
-    static public final int HEIGHT = 29;
+    static public final int WIDTH = 40;
+    static public final int HEIGHT = 30;
     // box2d object containing physics world
     protected World world;
     public StaticPhysicsEntity ground;
