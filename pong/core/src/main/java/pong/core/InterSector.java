@@ -53,7 +53,7 @@ public class InterSector {
 
     Collision getCollisionOnHorizontal(Vec2 ballPos, Vec2 ballVel, float c) {
         System.out.println("GETCOLL ON H: " + ballPos + " " + ballVel + " " +c);
-        float x = ballPos.x + ((c - ballPos.y / ballVel.y) * ballVel.x);
+        float x = ballPos.x + (((c - ballPos.y) / ballVel.y) * ballVel.x);
         Vec2 returnValue = new Vec2(x, c);
         float time = (c - ballPos.y) / ballVel.y;
         Collision col = new Collision(returnValue, time);
