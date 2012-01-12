@@ -9,6 +9,10 @@ import org.jbox2d.dynamics.World;
 
 import pong.core.PongWorld;
 
+/**
+ * Resets or destroys the ball if hit
+ * 
+ */
 public class Ground extends StaticPhysicsEntity implements
 		PhysicsEntity.HasContactListener {
 
