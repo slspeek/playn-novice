@@ -22,18 +22,22 @@ import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
 import pong.core.PongWorld;
 
+/**
+ * Our Bat who bounces the Ball.
+ * 
+ */
 public class Bat extends DynamicPhysicsEntity implements
 		PhysicsEntity.HasContactListener {
 	public static String TYPE = "Bat";
 	Sound ding;
 	PongWorld pongWorld;
-	
+
 	public Bat(final PongWorld pongWorld, World world, float x, float y,
 			float angle) {
 		super(pongWorld, world, x, y, angle);
 		this.pongWorld = pongWorld;
 		// load a sound that we'll play when placing sprites
-	    ding = assetManager().getSound("images/ding");
+		ding = assetManager().getSound("images/ding");
 	}
 
 	@Override
@@ -108,7 +112,7 @@ public class Bat extends DynamicPhysicsEntity implements
 		} else {
 			vx += 1f;
 		}
-		Vec2 newSpeed = new Vec2(vx,vy);
+		Vec2 newSpeed = new Vec2(vx, vy);
 		return newSpeed;
 	}
 }
