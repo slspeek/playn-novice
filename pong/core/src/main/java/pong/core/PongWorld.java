@@ -120,12 +120,12 @@ public class PongWorld implements ContactListener {
 
     private void initBoards() {
         Font font = graphics().createFont("Helvetica", Font.Style.PLAIN, 64);
-        messageBoard = new MessageBoard(font, new Vec2(15,7), 20f, 10f, 0xFFCCCCCC);
+        messageBoard = new MessageBoard(font, new Vec2(10,7), 30f, 20f, 0xFFCCCCCC);
         font = graphics().createFont("Helvetica", Font.Style.PLAIN, 36);
-        scoreBoard = new ScoreBoard(font, new Vec2(17, 2), 4f, 3f, 0xFFCCCCCC);
+        scoreBoard = new ScoreBoard(font, new Vec2(17, 2), 5f, 4f, 0xFFCCCCCC);
         dynamicLayer.add(scoreBoard.getLayer());
         dynamicLayer.add(messageBoard.getLayer());
-        messageBoard.setMessage("SPACE");
+        messageBoard.setMessage("Press space to begin");
         
     }
 
