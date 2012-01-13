@@ -187,7 +187,6 @@ public class PongGame implements Game {
             final Vec2 position = body.getPosition();
             final Vec2 linearVelocity = body.getLinearVelocity();
             if (linearVelocity.y < 0 && position.y > BAT_MARGIN && position.y < PongWorld.HEIGHT - 4 * BAT_MARGIN) {
-                System.out.println("AI " + position.y);
                 Collision coll = ai.getCollision(position, linearVelocity, BAT_MARGIN);
                 botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
             }

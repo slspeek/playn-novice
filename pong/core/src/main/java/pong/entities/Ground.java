@@ -19,8 +19,10 @@ public class Ground extends StaticPhysicsEntity implements
 	public Ground(PongWorld pongWorld, World world, float x, float y,
 			float angle) {
 		super(pongWorld, world, x, y, angle);
+                this.pongWorld = pongWorld;
+                System.out.println("xxxx" + pongWorld);
 	}
-
+        public PongWorld pongWorld;
 	@Override
 	Body initPhysicsBody(World world, float x, float y, float angle) {
 		BodyDef bodyDef = new BodyDef();
@@ -55,6 +57,8 @@ public class Ground extends StaticPhysicsEntity implements
 
 	@Override
 	public void contact(PhysicsEntity other) {
+            //System.out.println("xxxx" + pongworld.messageBoard);
+            pongWorld.messageBoard.setMessage("Game over");
 		System.out.println("Hit the ground");
 	}
 
