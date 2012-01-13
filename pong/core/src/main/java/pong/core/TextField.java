@@ -41,11 +41,12 @@ public class TextField {
 
     public void setMessage(String message) {
         this.message = message;
-        TextFormat format = new TextFormat().withFont(font).withTextColor(color);
+        TextFormat format = new TextFormat().withFont(font).withTextColor(color)
+                .withWrapping(width/PongWorld.physUnitPerScreenUnit, TextFormat.Alignment.CENTER);
         layout = graphics().layoutText(message, format);
         layer.canvas().clear();
         layer.canvas().setFillColor(0xFFFFFFFF);
-        //layer.canvas().fillRect(0, 0, width, height);
+        //layer.canvas().fillRect(0, 0, width/PongWorld.physUnitPerScreenUnit, height/PongWorld.physUnitPerScreenUnit);
         layer.canvas().drawText(layout, 0, 0);
     }
 
