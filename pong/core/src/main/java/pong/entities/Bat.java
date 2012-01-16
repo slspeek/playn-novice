@@ -37,7 +37,7 @@ public class Bat extends DynamicPhysicsEntity implements
 		super(pongWorld, world, x, y, angle);
 		this.pongWorld = pongWorld;
 		// load a sound that we'll play when placing sprites
-		ding = assetManager().getSound("images/pong-bathit"); // was ding
+		ding = assetManager().getSound("images/Pong-Bathit"); // was ding
 	}
 
 	@Override
