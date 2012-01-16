@@ -45,9 +45,26 @@ public class PongGame implements Game {
     int score = 100;
     private int BAT_MARGIN = 1;
 
+    private void startBall() {
+        if (!ballLoaded && worldLoaded) {
+            ball = new Ball(world, world.world,
+                    PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2, 0);
+
+            Random r = new Random();
+            float alfa = (float) (r.nextFloat() * Math.PI / 2);
+            float vx = (float) (INITIAL_BALL_SPEED * Math.cos(Math.PI / 4 + alfa));
+            float vy = (float) (INITIAL_BALL_SPEED * Math.sin(Math.PI / 4 + alfa));
+
+            ball.setLinearVelocity(vx, vy);
+            world.add(ball);
+            ballLoaded = true;
+            world.messageBoard.setMessage("                  ");
+        }
+    }
+
     @Override
     public void init() {
-  
+
         // load and show our background image
         Image bgImage = assetManager().getImage("images/Black.png");
         bgLayer = graphics().createImageLayer(bgImage);
@@ -71,9 +88,14 @@ public class PongGame implements Game {
         // hook up our pointer listener
         pointer().setListener(new Pointer.Adapter() {
 
+            public void onPointerStart(Pointer.Event event) {
+                startBall();
+
+            }
+
             @Override
             public void onPointerDrag(Pointer.Event event) {
-
+//startBall();
                 float x = event.x();
                 Vec2 oldPos = bat.getBody().getPosition();
                 Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
@@ -88,22 +110,7 @@ public class PongGame implements Game {
             public void onKeyDown(Keyboard.Event event) {
                 switch (event.key()) {
                     case SPACE:
-                        if (!ballLoaded && worldLoaded) {
-                            ball = new Ball(world, world.world,
-                                    PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2,
-                                    (float) Math.PI / 4);
-
-                            Random r = new Random();
-                            float alfa = (float) (r.nextFloat() * Math.PI / 2);
-                            float vx = (float) (INITIAL_BALL_SPEED * Math.cos(Math.PI / 4 + alfa));
-                            float vy = (float) (INITIAL_BALL_SPEED * Math.sin(Math.PI / 4 + alfa));
-
-                            ball.setLinearVelocity(vx, vy);
-                            world.add(ball);
-                            ballLoaded = true;
-                            world.messageBoard.setMessage("                  ");
-                        }
-
+                        startBall();
                         break;
                     case LEFT:
                         increaseSpeed(false, bat);
@@ -135,6 +142,7 @@ public class PongGame implements Game {
         });
 
         initJoint();
+        //startBall();
     }
 
     private void initJoint() {
