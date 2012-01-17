@@ -18,6 +18,7 @@ package pong.entities;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
+import playn.core.Canvas;
 import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
 import playn.core.Surface;
@@ -72,12 +73,12 @@ public class Bat extends DynamicPhysicsEntity implements
 
     @Override
     float getWidth() {
-        return 2.0f;
+        return 5.0f;
     }
 
     @Override
     float getHeight() {
-        return 10f;
+        return 1f;
     }
 
     /**
@@ -89,9 +90,9 @@ public class Bat extends DynamicPhysicsEntity implements
     }
 
     public void paint(float alpha) {
-        Surface surface = layer.surface();
-        surface.setFillColor(0xFFFFFFFF);
-        surface.fillRect(0, 0, 10, 10);
+        Canvas canvas = layer.canvas();
+        canvas.setFillColor(0xFFFF0000);
+        canvas.fillRect(0, 0, 10, 10);
         super.paint(alpha);
     }
 

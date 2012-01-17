@@ -6,6 +6,7 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
+import playn.core.Canvas;
 import playn.core.Surface;
 
 import pong.core.PongWorld;
@@ -53,9 +54,9 @@ public class Ground extends StaticPhysicsEntity implements
     }
 
     public void paint(float alpha) {
-        Surface surface = layer.surface();
-        surface.setFillColor(0xFFFFFFFF);
-        surface.fillRect(0, 0, 10, 10);
+        Canvas canvas = layer.canvas();
+        canvas.setFillColor(0xFF00FFFF);
+        canvas.fillRect(0, 0, 10, 10);
         super.paint(alpha);
     }
 

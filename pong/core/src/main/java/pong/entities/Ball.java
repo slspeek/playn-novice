@@ -22,6 +22,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import playn.core.Canvas;
 import playn.core.Surface;
 
 import pong.core.PongWorld;
@@ -61,9 +62,9 @@ public class Ball extends DynamicPhysicsEntity implements
     }
 
     public void paint(float alpha) {
-        Surface surface = layer.surface();
-        surface.setFillColor(0xFFFFFFFF);
-        surface.fillRect(0, 0, 10, 10);
+        Canvas canvas = layer.canvas();
+        canvas.setFillColor(0xFF00FF00);
+        canvas.fillCircle(getWidth()/2, getHeight()/2, getRadius());
         super.paint(alpha);
     }
 
@@ -79,7 +80,7 @@ public class Ball extends DynamicPhysicsEntity implements
 
     float getRadius() {
         // return 1.50f;
-        return 0.5f;
+        return 5f;
     }
 
     @Override
