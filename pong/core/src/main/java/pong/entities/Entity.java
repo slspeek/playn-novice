@@ -21,14 +21,14 @@ import pong.core.PongWorld;
 
 public abstract class Entity {
 
-    SurfaceLayer layer;
+    CanvasLayer layer;
     float x, y, angle;
 
     public Entity(final PongWorld peaWorld, float px, float py, float pangle) {
         this.x = px;
         this.y = py;
         this.angle = pangle;
-        layer = graphics().createSurfaceLayer((int)getWidth(), (int)getHeight());
+        layer = graphics().createCanvasLayer((int)getWidth(), (int)getHeight());
         initPreLoad(peaWorld);
     }
    

@@ -79,7 +79,7 @@ public class PongWorld implements ContactListener {
         world.setContactListener(this);
 
         // create the ground
-        ground = new Ground(this, world, WIDTH/2 , 1f, 0);
+        ground = new Ground(this, world, WIDTH/2 , HEIGHT, 0);
         add(ground);
         System.out.println("After ground");
         // create the ceil
