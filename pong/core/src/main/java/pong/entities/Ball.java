@@ -22,65 +22,67 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import playn.core.Surface;
 
 import pong.core.PongWorld;
 
 /**
  * Moves around and bounces on everything.
- * 
+ *
  */
 public class Ball extends DynamicPhysicsEntity implements
-		PhysicsEntity.HasContactListener {
-	public static String TYPE = "Ball";
+        PhysicsEntity.HasContactListener {
 
-	public Ball(PongWorld pongWorld, World world, float x, float y, float angle) {
-		super(pongWorld, world, x, y, angle);
-	}
+    public static String TYPE = "Ball";
 
-	@Override
-	Body initPhysicsBody(World world, float x, float y, float angle) {
-		FixtureDef fixtureDef = new FixtureDef();
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DYNAMIC;
-		bodyDef.position = new Vec2(0, 0);
-		Body body = world.createBody(bodyDef);
+    public Ball(PongWorld pongWorld, World world, float x, float y, float angle) {
+        super(pongWorld, world, x, y, angle);
+    }
 
-		CircleShape circleShape = new CircleShape();
-		circleShape.m_radius = getRadius();
-		fixtureDef.shape = circleShape;
-		fixtureDef.density = 0.4f;
-		fixtureDef.friction = 0.0f;
-		fixtureDef.restitution = 1f;
-		circleShape.m_p.set(0, 0);
-		body.createFixture(fixtureDef);
-		body.setLinearDamping(0.0f);
-		body.setTransform(new Vec2(x, y), angle);
-		return body;
-	}
+    @Override
+    Body initPhysicsBody(World world, float x, float y, float angle) {
+        FixtureDef fixtureDef = new FixtureDef();
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.DYNAMIC;
+        bodyDef.position = new Vec2(0, 0);
+        Body body = world.createBody(bodyDef);
 
-	@Override
-	float getWidth() {
-		return 2 * getRadius();
-	}
+        CircleShape circleShape = new CircleShape();
+        circleShape.m_radius = getRadius();
+        fixtureDef.shape = circleShape;
+        fixtureDef.density = 0.4f;
+        fixtureDef.friction = 0.0f;
+        fixtureDef.restitution = 1f;
+        circleShape.m_p.set(0, 0);
+        body.createFixture(fixtureDef);
+        body.setLinearDamping(0.0f);
+        body.setTransform(new Vec2(x, y), angle);
+        return body;
+    }
 
-	@Override
-	float getHeight() {
-		return 2 * getRadius();
-	}
+    public void paint(float alpha) {
+        Surface surface = layer.surface();
+        surface.setFillColor(0xFFFFFFFF);
+        surface.fillRect(0, 0, 10, 10);
+        super.paint(alpha);
+    }
 
-	float getRadius() {
-		// return 1.50f;
-		return 0.5f;
-	}
+    @Override
+    float getWidth() {
+        return 2 * getRadius();
+    }
 
-	@Override
-	public String getImageName() {
-		// return "chrome.png";
-		return "pea.png";
-	}
+    @Override
+    float getHeight() {
+        return 2 * getRadius();
+    }
 
-	@Override
-	public void contact(PhysicsEntity other) {
+    float getRadius() {
+        // return 1.50f;
+        return 0.5f;
+    }
 
-	}
+    @Override
+    public void contact(PhysicsEntity other) {
+    }
 }
