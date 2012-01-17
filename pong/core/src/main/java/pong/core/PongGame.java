@@ -64,84 +64,88 @@ public class PongGame implements Game {
 
     @Override
     public void init() {
+        System.out.println("Hello");
+        try {
+            // load and show our background image
+            Image bgImage = assetManager().getImage("images/Black.png");
+            bgLayer = graphics().createImageLayer(bgImage);
+            graphics().rootLayer().add(bgLayer);
 
-        // load and show our background image
-        Image bgImage = assetManager().getImage("images/Black.png");
-        bgLayer = graphics().createImageLayer(bgImage);
-        graphics().rootLayer().add(bgLayer);
+            // create our world layer (scaled to "world space")
+            worldLayer = graphics().createGroupLayer();
+            worldLayer.setScale(1f / PongWorld.physUnitPerScreenUnit);
+            graphics().rootLayer().add(worldLayer);
 
-        // create our world layer (scaled to "world space")
-        worldLayer = graphics().createGroupLayer();
-        worldLayer.setScale(1f / PongWorld.physUnitPerScreenUnit);
-        graphics().rootLayer().add(worldLayer);
+            world = new PongWorld(worldLayer);
+            worldLoaded = true;
 
-        world = new PongWorld(worldLayer);
-        worldLoaded = true;
+            bat = new Bat(world, world.world, PongWorld.WIDTH / 2,
+                    PongWorld.HEIGHT - BAT_MARGIN, 0);
+            world.add(bat);
 
-        bat = new Bat(world, world.world, PongWorld.WIDTH / 2,
-                PongWorld.HEIGHT - BAT_MARGIN, 0);
-        world.add(bat);
+            botBat = new Bat(world, world.world, PongWorld.WIDTH / 2,
+                    BAT_MARGIN, 0);
+            world.add(botBat);
+            // hook up our pointer listener
+            pointer().setListener(new Pointer.Adapter() {
 
-        botBat = new Bat(world, world.world, PongWorld.WIDTH / 2,
-                BAT_MARGIN, 0);
-        world.add(botBat);
-        // hook up our pointer listener
-        pointer().setListener(new Pointer.Adapter() {
-
-            public void onPointerStart(Pointer.Event event) {
-                startBall();
-
-            }
-
-            @Override
-            public void onPointerDrag(Pointer.Event event) {
-//startBall();
-                float x = event.x();
-                Vec2 oldPos = bat.getBody().getPosition();
-                Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
-                bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
-
-            }
-        });
-
-        PlayN.keyboard().setListener(new Keyboard.Adapter() {
-
-            @Override
-            public void onKeyDown(Keyboard.Event event) {
-                switch (event.key()) {
-                    case SPACE:
-                        startBall();
-                        break;
-                    case LEFT:
-                        increaseSpeed(false, bat);
-                        break;
-                    case RIGHT:
-                        increaseSpeed(true, bat);
-                        break;
-                    case X:
-                        bat.getBody().setLinearVelocity(new Vec2(0, 0));
-                        break;
-                    case Q:
-                        quit();
-                        break;
+                public void onPointerStart(Pointer.Event event) {
+                    startBall();
 
                 }
 
-            }
+                @Override
+                public void onPointerDrag(Pointer.Event event) {
+//startBall();
+                    float x = event.x();
+                    Vec2 oldPos = bat.getBody().getPosition();
+                    Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
+                    bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
 
-            private void increaseSpeed(boolean right, Bat bat) {
-                Vec2 oldSpeed = bat.getBody().getLinearVelocity();
-                float vx = oldSpeed.x;
-                float newVx = vx + (right ? DELTA : -DELTA);
-                bat.getBody().setLinearVelocity(new Vec2(newVx, oldSpeed.y));
-            }
+                }
+            });
 
-            @Override
-            public void onKeyUp(Keyboard.Event event) {
-            }
-        });
+            PlayN.keyboard().setListener(new Keyboard.Adapter() {
 
-        initJoint();
+                @Override
+                public void onKeyDown(Keyboard.Event event) {
+                    switch (event.key()) {
+                        case SPACE:
+                            startBall();
+                            break;
+                        case LEFT:
+                            increaseSpeed(false, bat);
+                            break;
+                        case RIGHT:
+                            increaseSpeed(true, bat);
+                            break;
+                        case X:
+                            bat.getBody().setLinearVelocity(new Vec2(0, 0));
+                            break;
+                        case Q:
+                            quit();
+                            break;
+
+                    }
+
+                }
+
+                private void increaseSpeed(boolean right, Bat bat) {
+                    Vec2 oldSpeed = bat.getBody().getLinearVelocity();
+                    float vx = oldSpeed.x;
+                    float newVx = vx + (right ? DELTA : -DELTA);
+                    bat.getBody().setLinearVelocity(new Vec2(newVx, oldSpeed.y));
+                }
+
+                @Override
+                public void onKeyUp(Keyboard.Event event) {
+                }
+            });
+
+            initJoint();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //startBall();
     }
 

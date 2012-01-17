@@ -15,47 +15,23 @@
  */
 package pong.entities;
 
-import static playn.core.PlayN.assetManager;
+import playn.core.*;
 import static playn.core.PlayN.graphics;
-import playn.core.Image;
-import playn.core.ImageLayer;
-import playn.core.PlayN;
-import playn.core.ResourceCallback;
 import pong.core.PongWorld;
 
-
 public abstract class Entity {
-  ImageLayer layer;
-  Image image;
-  float x, y, angle;
 
-  public Entity(final PongWorld peaWorld, float px, float py, float pangle) {
-    this.x = px;
-    this.y = py;
-    this.angle = pangle;
-    image = assetManager().getImage("images/" + getImageName());
-    layer = graphics().createImageLayer(image);
-    initPreLoad(peaWorld);
-    image.addCallback(new ResourceCallback<Image>() {
-      @Override
-      public void done(Image image) {
-        // since the image is loaded, we can use its width and height
-        layer.setWidth(image.width());
-        layer.setHeight(image.height());
-        layer.setOrigin(image.width() / 2f, image.height() / 2f);
-        layer.setScale(getWidth() / image.width(), getHeight() / image.height());
-        layer.setTranslation(x, y);
-        layer.setRotation(angle);
-        initPostLoad(peaWorld);
-      }
+    SurfaceLayer layer;
+    float x, y, angle;
 
-      @Override
-      public void error(Throwable err) {
-        PlayN.log().error("Error loading image: " + err.getMessage());
-      }
-    });
-  }
-
+    public Entity(final PongWorld peaWorld, float px, float py, float pangle) {
+        this.x = px;
+        this.y = py;
+        this.angle = pangle;
+        layer = graphics().createSurfaceLayer((int)getWidth(), (int)getHeight());
+        initPreLoad(peaWorld);
+    }
+   
   /**
    * Perform pre-image load initialization (e.g., attaching to PeaWorld layers).
    *
@@ -88,9 +64,4 @@ public abstract class Entity {
 
   abstract float getHeight();
 
-  abstract String getImageName();
-
-  public Image getImage() {
-    return image;
-  }
 }

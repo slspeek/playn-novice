@@ -20,99 +20,104 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
+import playn.core.Surface;
 import pong.core.PongWorld;
 
 /**
  * Our Bat who bounces the Ball.
- * 
+ *
  */
 public class Bat extends DynamicPhysicsEntity implements
-		PhysicsEntity.HasContactListener {
-	public static String TYPE = "Bat";
-	Sound ding;
-	PongWorld pongWorld;
+        PhysicsEntity.HasContactListener {
 
-	public Bat(final PongWorld pongWorld, World world, float x, float y,
-			float angle) {
-		super(pongWorld, world, x, y, angle);
-		this.pongWorld = pongWorld;
-		// load a sound that we'll play when placing sprites
-		ding = assetManager().getSound("images/Pong-Bathit"); // was ding
-	}
+    public static String TYPE = "Bat";
+    Sound ding;
+    PongWorld pongWorld;
 
-	@Override
-	Body initPhysicsBody(World world, float x, float y, float angle) {
-		FixtureDef fixtureDef = new FixtureDef();
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DYNAMIC;
-		bodyDef.position = new Vec2(0, 0);
-		bodyDef.fixedRotation = true;
-		Body body = world.createBody(bodyDef);
+    public Bat(final PongWorld pongWorld, World world, float x, float y,
+            float angle) {
+        super(pongWorld, world, x, y, angle);
+        this.pongWorld = pongWorld;
+        // load a sound that we'll play when placing sprites
+        ding = assetManager().getSound("images/Pong-Bathit"); // was ding
+    }
 
-		PolygonShape polygonShape = new PolygonShape();
-		Vec2[] polygon = new Vec2[4];
-		polygon[0] = new Vec2(-getWidth() / 2f, -getHeight() / 2f
-				+ getTopOffset());
-		polygon[1] = new Vec2(getWidth() / 2f, -getHeight() / 2f
-				+ getTopOffset());
-		polygon[2] = new Vec2(getWidth() / 2f, getHeight() / 2f);
-		polygon[3] = new Vec2(-getWidth() / 2f, getHeight() / 2f);
-		polygonShape.set(polygon, polygon.length);
-		fixtureDef.shape = polygonShape;
-		fixtureDef.friction = 0.1f;
-		fixtureDef.restitution = 0.8f;
-		fixtureDef.density = 100f;
-		body.createFixture(fixtureDef);
-		body.setTransform(new Vec2(x, y), angle);
-		return body;
-	}
+    @Override
+    Body initPhysicsBody(World world, float x, float y, float angle) {
+        FixtureDef fixtureDef = new FixtureDef() {
+        };
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.DYNAMIC;
+        bodyDef.position = new Vec2(0, 0);
+        bodyDef.fixedRotation = true;
+        Body body = world.createBody(bodyDef);
 
-	@Override
-	float getWidth() {
-		return 2.0f;
-	}
+        PolygonShape polygonShape = new PolygonShape();
+        Vec2[] polygon = new Vec2[4];
+        polygon[0] = new Vec2(-getWidth() / 2f, -getHeight() / 2f
+                + getTopOffset());
+        polygon[1] = new Vec2(getWidth() / 2f, -getHeight() / 2f
+                + getTopOffset());
+        polygon[2] = new Vec2(getWidth() / 2f, getHeight() / 2f);
+        polygon[3] = new Vec2(-getWidth() / 2f, getHeight() / 2f);
+        polygonShape.set(polygon, polygon.length);
+        fixtureDef.shape = polygonShape;
+        fixtureDef.friction = 0.1f;
+        fixtureDef.restitution = 0.8f;
+        fixtureDef.density = 100f;
+        body.createFixture(fixtureDef);
+        body.setTransform(new Vec2(x, y), angle);
+        return body;
+    }
 
-	@Override
-	float getHeight() {
-		return 0.3f;
-	}
+    @Override
+    float getWidth() {
+        return 2.0f;
+    }
 
-	/**
-	 * Return the size of the offset where the block is slightly lower than
-	 * where the image is drawn for a depth effect
-	 */
-	public float getTopOffset() {
-		return 2.0f / 8f;
-	}
+    @Override
+    float getHeight() {
+        return 10f;
+    }
 
-	@Override
-	public String getImageName() {
-		return "Bat.png";
-	}
+    /**
+     * Return the size of the offset where the block is slightly lower than
+     * where the image is drawn for a depth effect
+     */
+    public float getTopOffset() {
+        return 2.0f / 8f;
+    }
 
-	@Override
-	public void contact(PhysicsEntity other) {
-		ding.play();
-		pongWorld.scoreBoard.increaseScore();
-		Vec2 velocity = other.getBody().getLinearVelocity();
-		Vec2 newSpeed = newSpeed(velocity);
-		other.getBody().setLinearVelocity(newSpeed);
-	}
+    public void paint(float alpha) {
+        Surface surface = layer.surface();
+        surface.setFillColor(0xFFFFFFFF);
+        surface.fillRect(0, 0, 10, 10);
+        super.paint(alpha);
+    }
 
-	private Vec2 newSpeed(Vec2 velocity) {
-		float vx = velocity.x;
-		float vy = velocity.y;
-		if (vy < 0) {
-			vy -= 1f;
-		} else {
-			vy += 1f;
-		}
-		if (vx < 0) {
-			vx -= 1f;
-		} else {
-			vx += 1f;
-		}
-		Vec2 newSpeed = new Vec2(vx, vy);
-		return newSpeed;
-	}
+    @Override
+    public void contact(PhysicsEntity other) {
+        ding.play();
+        pongWorld.scoreBoard.increaseScore();
+        Vec2 velocity = other.getBody().getLinearVelocity();
+        Vec2 newSpeed = newSpeed(velocity);
+        other.getBody().setLinearVelocity(newSpeed);
+    }
+
+    private Vec2 newSpeed(Vec2 velocity) {
+        float vx = velocity.x;
+        float vy = velocity.y;
+        if (vy < 0) {
+            vy -= 1f;
+        } else {
+            vy += 1f;
+        }
+        if (vx < 0) {
+            vx -= 1f;
+        } else {
+            vx += 1f;
+        }
+        Vec2 newSpeed = new Vec2(vx, vy);
+        return newSpeed;
+    }
 }
