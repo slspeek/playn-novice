@@ -49,7 +49,7 @@ public class Ball extends DynamicPhysicsEntity implements
         Body body = world.createBody(bodyDef);
 
         CircleShape circleShape = new CircleShape();
-        circleShape.m_radius = getRadius();
+        circleShape.m_radius = getRadius()*PongWorld.physUnitPerScreenUnit;
         fixtureDef.shape = circleShape;
         fixtureDef.density = 0.4f;
         fixtureDef.friction = 0.0f;
@@ -65,6 +65,7 @@ public class Ball extends DynamicPhysicsEntity implements
         Canvas canvas = layer.canvas();
         canvas.setFillColor(0xFF00FF00);
         canvas.fillCircle(getWidth()/2, getHeight()/2, getRadius());
+        layer.setScale(PongWorld.physUnitPerScreenUnit);
         super.paint(alpha);
     }
 
@@ -79,8 +80,7 @@ public class Ball extends DynamicPhysicsEntity implements
     }
 
     float getRadius() {
-        // return 1.50f;
-        return 5f;
+        return 10f;
     }
 
     @Override
