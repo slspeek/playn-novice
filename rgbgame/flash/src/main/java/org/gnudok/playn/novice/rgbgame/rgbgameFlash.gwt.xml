@@ -1,0 +1,10 @@
+<module rename-to='rgbgameflash'>
+  <inherits name='playn.PlayNFlash'/>
+
+  <source path='core'/>
+  <source path='flash'/>
+
+  <public path="resources" />
+
+  <entry-point class='org.gnudok.playn.novice.rgbgame.flash.rgbgameFlash'/>
+</module>
