@@ -31,6 +31,9 @@ public class PongGame implements Game {
 
     public static final float MAXBATSPEED = 12;
     public static final int DELTA = 6;
+    public static boolean gamePaused = false;
+    public static Vec2 ballSpeedOrig, batSpeedOrig, botBatSpeedOrig;
+
     ImageLayer bgLayer;
     float INITIAL_BALL_SPEED = 10f;
     // main layer that holds the world. note: this gets scaled to world space
@@ -126,6 +129,29 @@ public class PongGame implements Game {
                         case Q:
                             quit();
                             break;
+                        case P:
+                            if (ballSpeedOrig == new Vec2(0,0))
+                                ballSpeedOrig = ball.getBody().getLinearVelocity();
+                                        
+                            if (gamePaused == false) {
+                                batSpeedOrig = bat.getBody().getLinearVelocity();
+                                ballSpeedOrig = ball.getBody().getLinearVelocity();
+                                botBatSpeedOrig = botBat.getBody().getLinearVelocity();
+
+                                bat.setLinearVelocity(0, 0);
+                                ball.setLinearVelocity(0, 0);
+                                botBat.setLinearVelocity(0, 0);
+                                gamePaused = true;
+                                System.out.println("gamePaused true: " + ballSpeedOrig);
+                            } else {
+                                
+                                bat.setLinearVelocity(batSpeedOrig.x, batSpeedOrig.y);
+                                ball.setLinearVelocity(ballSpeedOrig.x, ballSpeedOrig.y);
+                                botBat.setLinearVelocity(botBatSpeedOrig.x, botBatSpeedOrig.y);
+                                gamePaused = false;
+                                System.out.println("gamePaused false: " + ballSpeedOrig);
+                            } 
+                            break;
 
                     }
 
@@ -147,12 +173,12 @@ public class PongGame implements Game {
         Vec2 oldSpeed = bat.getBody().getLinearVelocity();
         bat.getBody().setLinearVelocity(getIncreasedSpeed(right, oldSpeed));
     }
-    
+
     public Vec2 getIncreasedSpeed(boolean right, Vec2 oldSpeed) {
         float vx = oldSpeed.x;
         float newVx = vx + (right ? DELTA : -DELTA);
         if (newVx < 0) {
-            newVx = Math.max(- PongGame.MAXBATSPEED, newVx);
+            newVx = Math.max(-PongGame.MAXBATSPEED, newVx);
         } else {
             newVx = Math.min(PongGame.MAXBATSPEED, newVx);
         }
