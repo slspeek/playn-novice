@@ -63,7 +63,7 @@ public class Bat extends DynamicPhysicsEntity implements
         polygon[3] = new Vec2(-getWidth() / 2f, getHeight() / 2f);
         polygonShape.set(polygon, polygon.length);
         fixtureDef.shape = polygonShape;
-        fixtureDef.friction = 0.1f;
+        fixtureDef.friction = 5.1f;
         fixtureDef.restitution = 0.8f;
         fixtureDef.density = 100f;
         body.createFixture(fixtureDef);

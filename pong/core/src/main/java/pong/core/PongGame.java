@@ -29,7 +29,8 @@ import pong.entities.Bat;
  */
 public class PongGame implements Game {
 
-    int DELTA = 9;
+    public static final float MAXBATSPEED = 12;
+    public static final int DELTA = 6;
     ImageLayer bgLayer;
     float INITIAL_BALL_SPEED = 10f;
     // main layer that holds the world. note: this gets scaled to world space
@@ -130,13 +131,6 @@ public class PongGame implements Game {
 
                 }
 
-                private void increaseSpeed(boolean right, Bat bat) {
-                    Vec2 oldSpeed = bat.getBody().getLinearVelocity();
-                    float vx = oldSpeed.x;
-                    float newVx = vx + (right ? DELTA : -DELTA);
-                    bat.getBody().setLinearVelocity(new Vec2(newVx, oldSpeed.y));
-                }
-
                 @Override
                 public void onKeyUp(Keyboard.Event event) {
                 }
@@ -147,6 +141,22 @@ public class PongGame implements Game {
             e.printStackTrace();
         }
         //startBall();
+    }
+
+    public void increaseSpeed(boolean right, Bat bat) {
+        Vec2 oldSpeed = bat.getBody().getLinearVelocity();
+        bat.getBody().setLinearVelocity(getIncreasedSpeed(right, oldSpeed));
+    }
+    
+    public Vec2 getIncreasedSpeed(boolean right, Vec2 oldSpeed) {
+        float vx = oldSpeed.x;
+        float newVx = vx + (right ? DELTA : -DELTA);
+        if (newVx < 0) {
+            newVx = Math.max(- PongGame.MAXBATSPEED, newVx);
+        } else {
+            newVx = Math.min(PongGame.MAXBATSPEED, newVx);
+        }
+        return new Vec2(newVx, oldSpeed.y);
     }
 
     private void initJoint() {
