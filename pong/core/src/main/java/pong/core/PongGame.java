@@ -68,7 +68,7 @@ public class PongGame implements Game {
         System.out.println("Hello");
         try {
             // load and show our background image
-            Image bgImage = assetManager().getImage("images/Black_Horz.png");
+            Image bgImage = assetManager().getImage("images/Horizontal_Line.png");
             bgLayer = graphics().createImageLayer(bgImage);
             graphics().rootLayer().add(bgLayer);
 
