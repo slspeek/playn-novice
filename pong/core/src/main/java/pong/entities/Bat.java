@@ -99,7 +99,7 @@ public class Bat extends DynamicPhysicsEntity implements
     @Override
     public void contact(PhysicsEntity other) {
         ding.play();
-        pongWorld.scoreBoard.increaseScore();
+        pongWorld.playerScoreBoard.increaseScore();
         Vec2 velocity = other.getBody().getLinearVelocity();
         Vec2 newSpeed = newSpeed(velocity);
         other.getBody().setLinearVelocity(newSpeed);
