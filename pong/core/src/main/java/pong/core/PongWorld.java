@@ -57,7 +57,7 @@ public class PongWorld implements ContactListener {
     // box2d object containing physics world
     protected World world;
     public StaticPhysicsEntity ground;
-    public ScoreBoard scoreBoard;
+    public ScoreBoard playerScoreBoard;
     public MessageBoard messageBoard;
     private List<Entity> entities = new ArrayList<Entity>(0);
     private HashMap<Body, PhysicsEntity> bodyEntityLUT = new HashMap<Body, PhysicsEntity>();
@@ -122,8 +122,8 @@ public class PongWorld implements ContactListener {
         Font font = graphics().createFont("Helvetica", Font.Style.PLAIN, 64);
         messageBoard = new MessageBoard(font, new Vec2(13,7), 15f, 20f, 0xFFCCCCCC);
         font = graphics().createFont("Helvetica", Font.Style.PLAIN, 36);
-        scoreBoard = new ScoreBoard(font, new Vec2(17, 2), 5f, 4f, 0xFFCCCCCC);
-        dynamicLayer.add(scoreBoard.getLayer());
+        playerScoreBoard = new ScoreBoard(font, new Vec2(17, 2), 5f, 4f, 0xFFCCCCCC);
+        dynamicLayer.add(playerScoreBoard.getLayer());
         dynamicLayer.add(messageBoard.getLayer());
         messageBoard.setMessage("Press space to begin");
         

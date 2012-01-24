@@ -133,26 +133,7 @@ public class PongGame implements Game {
                             quit();
                             break;
                         case P:
-                            if (gamePaused == false) {
-                                gamePaused = true;
-                                batSpeedOrig = new Vec2(bat.getBody().getLinearVelocity());
-                                System.out.println("Before speeed");
-                                ballSpeedOrig = new Vec2(ball.getBody().getLinearVelocity());
-                                                        
-                                botBatSpeedOrig = new Vec2(botBat.getBody().getLinearVelocity());
-                                System.out.println("gamePaused true: " + ballSpeedOrig);
-
-                                bat.setLinearVelocity(0, 0);
-                                ball.setLinearVelocity(0, 0);
-                                botBat.setLinearVelocity(0, 0);
-                                System.out.println("gamePaused true: " + ballSpeedOrig);
-                            } else {
-                                gamePaused = false;
-                                bat.setLinearVelocity(batSpeedOrig.x, batSpeedOrig.y);
-                                ball.setLinearVelocity(ballSpeedOrig.x, ballSpeedOrig.y);
-                                botBat.setLinearVelocity(botBatSpeedOrig.x, botBatSpeedOrig.y);
-                                System.out.println("gamePaused false: " + ballSpeedOrig);
-                            }
+                            pauseGame();
                             break;
 
                     }
@@ -206,6 +187,28 @@ public class PongGame implements Game {
 
     }
 
+    public void pauseGame() {
+        if (gamePaused == false) {
+            batSpeedOrig = new Vec2(bat.getBody().getLinearVelocity());
+            System.out.println("Before speeed");
+            ballSpeedOrig = new Vec2(ball.getBody().getLinearVelocity());
+
+            botBatSpeedOrig = new Vec2(botBat.getBody().getLinearVelocity());
+            System.out.println("gamePaused true: " + ballSpeedOrig);
+
+            bat.setLinearVelocity(0, 0);
+            ball.setLinearVelocity(0, 0);
+            botBat.setLinearVelocity(0, 0);
+            System.out.println("gamePaused true: " + ballSpeedOrig);
+        } else {
+            bat.setLinearVelocity(batSpeedOrig.x, batSpeedOrig.y);
+            ball.setLinearVelocity(ballSpeedOrig.x, ballSpeedOrig.y);
+            botBat.setLinearVelocity(botBatSpeedOrig.x, botBatSpeedOrig.y);
+            System.out.println("gamePaused false: " + ballSpeedOrig);
+        }
+        gamePaused =! gamePaused;
+    }
+    
     @Override
     public void paint(float alpha) {
         if (worldLoaded) {
