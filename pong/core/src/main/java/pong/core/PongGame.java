@@ -31,9 +31,8 @@ public class PongGame implements Game {
 
     public static final float MAXBATSPEED = 12;
     public static final int DELTA = 6;
-    public static boolean gamePaused = false;
-    public static Vec2 ballSpeedOrig, batSpeedOrig, botBatSpeedOrig;
-
+    public boolean gamePaused = false;
+    public Vec2 ballSpeedOrig, batSpeedOrig, botBatSpeedOrig;
     ImageLayer bgLayer;
     float INITIAL_BALL_SPEED = 10f;
     // main layer that holds the world. note: this gets scaled to world space
@@ -95,6 +94,10 @@ public class PongGame implements Game {
 
                 public void onPointerStart(Pointer.Event event) {
                     startBall();
+                    float x = event.x();
+                    Vec2 oldPos = bat.getBody().getPosition();
+                    Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
+                    bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
 
                 }
 
@@ -130,27 +133,26 @@ public class PongGame implements Game {
                             quit();
                             break;
                         case P:
-                            if (ballSpeedOrig == new Vec2(0,0))
-                                ballSpeedOrig = ball.getBody().getLinearVelocity();
-                                        
                             if (gamePaused == false) {
-                                batSpeedOrig = bat.getBody().getLinearVelocity();
-                                ballSpeedOrig = ball.getBody().getLinearVelocity();
-                                botBatSpeedOrig = botBat.getBody().getLinearVelocity();
+                                gamePaused = true;
+                                batSpeedOrig = new Vec2(bat.getBody().getLinearVelocity());
+                                System.out.println("Before speeed");
+                                ballSpeedOrig = new Vec2(ball.getBody().getLinearVelocity());
+                                                        
+                                botBatSpeedOrig = new Vec2(botBat.getBody().getLinearVelocity());
+                                System.out.println("gamePaused true: " + ballSpeedOrig);
 
                                 bat.setLinearVelocity(0, 0);
                                 ball.setLinearVelocity(0, 0);
                                 botBat.setLinearVelocity(0, 0);
-                                gamePaused = true;
                                 System.out.println("gamePaused true: " + ballSpeedOrig);
                             } else {
-                                
+                                gamePaused = false;
                                 bat.setLinearVelocity(batSpeedOrig.x, batSpeedOrig.y);
                                 ball.setLinearVelocity(ballSpeedOrig.x, ballSpeedOrig.y);
                                 botBat.setLinearVelocity(botBatSpeedOrig.x, botBatSpeedOrig.y);
-                                gamePaused = false;
                                 System.out.println("gamePaused false: " + ballSpeedOrig);
-                            } 
+                            }
                             break;
 
                     }
