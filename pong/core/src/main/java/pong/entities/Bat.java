@@ -23,6 +23,7 @@ import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
 import playn.core.Surface;
 import pong.core.PongWorld;
+import pong.core.ScoreBoard;
 
 /**
  * Our Bat who bounces the Ball.
@@ -34,6 +35,7 @@ public class Bat extends DynamicPhysicsEntity implements
     public static String TYPE = "Bat";
     Sound ding;
     PongWorld pongWorld;
+    ScoreBoard scoreBoard;
 
     public Bat(final PongWorld pongWorld, World world, float x, float y,
             float angle) {
@@ -41,6 +43,10 @@ public class Bat extends DynamicPhysicsEntity implements
         this.pongWorld = pongWorld;
         // load a sound that we'll play when placing sprites
         ding = assetManager().getSound("images/Pong-Bathit"); // was ding
+    }
+    
+    public void setScoreBoard(ScoreBoard board) {
+        this.scoreBoard = board;
     }
 
     @Override
@@ -99,7 +105,7 @@ public class Bat extends DynamicPhysicsEntity implements
     @Override
     public void contact(PhysicsEntity other) {
         ding.play();
-        pongWorld.playerScoreBoard.increaseScore();
+        scoreBoard.increaseScore();
         Vec2 velocity = other.getBody().getLinearVelocity();
         Vec2 newSpeed = newSpeed(velocity);
         other.getBody().setLinearVelocity(newSpeed);

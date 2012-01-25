@@ -85,10 +85,12 @@ public class PongGame implements Game {
             bat = new Bat(world, world.world, PongWorld.WIDTH / 2,
                     PongWorld.HEIGHT - BAT_MARGIN, 0);
             world.add(bat);
+            bat.setScoreBoard(world.playerScoreBoard);
 
             botBat = new Bat(world, world.world, PongWorld.WIDTH / 2,
                     BAT_MARGIN, 0);
             world.add(botBat);
+            botBat.setScoreBoard(world.botScoreBoard);
             // hook up our pointer listener
             pointer().setListener(new Pointer.Adapter() {
 
