@@ -8,6 +8,7 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 import playn.core.Canvas;
 import playn.core.Surface;
+import pong.core.PongGame;
 
 import pong.core.PongWorld;
 
@@ -26,6 +27,13 @@ public class Ground extends StaticPhysicsEntity implements
     }
     public PongWorld pongWorld;
 
+    private PongGame game;
+    
+    public void setGame(PongGame game) {
+        this.game = game;
+    }
+    
+    
     @Override
     Body initPhysicsBody(World world, float x, float y, float angle) {
         BodyDef bodyDef = new BodyDef();
@@ -62,8 +70,6 @@ public class Ground extends StaticPhysicsEntity implements
 
     @Override
     public void contact(PhysicsEntity other) {
-        //System.out.println("xxxx" + pongworld.messageBoard);
-        pongWorld.messageBoard.setMessage("Game over");
-        System.out.println("Hit the ground");
+       game.gameOver();
     }
 }

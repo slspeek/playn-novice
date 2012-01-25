@@ -49,21 +49,22 @@ public class PongGame implements Game {
     private GameState state = GameState.BeforeStart;
 
     private void startGame() {
-        if (!ballLoaded && worldLoaded) {
-            ball = new Ball(world, world.world,
-                    PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2, 0);
+        Random r = new Random();
+        float alfa = (float) (r.nextFloat() * Math.PI / 2);
+        float vx = (float) (INITIAL_BALL_SPEED * Math.cos(Math.PI / 4 + alfa));
+        float vy = (float) (INITIAL_BALL_SPEED * Math.sin(Math.PI / 4 + alfa));
 
-            Random r = new Random();
-            float alfa = (float) (r.nextFloat() * Math.PI / 2);
-            float vx = (float) (INITIAL_BALL_SPEED * Math.cos(Math.PI / 4 + alfa));
-            float vy = (float) (INITIAL_BALL_SPEED * Math.sin(Math.PI / 4 + alfa));
+        ball.setLinearVelocity(vx, vy);
+        world.messageBoard.setMessage("                  ");
+        state = GameState.Running;
+    }
 
-            ball.setLinearVelocity(vx, vy);
-            world.add(ball);
-            ballLoaded = true;
-            world.messageBoard.setMessage("                  ");
-            state = GameState.Running;
-        }
+    private void reset() {
+        world.botScoreBoard.resetScore();
+        world.playerScoreBoard.resetScore();
+        ball.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2);
+        world.messageBoard.setMessage("Press space to begin");
+        state = GameState.BeforeStart;
     }
 
     @Override
@@ -80,7 +81,7 @@ public class PongGame implements Game {
             worldLayer.setScale(1f / PongWorld.physUnitPerScreenUnit);
             graphics().rootLayer().add(worldLayer);
 
-            world = new PongWorld(worldLayer);
+            world = new PongWorld(this, worldLayer);
             worldLoaded = true;
 
             bat = new Bat(world, world.world, PongWorld.WIDTH / 2,
@@ -92,11 +93,22 @@ public class PongGame implements Game {
                     BAT_MARGIN, 0);
             world.add(botBat);
             botBat.setScoreBoard(world.botScoreBoard);
+
+
+            ball = new Ball(world, world.world,
+                    PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2, 0);
+            world.add(ball);
+            ballLoaded = true;
+
             // hook up our pointer listener
             pointer().setListener(new Pointer.Adapter() {
 
                 public void onPointerStart(Pointer.Event event) {
+                    if (state == GameState.BeforeStart) {
                     startGame();
+                    } else if (state == GameState.GameOver) {
+                        reset();
+                    }
                     float x = event.x();
                     Vec2 oldPos = bat.getBody().getPosition();
                     Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
@@ -213,7 +225,7 @@ public class PongGame implements Game {
             state = GameState.Running;
         }
     }
-    
+
     @Override
     public void paint(float alpha) {
         if (worldLoaded) {
@@ -249,5 +261,10 @@ public class PongGame implements Game {
                 botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
             }
         }
+    }
+
+    public void gameOver() {
+        world.messageBoard.setMessage("Game over Insert coin");
+        state = GameState.GameOver;
     }
 }

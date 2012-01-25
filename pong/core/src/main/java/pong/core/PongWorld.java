@@ -56,7 +56,7 @@ public class PongWorld implements ContactListener {
     static public final int HEIGHT = 30;
     // box2d object containing physics world
     protected World world;
-    public StaticPhysicsEntity ground;
+    public Ground ground;
     public ScoreBoard playerScoreBoard;
     public ScoreBoard botScoreBoard;
     public MessageBoard messageBoard;
@@ -65,8 +65,10 @@ public class PongWorld implements ContactListener {
     private Stack<Contact> contacts = new Stack<Contact>();
     private static boolean showDebugDraw = false;
     private DebugDrawBox2D debugDraw;
+    private final PongGame game;
 
-    public PongWorld(GroupLayer scaledLayer) {
+    public PongWorld(PongGame game, GroupLayer scaledLayer) {
+        this.game = game;
         staticLayerBack = graphics().createGroupLayer();
         scaledLayer.add(staticLayerBack);
         dynamicLayer = graphics().createGroupLayer();
@@ -82,6 +84,7 @@ public class PongWorld implements ContactListener {
         // create the ground
         ground = new Ground(this, world, WIDTH/2 , HEIGHT, 0);
         add(ground);
+        ground.setGame(game);
         System.out.println("After ground");
         // create the ceil
         Body ceiling = world.createBody(new BodyDef());
@@ -118,7 +121,7 @@ public class PongWorld implements ContactListener {
         System.out.println("End of init");
         initBoards();
     }
-
+  
     private void initBoards() {
         Font font = graphics().createFont("Helvetica", Font.Style.PLAIN, 64);
         messageBoard = new MessageBoard(font, new Vec2(14,7), 15f, 20f, 0xFFCCCCCC);
@@ -128,7 +131,7 @@ public class PongWorld implements ContactListener {
         dynamicLayer.add(playerScoreBoard.getLayer());
         dynamicLayer.add(messageBoard.getLayer());
         dynamicLayer.add(botScoreBoard.getLayer());
-        messageBoard.setMessage("Press space to begin");
+        //messageBoard.setMessage("Press space to begin");
         
     }
 
