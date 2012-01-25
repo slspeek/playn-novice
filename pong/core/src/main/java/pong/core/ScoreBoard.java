@@ -15,6 +15,7 @@ public class ScoreBoard extends TextField {
 
     public ScoreBoard(Font font, Vec2 position, float width, float height, int color) {
         super(font, position, width, height, color);
+        resetScore();
     }
 
     public void increaseScore() {
