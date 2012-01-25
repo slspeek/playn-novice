@@ -31,7 +31,6 @@ public class PongGame implements Game {
 
     public static final float MAXBATSPEED = 12;
     public static final int DELTA = 6;
-    public boolean gamePaused = false;
     public Vec2 ballSpeedOrig, batSpeedOrig, botBatSpeedOrig;
     ImageLayer bgLayer;
     float INITIAL_BALL_SPEED = 10f;
@@ -47,8 +46,9 @@ public class PongGame implements Game {
     protected boolean ballLoaded;
     int score = 100;
     private int BAT_MARGIN = 1;
+    private GameState state = GameState.BeforeStart;
 
-    private void startBall() {
+    private void startGame() {
         if (!ballLoaded && worldLoaded) {
             ball = new Ball(world, world.world,
                     PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2, 0);
@@ -62,6 +62,7 @@ public class PongGame implements Game {
             world.add(ball);
             ballLoaded = true;
             world.messageBoard.setMessage("                  ");
+            state = GameState.Running;
         }
     }
 
@@ -95,7 +96,7 @@ public class PongGame implements Game {
             pointer().setListener(new Pointer.Adapter() {
 
                 public void onPointerStart(Pointer.Event event) {
-                    startBall();
+                    startGame();
                     float x = event.x();
                     Vec2 oldPos = bat.getBody().getPosition();
                     Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
@@ -105,7 +106,6 @@ public class PongGame implements Game {
 
                 @Override
                 public void onPointerDrag(Pointer.Event event) {
-//startBall();
                     float x = event.x();
                     Vec2 oldPos = bat.getBody().getPosition();
                     Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
@@ -120,7 +120,7 @@ public class PongGame implements Game {
                 public void onKeyDown(Keyboard.Event event) {
                     switch (event.key()) {
                         case SPACE:
-                            startBall();
+                            startGame();
                             break;
                         case LEFT:
                             increaseSpeed(false, bat);
@@ -190,7 +190,7 @@ public class PongGame implements Game {
     }
 
     public void pauseGame() {
-        if (gamePaused == false) {
+        if (state != GameState.Paused) {
             batSpeedOrig = new Vec2(bat.getBody().getLinearVelocity());
             System.out.println("Before speeed");
             ballSpeedOrig = new Vec2(ball.getBody().getLinearVelocity());
@@ -202,13 +202,16 @@ public class PongGame implements Game {
             ball.setLinearVelocity(0, 0);
             botBat.setLinearVelocity(0, 0);
             System.out.println("gamePaused true: " + ballSpeedOrig);
+            world.messageBoard.setMessage("Paused");
+            state = GameState.Paused;
         } else {
             bat.setLinearVelocity(batSpeedOrig.x, batSpeedOrig.y);
             ball.setLinearVelocity(ballSpeedOrig.x, ballSpeedOrig.y);
             botBat.setLinearVelocity(botBatSpeedOrig.x, botBatSpeedOrig.y);
             System.out.println("gamePaused false: " + ballSpeedOrig);
+            world.messageBoard.setMessage("        ");
+            state = GameState.Running;
         }
-        gamePaused =! gamePaused;
     }
     
     @Override
