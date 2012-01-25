@@ -20,4 +20,9 @@ public class ScoreBoard extends TextField {
     public void increaseScore() {
         setMessage(String.valueOf(++score));
     }
+    
+    public void resetScore() {
+        this.score = 0;
+        setMessage(String.valueOf(score));
+    }
 }
