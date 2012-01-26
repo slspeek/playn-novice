@@ -34,10 +34,7 @@ import playn.core.DebugDrawBox2D;
 import playn.core.Font;
 import playn.core.GroupLayer;
 import static playn.core.PlayN.graphics;
-import pong.entities.Entity;
-import pong.entities.Ground;
-import pong.entities.PhysicsEntity;
-import pong.entities.StaticPhysicsEntity;
+import pong.entities.*;
 
 /**
  * Creates the world we play in.
@@ -56,14 +53,15 @@ public class PongWorld implements ContactListener {
     static public final int HEIGHT = 30;
     // box2d object containing physics world
     protected World world;
-    public Ground ground;
+    public Ground  ground;
+    public Ceiling ceiling;
     public ScoreBoard playerScoreBoard;
     public ScoreBoard botScoreBoard;
     public MessageBoard messageBoard;
     private List<Entity> entities = new ArrayList<Entity>(0);
     private HashMap<Body, PhysicsEntity> bodyEntityLUT = new HashMap<Body, PhysicsEntity>();
     private Stack<Contact> contacts = new Stack<Contact>();
-    private static boolean showDebugDraw = false;
+    private static boolean showDebugDraw = true;
     private DebugDrawBox2D debugDraw;
     private final PongGame game;
 
@@ -85,12 +83,17 @@ public class PongWorld implements ContactListener {
         ground = new Ground(this, world, WIDTH/2 , HEIGHT, 0);
         add(ground);
         ground.setGame(game);
-        System.out.println("After ground");
+        
+        
+        //create the ceiling
+        ceiling = new Ceiling(this, world, WIDTH/2, 0f, 0f);
+        add(ceiling);
+        ceiling.setGame(game);
         // create the ceil
-        Body ceiling = world.createBody(new BodyDef());
-        PolygonShape ceilingShape = new PolygonShape();
-        ceilingShape.setAsEdge(new Vec2(0, 1), new Vec2(WIDTH, 1));
-        ceiling.createFixture(ceilingShape, 0.0f);
+//        Body ceiling = world.createBody(new BodyDef());
+//        PolygonShape ceilingShape = new PolygonShape();
+//        ceilingShape.setAsEdge(new Vec2(0, 1), new Vec2(WIDTH, 1));
+//        ceiling.createFixture(ceilingShape, 0.0f);
 
         // create the walls
         Body wallLeft = world.createBody(new BodyDef());

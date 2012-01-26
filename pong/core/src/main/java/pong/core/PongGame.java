@@ -158,12 +158,12 @@ public class PongGame implements Game {
                 public void onKeyUp(Keyboard.Event event) {
                 }
             });
-
-            initJoint();
+            initPlayerBatJoint();
+            initBotBatJoint();
+            reset();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //startBall();
     }
 
     public void increaseSpeed(boolean right, Bat bat) {
@@ -182,7 +182,7 @@ public class PongGame implements Game {
         return new Vec2(newVx, oldSpeed.y);
     }
 
-    private void initJoint() {
+    private void initPlayerBatJoint() {
         LineJointDef jd = new LineJointDef();
 
         // Bouncy limit
@@ -201,7 +201,35 @@ public class PongGame implements Game {
 
     }
 
+    private void initBotBatJoint() {
+        LineJointDef jd = new LineJointDef();
+
+        // Bouncy limit
+        Vec2 axis = new Vec2(1.0f, 0.0f);
+        axis.normalize();
+        jd.initialize(world.ceiling.getBody(), botBat.getBody(), new Vec2(0.0f,
+                8.5f), axis);
+
+        jd.motorSpeed = 0.0f;
+        jd.maxMotorForce = 100.0f;
+        jd.enableMotor = true;
+        jd.lowerTranslation = -4.0f;
+        jd.upperTranslation = 4.0f;
+        // jd.enableLimit = true;
+        joint = (LineJoint) world.world.createJoint(jd);
+
+    }
+
     public void pauseGame() {
+        stopMovingParts();
+        if (state == GameState.Paused) {
+            world.messageBoard.setMessage("Paused");
+        } else {
+            world.messageBoard.setMessage("       ");
+        }
+        
+    }
+    public void stopMovingParts() {
         if (state != GameState.Paused) {
             batSpeedOrig = new Vec2(bat.getBody().getLinearVelocity());
             System.out.println("Before speeed");
@@ -214,14 +242,14 @@ public class PongGame implements Game {
             ball.setLinearVelocity(0, 0);
             botBat.setLinearVelocity(0, 0);
             System.out.println("gamePaused true: " + ballSpeedOrig);
-            world.messageBoard.setMessage("Paused");
+            //world.messageBoard.setMessage("Paused");
             state = GameState.Paused;
         } else {
             bat.setLinearVelocity(batSpeedOrig.x, batSpeedOrig.y);
             ball.setLinearVelocity(ballSpeedOrig.x, ballSpeedOrig.y);
             botBat.setLinearVelocity(botBatSpeedOrig.x, botBatSpeedOrig.y);
             System.out.println("gamePaused false: " + ballSpeedOrig);
-            world.messageBoard.setMessage("        ");
+            //world.messageBoard.setMessage("        ");
             state = GameState.Running;
         }
     }
@@ -265,6 +293,7 @@ public class PongGame implements Game {
 
     public void gameOver() {
         world.messageBoard.setMessage("Game over Insert coin");
+        stopMovingParts();
         state = GameState.GameOver;
     }
 }
