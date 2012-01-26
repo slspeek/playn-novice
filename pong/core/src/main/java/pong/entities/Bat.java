@@ -96,9 +96,8 @@ public class Bat extends DynamicPhysicsEntity implements
     }
 
     public void paint(float alpha) {
-        Canvas canvas = layer.canvas();
         canvas.setFillColor(0xFFFF0000);
-        canvas.fillRect(0, 0, 10, 10);
+        canvas.fillRect(-getWidth()/2, 0, getWidth(), getHeight());
         super.paint(alpha);
     }
 

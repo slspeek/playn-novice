@@ -21,15 +21,22 @@ import pong.core.PongWorld;
 
 public abstract class Entity {
 
-    CanvasLayer layer;
+    ImageLayer layer;
+    Canvas canvas;
     float x, y, angle;
 
     public Entity(final PongWorld peaWorld, float px, float py, float pangle) {
         this.x = px;
         this.y = py;
         this.angle = pangle;
-        layer = graphics().createCanvasLayer((int)getWidth(), (int)getHeight());
+        CanvasImage image = graphics().createImage((int)getWidth(), (int)getHeight());
+        canvas = image.canvas();
+        layer = graphics().createImageLayer(image);
         initPreLoad(peaWorld);
+                
+        canvas.setFillColor(0xFFE00EEE);
+        canvas.fillRect(0, 0, canvas.width(), canvas.height());
+        layer.setOrigin(getWidth()/2, getHeight()/2);
     }
    
   /**

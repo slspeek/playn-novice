@@ -54,7 +54,8 @@ public class Ball extends DynamicPhysicsEntity implements
         fixtureDef.density = 0.4f;
         fixtureDef.friction = 0.0f;
         fixtureDef.restitution = 1f;
-        circleShape.m_p.set(getWidth()/2*PongWorld.physUnitPerScreenUnit, getHeight()/2*PongWorld.physUnitPerScreenUnit);
+        //circleShape.m_p.set(getWidth()/2*PongWorld.physUnitPerScreenUnit, getHeight()/2*PongWorld.physUnitPerScreenUnit);
+        circleShape.m_p.set(0,0);
         body.createFixture(fixtureDef);
         body.setLinearDamping(0.0f);
         body.setTransform(new Vec2(x, y), angle);
@@ -62,7 +63,7 @@ public class Ball extends DynamicPhysicsEntity implements
     }
 
     public void paint(float alpha) {
-        Canvas canvas = layer.canvas();
+       
         canvas.setFillColor(0xFF00FF00);
         canvas.fillCircle(getWidth()/2, getHeight()/2, getRadius());
         layer.setScale(PongWorld.physUnitPerScreenUnit);
