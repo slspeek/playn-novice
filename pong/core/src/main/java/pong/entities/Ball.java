@@ -54,7 +54,7 @@ public class Ball extends DynamicPhysicsEntity implements
         fixtureDef.density = 0.4f;
         fixtureDef.friction = 0.0f;
         fixtureDef.restitution = 1f;
-        circleShape.m_p.set(0, 0);
+        circleShape.m_p.set(getWidth()/2*PongWorld.physUnitPerScreenUnit, getHeight()/2*PongWorld.physUnitPerScreenUnit);
         body.createFixture(fixtureDef);
         body.setLinearDamping(0.0f);
         body.setTransform(new Vec2(x, y), angle);
