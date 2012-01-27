@@ -5,6 +5,7 @@ package org.gnudok.playn.novice.tetris.core;
 
 
 
+import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Keyboard.Event;
 
@@ -28,11 +29,10 @@ class TAdapter extends Keyboard.Adapter {
 		if (!this.board.isStarted || this.board.curPiece.getShape() == Tetrominoes.NoShape) {
 			return;
 		}
-		System.out.println("aFTER PRE CONTDION");
 		
-		int keycode = event.keyCode();
+		Key keycode = event.key();
 		
-		if (keycode == 'p' || keycode == 'P') {
+		if (keycode.equals(Key.P)) {
 			this.board.pause();
 			return;
 		}
@@ -41,29 +41,26 @@ class TAdapter extends Keyboard.Adapter {
 			return;
 
 		switch (keycode) {
-		case Keyboard.KEY_LEFT:
+		case LEFT:
 			System.out.println("Try move left");
 			this.board.tryMove(this.board.curPiece, this.board.curX - 1, this.board.curY);
 			break;
-		case Keyboard.KEY_RIGHT:
+		case RIGHT:
 			this.board.tryMove(this.board.curPiece, this.board.curX + 1, this.board.curY);
 			break;
-		case Keyboard.KEY_DOWN:
+		case DOWN:
 			this.board.tryMove(this.board.curPiece.rotateRight(), this.board.curX, this.board.curY);
 			break;
-		case Keyboard.KEY_UP:
+		case UP:
 			this.board.tryMove(this.board.curPiece.rotateLeft(), this.board.curX, this.board.curY);
 			break;
-		case Keyboard.KEY_SPACE:
+		case SPACE:
 			this.board.dropDown();
 			break;
-		case 'd':
+		case D:
 			this.board.oneLineDown();
 			break;
-		case 'D':
-			this.board.oneLineDown();
-			break;
-		}
+                }
 		super.onKeyDown(event);
 	}
 
