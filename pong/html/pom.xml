@@ -18,6 +18,7 @@
     <gwt.name>pong</gwt.name>
     <!-- Desired Google App Engine SDK version -->
     <gae.version>1.6.0</gae.version>
+    <gae.home>${user.home}/appengine-java-sdk-${gae.version}</gae.home>
   </properties>
 
   <dependencies>
