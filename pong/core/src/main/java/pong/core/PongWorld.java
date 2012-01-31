@@ -135,9 +135,13 @@ public class PongWorld implements ContactListener {
         dynamicLayer.add(messageBoard.getLayer());
         dynamicLayer.add(botScoreBoard.getLayer());
         //messageBoard.setMessage("Press space to begin");
-        
     }
 
+    // added JT
+    public PongGame getGame() {
+        return this.game;
+    }
+    
     public void update(float delta) {
         for (Entity e : entities) {
             e.update(delta);

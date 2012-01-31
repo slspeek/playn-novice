@@ -22,6 +22,7 @@ import playn.core.Canvas;
 import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
 import playn.core.Surface;
+import pong.core.PongGame;
 import pong.core.PongWorld;
 import pong.core.ScoreBoard;
 
@@ -33,7 +34,7 @@ public class Bat extends DynamicPhysicsEntity implements
         PhysicsEntity.HasContactListener {
 
     public static String TYPE = "Bat";
-    Sound ding;
+    Sound ding, Playerwinssnd;
     PongWorld pongWorld;
     ScoreBoard scoreBoard;
 
@@ -42,7 +43,8 @@ public class Bat extends DynamicPhysicsEntity implements
         super(pongWorld, world, x, y, angle);
         this.pongWorld = pongWorld;
         // load a sound that we'll play when placing sprites
-        ding = assetManager().getSound("images/Pong-Bathit"); // was ding
+        ding = assetManager().getSound("images/Pong-Bathit"); // ball hits bat
+        Playerwinssnd = assetManager().getSound("images/Pong-Playerwin"); // added JT for Player wins sound
     }
     
     public void setScoreBoard(ScoreBoard board) {
@@ -104,7 +106,22 @@ public class Bat extends DynamicPhysicsEntity implements
     @Override
     public void contact(PhysicsEntity other) {
         ding.play();
+        // added JT 
         scoreBoard.increaseScore();
+        // do somethings when predef winning score reached....
+        if (pongWorld.botScoreBoard.getScore()    == PongGame.WINNING_SCORE ||
+            pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE   ) {
+            //System.out.println("WINNING SCORE REACHED <---------" + PongGame.WINNING_SCORE);
+            pongWorld.getGame().stopMovingParts();
+            if (pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE) {
+                Playerwinssnd.play();
+            }
+            //else {// Play bot wins sound
+            //}
+            // pongWorld.getGame().setState();98888
+            // also needs resetting gameState
+        }
+
         Vec2 velocity = other.getBody().getLinearVelocity();
         Vec2 newSpeed = newSpeed(velocity);
         other.getBody().setLinearVelocity(newSpeed);

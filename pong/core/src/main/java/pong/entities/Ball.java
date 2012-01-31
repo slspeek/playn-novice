@@ -24,6 +24,8 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import playn.core.Canvas;
 import playn.core.Surface;
+import playn.core.Sound;    // added JT
+import static playn.core.PlayN.assetManager; // added JT
 
 import pong.core.PongWorld;
 
@@ -35,9 +37,11 @@ public class Ball extends DynamicPhysicsEntity implements
         PhysicsEntity.HasContactListener {
 
     public static String TYPE = "Ball";
-
+    Sound Ballsidesnd;  // added JT for side-edge sound
+    
     public Ball(PongWorld pongWorld, World world, float x, float y, float angle) {
         super(pongWorld, world, x, y, angle);
+        Ballsidesnd = assetManager().getSound("images/Pong-Ballside"); // added JT for side-edge sound
     }
 
     @Override
@@ -67,6 +71,16 @@ public class Ball extends DynamicPhysicsEntity implements
         canvas.setFillColor(0xFF00FF00);
         canvas.fillCircle(getWidth()/2, getHeight()/2, getRadius());
         layer.setScale(PongWorld.physUnitPerScreenUnit);
+        
+        // added JT for side-edge sound (next 3 code lines)
+        float ballX = this.getBody().getPosition().x;
+        if (ballX == 0.629375f || (ballX <= 39.07626f && ballX >= 38.852028f)) {    
+        //if (ballX == (float) this.getBody().getWidth()/2) {    
+            Ballsidesnd.play();
+            System.out.println("Ball hits edge: " + this.getBody().getPosition().x);
+        }    
+
+
         super.paint(alpha);
     }
 
@@ -86,5 +100,6 @@ public class Ball extends DynamicPhysicsEntity implements
 
     @Override
     public void contact(PhysicsEntity other) {
+        
     }
 }

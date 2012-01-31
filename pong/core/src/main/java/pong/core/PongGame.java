@@ -37,6 +37,7 @@ public class PongGame implements Game {
     // main layer that holds the world. note: this gets scaled to world space
     GroupLayer worldLayer;
     // main world
+    public static int WINNING_SCORE = 10; // added JT
     PongWorld world = null;
     boolean worldLoaded = false;
     Bat bat;
@@ -44,7 +45,7 @@ public class PongGame implements Game {
     Ball ball;
     LineJoint joint;
     protected boolean ballLoaded;
-    int score = 100;
+//    int score = 100;
     private int BAT_MARGIN = 1;
     private GameState state = GameState.BeforeStart;
 
@@ -99,13 +100,14 @@ public class PongGame implements Game {
                     PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2, 0);
             world.add(ball);
             ballLoaded = true;
+            
 
             // hook up our pointer listener
             pointer().setListener(new Pointer.Adapter() {
 
                 public void onPointerStart(Pointer.Event event) {
                     if (state == GameState.BeforeStart) {
-                    startGame();
+                        startGame();
                     } else if (state == GameState.GameOver) {
                         reset();
                     }
@@ -146,6 +148,7 @@ public class PongGame implements Game {
                         case Q:
                             quit();
                             break;
+                        case PAUSE:
                         case P:
                             pauseGame();
                             break;
