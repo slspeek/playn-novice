@@ -26,4 +26,8 @@ public class ScoreBoard extends TextField {
         this.score = 0;
         setMessage(String.valueOf(score));
     }
+    
+    public int getScore() {  // added JT
+        return this.score;
+    }
 }
