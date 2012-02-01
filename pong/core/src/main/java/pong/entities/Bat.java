@@ -22,6 +22,7 @@ import playn.core.Canvas;
 import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
 import playn.core.Surface;
+import pong.core.GameState;
 import pong.core.PongGame;
 import pong.core.PongWorld;
 import pong.core.ScoreBoard;
@@ -107,7 +108,7 @@ public class Bat extends DynamicPhysicsEntity implements
     public void contact(PhysicsEntity other) {
         ding.play();
         // added JT 
-        scoreBoard.increaseScore();
+        //scoreBoard.increaseScore();
         // do somethings when predef winning score reached....
         if (pongWorld.botScoreBoard.getScore()    == PongGame.WINNING_SCORE ||
             pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE   ) {
@@ -115,12 +116,16 @@ public class Bat extends DynamicPhysicsEntity implements
             pongWorld.getGame().stopMovingParts();
             if (pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE) {
                 Playerwinssnd.play();
+                pongWorld.getGame().setGameState(GameState.GameOver);
+                return;
             }
             //else {// Play bot wins sound
             //}
-            // pongWorld.getGame().setState();98888
+            // pongWorld.getGame().setState() = GameState.BeforeStart;
             // also needs resetting gameState
         }
+        
+        scoreBoard.increaseScore();
 
         Vec2 velocity = other.getBody().getLinearVelocity();
         Vec2 newSpeed = newSpeed(velocity);
