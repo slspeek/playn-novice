@@ -42,6 +42,7 @@ public class Ball extends DynamicPhysicsEntity implements
     public Ball(PongWorld pongWorld, World world, float x, float y, float angle) {
         super(pongWorld, world, x, y, angle);
         Ballsidesnd = assetManager().getSound("images/Pong-Ballside"); // added JT for side-edge sound
+        
     }
 
     @Override
@@ -77,7 +78,7 @@ public class Ball extends DynamicPhysicsEntity implements
         if (ballX == 0.629375f || (ballX <= 39.07626f && ballX >= 38.852028f)) {    
         //if (ballX == (float) this.getBody().getWidth()/2) {    
             Ballsidesnd.play();
-            System.out.println("Ball hits edge: " + this.getBody().getPosition().x);
+            // System.out.println("Ball hits edge: " + this.getBody().getPosition().x);
         }    
 
 

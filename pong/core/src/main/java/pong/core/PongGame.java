@@ -37,7 +37,7 @@ public class PongGame implements Game {
     // main layer that holds the world. note: this gets scaled to world space
     GroupLayer worldLayer;
     // main world
-    public static int WINNING_SCORE = 10; // added JT
+    public static int WINNING_SCORE = 6; // added JT
     PongWorld world = null;
     boolean worldLoaded = false;
     Bat bat;
@@ -134,7 +134,15 @@ public class PongGame implements Game {
                 public void onKeyDown(Keyboard.Event event) {
                     switch (event.key()) {
                         case SPACE:
-                            startGame();
+                            if (state == GameState.BeforeStart) {
+                                startGame();
+                            } 
+                            else 
+                                if (state == GameState.GameOver) {
+                                reset();
+                                startGame();
+                            }
+                            
                             break;
                         case LEFT:
                             increaseSpeed(false, bat);
@@ -152,7 +160,6 @@ public class PongGame implements Game {
                         case P:
                             pauseGame();
                             break;
-
                     }
 
                 }
@@ -224,14 +231,15 @@ public class PongGame implements Game {
     }
 
     public void pauseGame() {
+            
         stopMovingParts();
         if (state == GameState.Paused) {
             world.messageBoard.setMessage("Paused");
         } else {
             world.messageBoard.setMessage("       ");
-        }
-        
+        }        
     }
+    
     public void stopMovingParts() {
         if (state != GameState.Paused) {
             batSpeedOrig = new Vec2(bat.getBody().getLinearVelocity());
@@ -253,10 +261,15 @@ public class PongGame implements Game {
             botBat.setLinearVelocity(botBatSpeedOrig.x, botBatSpeedOrig.y);
             System.out.println("gamePaused false: " + ballSpeedOrig);
             //world.messageBoard.setMessage("        ");
-            state = GameState.Running;
+            state = GameState.Running;  // not always...
         }
     }
 
+    
+    public void setGameState(GameState state){
+        this.state = state;
+    }
+    
     @Override
     public void paint(float alpha) {
         if (worldLoaded) {
