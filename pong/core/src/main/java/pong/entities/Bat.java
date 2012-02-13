@@ -107,9 +107,7 @@ public class Bat extends DynamicPhysicsEntity implements
     @Override
     public void contact(PhysicsEntity other) {
         ding.play();
-        // added JT 
-        //scoreBoard.increaseScore();
-        // do somethings when predef winning score reached....
+        // added JT: stop score counting and  stop GameState op GameOver
         if (pongWorld.botScoreBoard.getScore()    == PongGame.WINNING_SCORE ||
             pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE   ) {
             //System.out.println("WINNING SCORE REACHED <---------" + PongGame.WINNING_SCORE);
@@ -117,12 +115,9 @@ public class Bat extends DynamicPhysicsEntity implements
             if (pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE) {
                 Playerwinssnd.play();
                 pongWorld.getGame().setGameState(GameState.GameOver);
+                pongWorld.getGame().resetBatPos();
                 return;
             }
-            //else {// Play bot wins sound
-            //}
-            // pongWorld.getGame().setState() = GameState.BeforeStart;
-            // also needs resetting gameState
         }
         
         scoreBoard.increaseScore();
