@@ -37,7 +37,7 @@ public class PongGame implements Game {
     // main layer that holds the world. note: this gets scaled to world space
     GroupLayer worldLayer;
     // main world
-    public static int WINNING_SCORE = 6; // added JT
+    public static int WINNING_SCORE = 6;    // added JT
     PongWorld world = null;
     boolean worldLoaded = false;
     Bat bat;
@@ -45,7 +45,6 @@ public class PongGame implements Game {
     Ball ball;
     LineJoint joint;
     protected boolean ballLoaded;
-//    int score = 100;
     private int BAT_MARGIN = 1;
     private GameState state = GameState.BeforeStart;
 
@@ -63,6 +62,7 @@ public class PongGame implements Game {
     private void reset() {
         world.botScoreBoard.resetScore();
         world.playerScoreBoard.resetScore();
+        resetBatPos();
         ball.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2);
         world.messageBoard.setMessage("Press space to begin");
         state = GameState.BeforeStart;
@@ -142,7 +142,6 @@ public class PongGame implements Game {
                                 reset();
                                 startGame();
                             }
-                            
                             break;
                         case LEFT:
                             increaseSpeed(false, bat);
@@ -265,10 +264,20 @@ public class PongGame implements Game {
         }
     }
 
+    public void resetBatPos() {
+        bat.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT - BAT_MARGIN);
+        botBat.setPos(PongWorld.WIDTH / 2, BAT_MARGIN);
+    }
     
-    public void setGameState(GameState state){
+    public void setGameState(GameState state) {
         this.state = state;
     }
+
+    public int getBatMargin() {
+        return this.BAT_MARGIN;
+    }    
+
+    
     
     @Override
     public void paint(float alpha) {
@@ -295,18 +304,21 @@ public class PongGame implements Game {
     }
 
     private void dealWithAIBotBat() {
+        float deltaMiss = 0;
         if (ball != null) {
             InterSector ai = new InterSector(PongWorld.WIDTH, PongWorld.HEIGHT);
             final Body body = ball.getBody();
             final Vec2 position = body.getPosition();
             final Vec2 linearVelocity = body.getLinearVelocity();
-            if (linearVelocity.y < 0 && position.y > BAT_MARGIN && position.y < PongWorld.HEIGHT - 4 * BAT_MARGIN) {
+            if (linearVelocity.y < 0 && position.y > BAT_MARGIN && position.y < PongWorld.HEIGHT - 4 * BAT_MARGIN) 
+            {
                 Collision coll = ai.getCollision(position, linearVelocity, BAT_MARGIN);
                 botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
             }
         }
     }
 
+    
     public void gameOver() {
         world.messageBoard.setMessage("Game over Insert coin");
         stopMovingParts();
