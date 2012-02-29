@@ -36,16 +36,18 @@ public class Bat extends DynamicPhysicsEntity implements
 
     public static String TYPE = "Bat";
     Sound ding, Playerwinssnd;
-    PongWorld pongWorld;
-    ScoreBoard scoreBoard;
+    PongWorld   pongWorld;
+    ScoreBoard  scoreBoard;
+    private PongGame    game;
 
     public Bat(final PongWorld pongWorld, World world, float x, float y,
             float angle) {
         super(pongWorld, world, x, y, angle);
         this.pongWorld = pongWorld;
+        this.game = pongWorld.getGame();
         // load a sound that we'll play when placing sprites
         ding = assetManager().getSound("images/Pong-Bathit"); // ball hits bat
-        Playerwinssnd = assetManager().getSound("images/Pong-Playerwin"); // added JT for Player wins sound
+        Playerwinssnd = assetManager().getSound("images/Pong-Playerwin"); // Player wins sound
     }
     
     public void setScoreBoard(ScoreBoard board) {
@@ -107,21 +109,36 @@ public class Bat extends DynamicPhysicsEntity implements
     @Override
     public void contact(PhysicsEntity other) {
         ding.play();
-        // added JT: stop score counting and  stop GameState op GameOver
+        // added JT: stop score counting and set GameState op GameOver
         if (pongWorld.botScoreBoard.getScore()    == PongGame.WINNING_SCORE ||
-            pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE   ) {
-            //System.out.println("WINNING SCORE REACHED <---------" + PongGame.WINNING_SCORE);
-            pongWorld.getGame().stopMovingParts();
+            pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE   ) 
+        {
+            game.stopMovingParts();
+            game.setGameState(GameState.GameOver);
+            game.resetBatPos();
+
             if (pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE) {
                 Playerwinssnd.play();
-                pongWorld.getGame().setGameState(GameState.GameOver);
-                pongWorld.getGame().resetBatPos();
                 return;
             }
         }
         
         scoreBoard.increaseScore();
-
+        
+        if (this.getClass().isInstance(game.bat)) 
+        {
+            System.out.println("bat contact");
+            int score = pongWorld.botScoreBoard.getScore();
+            if (score == game.aiBot.skipAiAtScores[0] || score == game.aiBot.skipAiAtScores[1]) {    
+                game.aiBot.skip = true;
+                System.out.println("bat contact Ai SKIP " + score);
+            }
+            else {
+                game.aiBot.skip = false;
+            }
+        }
+        // System.out.println("Class name: " + this.getClass().isInstance(pongWorld.getGame().botBat));
+        
         Vec2 velocity = other.getBody().getLinearVelocity();
         Vec2 newSpeed = newSpeed(velocity);
         other.getBody().setLinearVelocity(newSpeed);
