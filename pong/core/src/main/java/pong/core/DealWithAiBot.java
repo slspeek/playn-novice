@@ -19,15 +19,13 @@ import pong.entities.Bat;
 public class DealWithAiBot {
     
 	public boolean skip = false; 
- 	private float deltaMiss = 0;	// 
+ //	private float deltaMiss = 0;	// 
 	private PongGame    game;
 	private PongWorld   pongWorld;
         private Ball        ball;
- 
-        
-        
         private Bat         botBat;
-        public int BAT_MARGIN;
+        public int          BAT_MARGIN;
+        public int          skipAiAtScores[] = {1, -1};
 	// private int botBatHits = world.botScoreBoard.getScore();
 
 	public DealWithAiBot(Ball ball, PongWorld pongWorld, Bat botBat)
@@ -36,7 +34,13 @@ public class DealWithAiBot {
             this.pongWorld = pongWorld;
             this.ball = ball;
             this.botBat = botBat;
-	    BAT_MARGIN = game.getBatMargin();	
+	    BAT_MARGIN = game.getBatMargin();
+            skipAiAtScores[0] = this.calcBotBatMiss();
+            skipAiAtScores[1] = this.calcBotBatMiss();
+            while (skipAiAtScores[0] == skipAiAtScores[1])
+            {
+                skipAiAtScores[1] = this.calcBotBatMiss();
+            }    
 	}
 
 	public void calcAiBot()
@@ -53,11 +57,11 @@ public class DealWithAiBot {
         }
 
 
-	// calc skip moment
+	// integer calc when to skip  
     	private int calcBotBatMiss() 
 	{
-        	Random generator = new Random();
-        	return generator.nextInt(game.WINNING_SCORE);
+            Random generator = new Random();
+            return generator.nextInt(game.WINNING_SCORE);
 	}
  
 }

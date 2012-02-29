@@ -20,6 +20,7 @@ import playn.core.PlayN;
 import playn.core.Pointer;
 import pong.entities.Ball;
 import pong.entities.Bat;
+import pong.core.DealWithAiBot;
 
 /**
  * PlayN Entry Point
@@ -40,13 +41,14 @@ public class PongGame implements Game {
     public static int WINNING_SCORE = 6;    // added JT
     PongWorld world = null;
     boolean worldLoaded = false;
-    Bat bat;
-    Bat botBat;
+    public Bat bat;
+    Bat botBat;    ////////////
     Ball ball;
     LineJoint joint;
     protected boolean ballLoaded;
     private int BAT_MARGIN = 1;
     private GameState state = GameState.BeforeStart;
+    public DealWithAiBot aiBot;
 
     private void startGame() {
         Random r = new Random();
@@ -100,8 +102,10 @@ public class PongGame implements Game {
                     PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2, 0);
             world.add(ball);
             ballLoaded = true;
+            aiBot = new DealWithAiBot(ball, world, botBat);
+            aiBot.skip = false;
             
-
+            
             // hook up our pointer listener
             pointer().setListener(new Pointer.Adapter() {
 
@@ -115,7 +119,6 @@ public class PongGame implements Game {
                     Vec2 oldPos = bat.getBody().getPosition();
                     Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
                     bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
-
                 }
 
                 @Override
@@ -240,14 +243,15 @@ public class PongGame implements Game {
     }
     
     public void stopMovingParts() {
+        if (state == GameState.GameOver || state == GameState.BeforeStart) {
+            return;
+        }
         if (state != GameState.Paused) {
             batSpeedOrig = new Vec2(bat.getBody().getLinearVelocity());
             System.out.println("Before speeed");
             ballSpeedOrig = new Vec2(ball.getBody().getLinearVelocity());
-
             botBatSpeedOrig = new Vec2(botBat.getBody().getLinearVelocity());
-            System.out.println("gamePaused true: " + ballSpeedOrig);
-
+     
             bat.setLinearVelocity(0, 0);
             ball.setLinearVelocity(0, 0);
             botBat.setLinearVelocity(0, 0);
@@ -291,7 +295,9 @@ public class PongGame implements Game {
         if (worldLoaded) {
             world.update(delta);
 
-            dealWithAIBotBat();
+            //dealWithAIBotBat();
+            if (aiBot.skip == false)
+               aiBot.calcAiBot();
         }
     }
 
@@ -303,20 +309,21 @@ public class PongGame implements Game {
     protected void quit() {
     }
 
-    private void dealWithAIBotBat() {
-        float deltaMiss = 0;
-        if (ball != null) {
-            InterSector ai = new InterSector(PongWorld.WIDTH, PongWorld.HEIGHT);
-            final Body body = ball.getBody();
-            final Vec2 position = body.getPosition();
-            final Vec2 linearVelocity = body.getLinearVelocity();
-            if (linearVelocity.y < 0 && position.y > BAT_MARGIN && position.y < PongWorld.HEIGHT - 4 * BAT_MARGIN) 
-            {
-                Collision coll = ai.getCollision(position, linearVelocity, BAT_MARGIN);
-                botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
-            }
-        }
-    }
+//    This method has been replaced by a class which method to calc ai for batBot
+//    is called in public method PongGame.update(float delta)    
+//    private void dealWithAIBotBat() {
+//        if (ball != null) {
+//            InterSector ai = new InterSector(PongWorld.WIDTH, PongWorld.HEIGHT);
+//            final Body body = ball.getBody();
+//            final Vec2 position = body.getPosition();
+//            final Vec2 linearVelocity = body.getLinearVelocity();
+//            if (linearVelocity.y < 0 && position.y > BAT_MARGIN && position.y < PongWorld.HEIGHT - 4 * BAT_MARGIN) 
+//            {
+//                Collision coll = ai.getCollision(position, linearVelocity, BAT_MARGIN);
+//                botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
+//            }
+//        }
+//    }
 
     
     public void gameOver() {
