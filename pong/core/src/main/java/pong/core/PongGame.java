@@ -7,7 +7,6 @@ import static playn.core.PlayN.pointer;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.LineJoint;
 import org.jbox2d.dynamics.joints.LineJointDef;
 
@@ -20,7 +19,6 @@ import playn.core.PlayN;
 import playn.core.Pointer;
 import pong.entities.Ball;
 import pong.entities.Bat;
-import pong.core.DealWithAiBot;
 
 /**
  * PlayN Entry Point
@@ -103,8 +101,6 @@ public class PongGame implements Game {
             world.add(ball);
             ballLoaded = true;
             aiBot = new DealWithAiBot(ball, world, botBat);
-            aiBot.skip = false;
-            
             
             // hook up our pointer listener
             pointer().setListener(new Pointer.Adapter() {
@@ -294,10 +290,7 @@ public class PongGame implements Game {
     public void update(float delta) {
         if (worldLoaded) {
             world.update(delta);
-
-            //dealWithAIBotBat();
-            if (aiBot.skip == false)
-               aiBot.calcAiBot();
+            aiBot.calcAiBot();
         }
     }
 
