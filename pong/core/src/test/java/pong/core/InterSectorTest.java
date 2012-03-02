@@ -94,7 +94,7 @@ public class InterSectorTest {
 		Vec2 ballVel = new Vec2(0,-1f);
 		
 		Vec2 expectedCollision = new Vec2(1f,c);
-		Collision col = interSector.getCollision(ballPos, ballVel, c);
+		Collision col = interSector.getPredictionForBallMovingUp(ballPos, ballVel, c);
 		assertEquals(expectedCollision, col.getPosition());
 		assertEquals(1f, col.getTime());
 	}
@@ -106,7 +106,7 @@ public class InterSectorTest {
 		Vec2 ballVel = new Vec2(-1f,-1f);
 		
 		Vec2 expectedCollision = new Vec2(0f,c);
-		Collision col = interSector.getCollision(ballPos, ballVel, c);
+		Collision col = interSector.getPredictionForBallMovingUp(ballPos, ballVel, c);
 		
 		assertEquals(expectedCollision, col.getPosition());
 		assertEquals(2f, col.getTime());
@@ -121,7 +121,7 @@ public class InterSectorTest {
 		
 		Vec2 expectedCollision = new Vec2(5f,0);
 		
-		Collision col = interSector.getCollision(ballPos, ballVel, c);
+		Collision col = interSector.getPredictionForBallMovingUp(ballPos, ballVel, c);
 		assertEquals(expectedCollision, interSector.getCollisionOnHorizontal(ballPos, ballVel, c).getPosition());
 		assertEquals(2f, col.getTime());
 	}
@@ -133,7 +133,7 @@ public class InterSectorTest {
 		Vec2 ballVel = new Vec2(-1f,-1f);
 		
 		Vec2 expectedCollision = new Vec2(1f,c);
-		Collision col = interSector.getCollision(ballPos, ballVel, c);
+		Collision col = interSector.getPredictionForBallMovingUp(ballPos, ballVel, c);
 		assertEquals(expectedCollision, col.getPosition());
 		assertEquals(3f, col.getTime());
 	}
@@ -145,7 +145,7 @@ public class InterSectorTest {
 		Vec2 ballVel = new Vec2(1f,-2f);
 		
 		Vec2 expectedCollision = new Vec2(5.5f,c);
-		Collision col = interSector.getCollision(ballPos, ballVel, c);
+		Collision col = interSector.getPredictionForBallMovingUp(ballPos, ballVel, c);
 		
 		assertEquals(expectedCollision, col.getPosition());
 		assertEquals(1.5f, col.getTime());

@@ -26,7 +26,8 @@ public class InterSector {
      * @param c The horizontal line y=c
      * @return The time and place of intersection
      */
-    public Collision getCollision(Vec2 pos, Vec2 vel, float c) {
+    public Collision getPredictionForBallMovingUp(Vec2 pos, Vec2 vel, float c) {
+        if (vel.y > 0)throw new IllegalStateException("Moving in the wrong direction");
         Collision firstGuess = getCollisionOnHorizontal(pos, vel, c);
         float xc = firstGuess.getPosition().x;
         if (xc < 0 ) {
@@ -34,7 +35,7 @@ public class InterSector {
             float firstAmountOfTime = secondGuess.getTime();
             Vec2 newPosition = secondGuess.getPosition();
             Vec2 newSpeed = new Vec2(-vel.x, vel.y);
-            Collision collision = getCollision(newPosition, newSpeed, c);
+            Collision collision = getPredictionForBallMovingUp(newPosition, newSpeed, c);
             return new Collision(collision.getPosition(), firstAmountOfTime
                     + collision.getTime());
         } else if (0 <= xc && xc < width ) {
@@ -44,7 +45,7 @@ public class InterSector {
             float firstAmountOfTime = secondGuess.getTime();
             Vec2 newPosition = secondGuess.getPosition();
             Vec2 newSpeed = new Vec2(-vel.x, vel.y);
-            Collision collision = getCollision(newPosition, newSpeed, c);
+            Collision collision = getPredictionForBallMovingUp(newPosition, newSpeed, c);
             return new Collision(collision.getPosition(), firstAmountOfTime
                     + collision.getTime());
         } 
@@ -54,12 +55,14 @@ public class InterSector {
         float x = ballPos.x + (((c - ballPos.y) / ballVel.y) * ballVel.x);
         Vec2 returnValue = new Vec2(x, c);
         float time = (c - ballPos.y) / ballVel.y;
+        if (time < 0) throw new IllegalStateException("Moving in the wrong direction");
         Collision col = new Collision(returnValue, time);
         return col;
     }
 
     Collision getCollisionOnVertical(Vec2 ballPos, Vec2 ballVel, float c) {
         float time = (c - ballPos.x) / ballVel.x;
+        if (time < 0) throw new IllegalStateException("Moving in the wrong direction");
         float y = ballPos.y +  time * ballVel.y;
         Vec2 returnValue = new Vec2(c, y);
         Collision col = new Collision(returnValue, time);

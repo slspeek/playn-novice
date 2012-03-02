@@ -18,10 +18,8 @@ package pong.entities;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
-import playn.core.Canvas;
 import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
-import playn.core.Surface;
 import pong.core.GameState;
 import pong.core.PongGame;
 import pong.core.PongWorld;
@@ -100,6 +98,7 @@ public class Bat extends DynamicPhysicsEntity implements
         return 2.0f / 8f;
     }
 
+    @Override
     public void paint(float alpha) {
         canvas.setFillColor(0xFFFF0000);
         canvas.fillRect(-getWidth()/2, 0, getWidth(), getHeight());
@@ -125,19 +124,14 @@ public class Bat extends DynamicPhysicsEntity implements
         
         scoreBoard.increaseScore();
         
-        if (this.getClass().isInstance(game.bat)) 
+        if (this == game.bat) 
         {
-            System.out.println("bat contact");
-            int score = pongWorld.botScoreBoard.getScore();
-            if (score == game.aiBot.skipAiAtScores[0] || score == game.aiBot.skipAiAtScores[1]) {    
-                game.aiBot.skip = true;
-                System.out.println("bat contact Ai SKIP " + score);
-            }
-            else {
-                game.aiBot.skip = false;
-            }
+            System.out.println("player bat contacted");
+            //Give the computer a chance
+            game.aiBot.mayRun= false;
+            
         }
-        // System.out.println("Class name: " + this.getClass().isInstance(pongWorld.getGame().botBat));
+        
         
         Vec2 velocity = other.getBody().getLinearVelocity();
         Vec2 newSpeed = newSpeed(velocity);
