@@ -17,6 +17,44 @@ public class InterSector {
         this.height = height;
     }
 
+    public Collision getPrediction(Vec2 pos, Vec2 vel, float c) {
+        if (vel.y > 0) {
+            Collision firstGuess = getCollisionOnHorizontal(pos, vel, height);
+            float xc = firstGuess.getPosition().x;
+            Collision bounceBottom;
+            Vec2 newSpeed;
+            if (xc < 0) {
+                Collision secondGuess = getCollisionOnVertical(pos, vel, 0);
+                float firstAmountOfTime = secondGuess.getTime();
+                Vec2 newPosition = secondGuess.getPosition();
+                newSpeed = new Vec2(-vel.x, vel.y);
+                Collision collision = getPredictionForBallMovingDown(newPosition, newSpeed, height);
+                bounceBottom = new Collision(collision.getPosition(), firstAmountOfTime
+                        + collision.getTime());
+            } else if (0 <= xc && xc < width) {
+                
+                bounceBottom =  firstGuess;
+                newSpeed = vel;
+            } else {
+                Collision secondGuess = getCollisionOnVertical(pos, vel, width);
+                float firstAmountOfTime = secondGuess.getTime();
+                Vec2 newPosition = secondGuess.getPosition();
+                newSpeed = new Vec2(-vel.x, vel.y);
+                Collision collision = getPredictionForBallMovingDown(newPosition, newSpeed, height);
+                bounceBottom = new Collision(collision.getPosition(), firstAmountOfTime
+                        + collision.getTime());
+            }
+            Vec2 newVel = new Vec2(newSpeed.x, - newSpeed.y);
+            System.out.println("New vel" + newVel + " pos " + bounceBottom.getPosition());
+            final Collision predictionForBallMovingUp = getPredictionForBallMovingUp(bounceBottom.getPosition(), newVel,c);
+            
+            return new Collision(predictionForBallMovingUp.getPosition(), bounceBottom.getTime() + predictionForBallMovingUp.getTime());
+            
+        } else {
+            return getPredictionForBallMovingUp(pos, vel, c);
+        }
+    }
+
     /**
      * Calculates the intersection of the path of ball and the horizontal line
      * y=c
@@ -27,10 +65,12 @@ public class InterSector {
      * @return The time and place of intersection
      */
     public Collision getPredictionForBallMovingUp(Vec2 pos, Vec2 vel, float c) {
-        if (vel.y > 0)throw new IllegalStateException("Moving in the wrong direction");
+        if (vel.y > 0) {
+            throw new IllegalStateException("Moving in the wrong direction");
+        }
         Collision firstGuess = getCollisionOnHorizontal(pos, vel, c);
         float xc = firstGuess.getPosition().x;
-        if (xc < 0 ) {
+        if (xc < 0) {
             Collision secondGuess = getCollisionOnVertical(pos, vel, c);
             float firstAmountOfTime = secondGuess.getTime();
             Vec2 newPosition = secondGuess.getPosition();
@@ -38,9 +78,9 @@ public class InterSector {
             Collision collision = getPredictionForBallMovingUp(newPosition, newSpeed, c);
             return new Collision(collision.getPosition(), firstAmountOfTime
                     + collision.getTime());
-        } else if (0 <= xc && xc < width ) {
+        } else if (0 <= xc && xc < width) {
             return firstGuess;
-        } else  {
+        } else {
             Collision secondGuess = getCollisionOnVertical(pos, vel, width);
             float firstAmountOfTime = secondGuess.getTime();
             Vec2 newPosition = secondGuess.getPosition();
@@ -48,22 +88,53 @@ public class InterSector {
             Collision collision = getPredictionForBallMovingUp(newPosition, newSpeed, c);
             return new Collision(collision.getPosition(), firstAmountOfTime
                     + collision.getTime());
-        } 
+        }
+    }
+
+        public Collision getPredictionForBallMovingDown(Vec2 pos, Vec2 vel, float c) {
+        if (vel.y < 0) {
+            throw new IllegalStateException("Moving in the wrong direction");
+        }
+        Collision firstGuess = getCollisionOnHorizontal(pos, vel, c);
+        float xc = firstGuess.getPosition().x;
+        if (xc < 0) {
+            Collision secondGuess = getCollisionOnVertical(pos, vel, c);
+            float firstAmountOfTime = secondGuess.getTime();
+            Vec2 newPosition = secondGuess.getPosition();
+            Vec2 newSpeed = new Vec2(-vel.x, vel.y);
+            Collision collision = getPredictionForBallMovingDown(newPosition, newSpeed, c);
+            return new Collision(collision.getPosition(), firstAmountOfTime
+                    + collision.getTime());
+        } else if (0 <= xc && xc < width) {
+            return firstGuess;
+        } else {
+            Collision secondGuess = getCollisionOnVertical(pos, vel, width);
+            float firstAmountOfTime = secondGuess.getTime();
+            Vec2 newPosition = secondGuess.getPosition();
+            Vec2 newSpeed = new Vec2(-vel.x, vel.y);
+            Collision collision = getPredictionForBallMovingDown(newPosition, newSpeed, c);
+            return new Collision(collision.getPosition(), firstAmountOfTime
+                    + collision.getTime());
+        }
     }
 
     Collision getCollisionOnHorizontal(Vec2 ballPos, Vec2 ballVel, float c) {
         float x = ballPos.x + (((c - ballPos.y) / ballVel.y) * ballVel.x);
         Vec2 returnValue = new Vec2(x, c);
         float time = (c - ballPos.y) / ballVel.y;
-        if (time < 0) throw new IllegalStateException("Moving in the wrong direction");
+        if (time < 0) {
+            throw new IllegalStateException("Moving in the wrong direction");
+        }
         Collision col = new Collision(returnValue, time);
         return col;
     }
 
     Collision getCollisionOnVertical(Vec2 ballPos, Vec2 ballVel, float c) {
         float time = (c - ballPos.x) / ballVel.x;
-        if (time < 0) throw new IllegalStateException("Moving in the wrong direction");
-        float y = ballPos.y +  time * ballVel.y;
+        if (time < 0) {
+            throw new IllegalStateException("Moving in the wrong direction");
+        }
+        float y = ballPos.y + time * ballVel.y;
         Vec2 returnValue = new Vec2(c, y);
         Collision col = new Collision(returnValue, time);
         return col;
