@@ -60,15 +60,15 @@ public class InterSectorTest {
 	// JT: latest
 	// Collision with direction of ball to player side
 	// Velocity y is positive...
-	
-	public void testGetCollisionVerticalVerySimpleInverse() {
+	@Test(expected=IllegalStateException.class)
+	public void testGetPredictionForBallMovingUp() {
 		float HEIGHT = 29f;
 		float c = HEIGHT;
 		Vec2 ballPos = new Vec2(1f,28f);
 		Vec2 ballVel = new Vec2(0f, 1f);
 		
 		Vec2 expectedCollision = new Vec2(1f,c);
-		Collision col = interSector.getCollisionOnVertical(ballPos, ballVel, c);
+		Collision col = interSector.getPredictionForBallMovingUp(ballPos, ballVel, c);
 		assertEquals(expectedCollision, col.getPosition());
 		assertEquals(1f, col.getTime());
 	}
@@ -150,4 +150,29 @@ public class InterSectorTest {
 		assertEquals(expectedCollision, col.getPosition());
 		assertEquals(1.5f, col.getTime());
 	}
+        
+        @Test 
+        public void getPredictionSimple() {
+                Vec2 ballPos = new Vec2(5f,3f);
+		Vec2 ballVel = new Vec2(0f,1f);
+		
+		Vec2 expectedCollision = new Vec2(5f,0);
+		Collision col = interSector.getPrediction(ballPos, ballVel, 0);
+		
+		assertEquals(expectedCollision, col.getPosition());
+		assertEquals(5f, col.getTime());
+        }
+        
+         @Test 
+        public void getPredictionComplicated() {
+                Vec2 ballPos = new Vec2(5.5f,1f);
+		Vec2 ballVel = new Vec2(0.5f,1f);
+		
+		Vec2 expectedCollision = new Vec2(3f,0);
+		Collision col = interSector.getPrediction(ballPos, ballVel, 0);
+		
+		assertEquals(expectedCollision, col.getPosition());
+		//assertEquals(5f, col.getTime());
+        }
+        
 }
