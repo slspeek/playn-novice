@@ -9,12 +9,18 @@ import org.jbox2d.common.Vec2;
  */
 public class InterSector {
 
-    private final float height;
     private final float width;
+    private final float height;
+    private final float ballRadius;
 
-    public InterSector(float width, float height) {
-        this.width = width;
-        this.height = height;
+    public InterSector(float width, float height, float ballRadius) {
+        this.width = width - 2 * ballRadius;
+        this.height = height -2 * ballRadius;
+        this.ballRadius = ballRadius;
+    }
+
+    public Collision translate(Collision coll) {
+        return new Collision(new Vec2(coll.getPosition().x + ballRadius, coll.getPosition().y + ballRadius), coll.getTime());
     }
 
     public Collision getPrediction(Vec2 pos, Vec2 vel, float c) {
@@ -32,8 +38,8 @@ public class InterSector {
                 bounceBottom = new Collision(collision.getPosition(), firstAmountOfTime
                         + collision.getTime());
             } else if (0 <= xc && xc < width) {
-                
-                bounceBottom =  firstGuess;
+
+                bounceBottom = firstGuess;
                 newSpeed = vel;
             } else {
                 Collision secondGuess = getCollisionOnVertical(pos, vel, width);
@@ -44,14 +50,14 @@ public class InterSector {
                 bounceBottom = new Collision(collision.getPosition(), firstAmountOfTime
                         + collision.getTime());
             }
-            Vec2 newVel = new Vec2(newSpeed.x, - newSpeed.y);
+            Vec2 newVel = new Vec2(newSpeed.x, -newSpeed.y);
             System.out.println("New vel" + newVel + " pos " + bounceBottom.getPosition());
-            final Collision predictionForBallMovingUp = getPredictionForBallMovingUp(bounceBottom.getPosition(), newVel,c);
-            
-            return new Collision(predictionForBallMovingUp.getPosition(), bounceBottom.getTime() + predictionForBallMovingUp.getTime());
-            
+            final Collision predictionForBallMovingUp = getPredictionForBallMovingUp(bounceBottom.getPosition(), newVel, c);
+
+            return translate(new Collision(predictionForBallMovingUp.getPosition(), bounceBottom.getTime() + predictionForBallMovingUp.getTime()));
+
         } else {
-            return getPredictionForBallMovingUp(pos, vel, c);
+            return translate(getPredictionForBallMovingUp(pos, vel, c));
         }
     }
 
@@ -91,7 +97,7 @@ public class InterSector {
         }
     }
 
-        public Collision getPredictionForBallMovingDown(Vec2 pos, Vec2 vel, float c) {
+    public Collision getPredictionForBallMovingDown(Vec2 pos, Vec2 vel, float c) {
         if (vel.y < 0) {
             throw new IllegalStateException("Moving in the wrong direction");
         }

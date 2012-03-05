@@ -67,6 +67,7 @@ public class Ball extends DynamicPhysicsEntity implements
         return body;
     }
 
+    @Override
     public void paint(float alpha) {
        
         canvas.setFillColor(0xFF00FF00);
@@ -96,9 +97,12 @@ public class Ball extends DynamicPhysicsEntity implements
     }
 
     float getRadius() {
-        return 10f;
+        return getRadiusInUnits()/PongWorld.physUnitPerScreenUnit;
     }
 
+    public float getRadiusInUnits() {
+        return 2f;
+    }
     @Override
     public void contact(PhysicsEntity other) {
         

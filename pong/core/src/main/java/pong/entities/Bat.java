@@ -126,9 +126,9 @@ public class Bat extends DynamicPhysicsEntity implements
         
         if (this == game.bat) 
         {
-            System.out.println("player bat contacted");
+            System.out.println("player bat contacted, AI started");
             //Give the computer a chance
-            game.aiBot.mayRun= false;
+            game.aiBot.calcAiBot();
             
         }
         

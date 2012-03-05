@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class InterSectorTest {
 
-	InterSector interSector = new InterSector(6,4);
+	InterSector interSector = new InterSector(6,4,0);
 	@Test
 	public void testGetCollisionHorizontalVerySimple() {
 		float c = 1;

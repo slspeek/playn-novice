@@ -290,7 +290,6 @@ public class PongGame implements Game {
     public void update(float delta) {
         if (worldLoaded) {
             world.update(delta);
-            aiBot.calcAiBot();
         }
     }
 
