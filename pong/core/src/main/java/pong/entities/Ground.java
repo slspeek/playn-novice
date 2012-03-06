@@ -6,8 +6,6 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
-import playn.core.Canvas;
-import playn.core.Surface;
 import pong.core.PongGame;
 
 import pong.core.PongWorld;
@@ -61,6 +59,7 @@ public class Ground extends StaticPhysicsEntity implements
         return 1f;
     }
 
+    @Override
     public void paint(float alpha) {
         canvas.setFillColor(0xFF00FFFF);
         canvas.fillRect(0, 0, 10, 10);
@@ -69,6 +68,7 @@ public class Ground extends StaticPhysicsEntity implements
 
     @Override
     public void contact(PhysicsEntity other) {
-       game.gameOver();
+        pongWorld.botScoreBoard.increaseScore();
+       //game.gameOver();
     }
 }

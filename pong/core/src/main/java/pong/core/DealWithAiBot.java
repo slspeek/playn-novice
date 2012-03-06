@@ -31,17 +31,21 @@ public class DealWithAiBot {
     }
 
     public void calcAiBot() {
-        Random random = new Random();
-        int i = random.nextInt(6);
-        if (i == 1) {
-            System.out.println("Skipping AI");
-            return;
+        try {
+            Random random = new Random();
+            int i = random.nextInt(6);
+            if (i == 1) {
+                System.out.println("Skipping AI");
+                return;
+            }
+            InterSector ai = new InterSector(pongWorld.WIDTH, pongWorld.HEIGHT, ball.getRadiusInUnits());
+            final Body body = ball.getBody();
+            final Vec2 position = body.getPosition();
+            final Vec2 linearVelocity = body.getLinearVelocity();
+            Collision coll = ai.getPrediction(position, linearVelocity, BAT_MARGIN);
+            botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        InterSector ai = new InterSector(pongWorld.WIDTH, pongWorld.HEIGHT, ball.getRadiusInUnits());
-        final Body body = ball.getBody();
-        final Vec2 position = body.getPosition();
-        final Vec2 linearVelocity = body.getLinearVelocity();
-        Collision coll = ai.getPrediction(position, linearVelocity, BAT_MARGIN);
-        botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
     }
 }

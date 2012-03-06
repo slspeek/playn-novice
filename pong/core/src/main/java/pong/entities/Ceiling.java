@@ -61,6 +61,7 @@ public class Ceiling extends StaticPhysicsEntity implements
         return 1f;
     }
 
+    @Override
     public void paint(float alpha) {
         canvas.setFillColor(0xFF00FFFF);
         canvas.fillRect(0, 0, 10, 10);
@@ -69,6 +70,6 @@ public class Ceiling extends StaticPhysicsEntity implements
 
     @Override
     public void contact(PhysicsEntity other) {
-        System.out.println("Ceiling hit");
+        pongWorld.playerScoreBoard.increaseScore();
     }
 }
