@@ -122,7 +122,7 @@ public class Bat extends DynamicPhysicsEntity implements
             }
         }
         
-        scoreBoard.increaseScore();
+        //scoreBoard.increaseScore();
         
         if (this == game.bat) 
         {
