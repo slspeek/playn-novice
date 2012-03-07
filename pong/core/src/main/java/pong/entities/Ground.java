@@ -69,6 +69,6 @@ public class Ground extends StaticPhysicsEntity implements
     @Override
     public void contact(PhysicsEntity other) {
         pongWorld.botScoreBoard.increaseScore();
-       //game.gameOver();
+       game.autoServe();
     }
 }

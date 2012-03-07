@@ -53,7 +53,7 @@ public class InterSectorBigBallTest {
         Vec2 ballPos = new Vec2(0.5f, 1.5f);
         Vec2 ballVel = new Vec2(1f, 1f);
 
-        Vec2 expectedCollision = new Vec2(3f, 1f);
+        Vec2 expectedCollision = new Vec2(3.5f, .5f);
         Collision col = interSector.getPrediction(ballPos, ballVel, 0);
         assertEquals(expectedCollision, col.getPosition());
     }
