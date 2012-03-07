@@ -15,15 +15,23 @@ public class InterSector {
 
     public InterSector(float width, float height, float ballRadius) {
         this.width = width - 2 * ballRadius;
-        this.height = height -2 * ballRadius;
+        this.height = height - 2 * ballRadius;
         this.ballRadius = ballRadius;
     }
 
-    public Collision translate(Collision coll) {
+    public Collision translateOut(Collision coll) {
         return new Collision(new Vec2(coll.getPosition().x + ballRadius, coll.getPosition().y + ballRadius), coll.getTime());
     }
 
+    public Vec2 translateIn(Vec2 pos) {
+        return new Vec2(pos.x - ballRadius, pos.y - ballRadius);
+    }
+
     public Collision getPrediction(Vec2 pos, Vec2 vel, float c) {
+        return getPredictionImpl(translateIn(pos), vel, c);
+    }
+
+    private Collision getPredictionImpl(Vec2 pos, Vec2 vel, float c) {
         if (vel.y > 0) {
             Collision firstGuess = getCollisionOnHorizontal(pos, vel, height);
             float xc = firstGuess.getPosition().x;
@@ -54,10 +62,10 @@ public class InterSector {
             System.out.println("New vel" + newVel + " pos " + bounceBottom.getPosition());
             final Collision predictionForBallMovingUp = getPredictionForBallMovingUp(bounceBottom.getPosition(), newVel, c);
 
-            return translate(new Collision(predictionForBallMovingUp.getPosition(), bounceBottom.getTime() + predictionForBallMovingUp.getTime()));
+            return translateOut(new Collision(predictionForBallMovingUp.getPosition(), bounceBottom.getTime() + predictionForBallMovingUp.getTime()));
 
         } else {
-            return translate(getPredictionForBallMovingUp(pos, vel, c));
+            return translateOut(getPredictionForBallMovingUp(pos, vel, c));
         }
     }
 
@@ -75,25 +83,34 @@ public class InterSector {
             throw new IllegalStateException("Moving in the wrong direction");
         }
         Collision firstGuess = getCollisionOnHorizontal(pos, vel, c);
-        float xc = firstGuess.getPosition().x;
-        if (xc < 0) {
-            Collision secondGuess = getCollisionOnVertical(pos, vel, c);
-            float firstAmountOfTime = secondGuess.getTime();
-            Vec2 newPosition = secondGuess.getPosition();
-            Vec2 newSpeed = new Vec2(-vel.x, vel.y);
-            Collision collision = getPredictionForBallMovingUp(newPosition, newSpeed, c);
-            return new Collision(collision.getPosition(), firstAmountOfTime
-                    + collision.getTime());
-        } else if (0 <= xc && xc < width) {
-            return firstGuess;
+        if (firstGuess.getTime() > 0) {
+            float xc = firstGuess.getPosition().x;
+            if (xc < 0) {
+                Collision secondGuess = getCollisionOnVertical(pos, vel, c);
+                float firstAmountOfTime = secondGuess.getTime();
+                if (firstAmountOfTime > 0) {
+                    Vec2 newPosition = secondGuess.getPosition();
+                    Vec2 newSpeed = new Vec2(-vel.x, vel.y);
+                    Collision collision = getPredictionForBallMovingUp(newPosition, newSpeed, c);
+                    return new Collision(collision.getPosition(), firstAmountOfTime
+                            + collision.getTime());
+                } else {
+                    throw new IllegalStateException("Cannot predict");
+                }
+            } else if (0 <= xc && xc < width) {
+                return firstGuess;
+            } else {
+                Collision secondGuess = getCollisionOnVertical(pos, vel, width);
+                float firstAmountOfTime = secondGuess.getTime();
+                Vec2 newPosition = secondGuess.getPosition();
+                Vec2 newSpeed = new Vec2(-vel.x, vel.y);
+                Collision collision = getPredictionForBallMovingUp(newPosition, newSpeed, c);
+                return new Collision(collision.getPosition(), firstAmountOfTime
+                        + collision.getTime());
+            }
         } else {
-            Collision secondGuess = getCollisionOnVertical(pos, vel, width);
-            float firstAmountOfTime = secondGuess.getTime();
-            Vec2 newPosition = secondGuess.getPosition();
-            Vec2 newSpeed = new Vec2(-vel.x, vel.y);
-            Collision collision = getPredictionForBallMovingUp(newPosition, newSpeed, c);
-            return new Collision(collision.getPosition(), firstAmountOfTime
-                    + collision.getTime());
+            throw new IllegalStateException("Cannot predict");
+
         }
     }
 

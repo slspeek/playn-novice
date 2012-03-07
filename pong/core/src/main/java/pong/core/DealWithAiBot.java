@@ -27,7 +27,6 @@ public class DealWithAiBot {
         this.ball = ball;
         this.botBat = botBat;
         BAT_MARGIN = game.getBatMargin();
-
     }
 
     public void calcAiBot() {

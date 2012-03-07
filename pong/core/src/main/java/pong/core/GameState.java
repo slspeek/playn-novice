@@ -13,6 +13,8 @@ public enum GameState {
     BeforeStart,
     Running,
     Paused,
-    GameOver;
+    GameOver,
+    PlayerServe,
+    BotServe;
     
 }
