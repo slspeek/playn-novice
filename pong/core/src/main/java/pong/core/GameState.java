@@ -14,7 +14,6 @@ public enum GameState {
     Running,
     Paused,
     GameOver,
-    PlayerServe,
-    BotServe;
+    AutoServe;
     
 }

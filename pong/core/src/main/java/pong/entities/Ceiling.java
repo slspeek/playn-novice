@@ -71,5 +71,6 @@ public class Ceiling extends StaticPhysicsEntity implements
     @Override
     public void contact(PhysicsEntity other) {
         pongWorld.playerScoreBoard.increaseScore();
+        game.autoServe();
     }
 }

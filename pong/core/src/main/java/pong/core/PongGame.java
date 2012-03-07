@@ -68,6 +68,13 @@ public class PongGame implements Game {
         state = GameState.BeforeStart;
     }
 
+    public void autoServe() {
+        resetBatPos();
+        ball.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2);
+        startGame();
+    }
+
+    
     @Override
     public void init() {
         System.out.println("Hello");
