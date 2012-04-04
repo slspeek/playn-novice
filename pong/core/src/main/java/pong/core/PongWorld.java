@@ -152,10 +152,10 @@ public class PongWorld implements ContactListener {
     }
 
     public void paint(float delta) {
-        if (showDebugDraw) {
-            debugDraw.getCanvas().canvas().clear();
-            world.drawDebugData();
-        }
+//        if (showDebugDraw) {
+//            debugDraw.getCanvas().canvas().clear();
+//            world.drawDebugData();
+//        }
         for (Entity e : entities) {
             e.paint(delta);
         }
