@@ -61,7 +61,7 @@ public class PongWorld implements ContactListener {
     private List<Entity> entities = new ArrayList<Entity>(0);
     private HashMap<Body, PhysicsEntity> bodyEntityLUT = new HashMap<Body, PhysicsEntity>();
     private Stack<Contact> contacts = new Stack<Contact>();
-    private static boolean showDebugDraw = true;
+    private static boolean showDebugDraw = false;
     private DebugDrawBox2D debugDraw;
     private final PongGame game;
 
@@ -105,22 +105,22 @@ public class PongWorld implements ContactListener {
         wallRightShape.setAsEdge(new Vec2(WIDTH, 0), new Vec2(WIDTH, HEIGHT));
         wallRight.createFixture(wallRightShape, 0.0f);
 
-        if (showDebugDraw) {
-            CanvasLayer canvasLayer = graphics().createCanvasLayer(
-                    (int) (WIDTH / physUnitPerScreenUnit),
-                    (int) (HEIGHT / physUnitPerScreenUnit));
-            graphics().rootLayer().add(canvasLayer);
-            debugDraw = new DebugDrawBox2D();
-            debugDraw.setCanvas(canvasLayer);
-            debugDraw.setFlipY(false);
-            debugDraw.setStrokeAlpha(150);
-            debugDraw.setFillAlpha(75);
-            debugDraw.setStrokeWidth(2.0f);
-            debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit
-                    | DebugDraw.e_aabbBit);
-            debugDraw.setCamera(0, 0, 1f / physUnitPerScreenUnit);
-            world.setDebugDraw(debugDraw);
-        }
+//        if (showDebugDraw) {
+//            CanvasLayer canvasLayer = graphics().createCanvasLayer(
+//                    (int) (WIDTH / physUnitPerScreenUnit),
+//                    (int) (HEIGHT / physUnitPerScreenUnit));
+//            graphics().rootLayer().add(canvasLayer);
+//            debugDraw = new DebugDrawBox2D();
+//            debugDraw.setCanvas(canvasLayer);
+//            debugDraw.setFlipY(false);
+//            debugDraw.setStrokeAlpha(150);
+//            debugDraw.setFillAlpha(75);
+//            debugDraw.setStrokeWidth(2.0f);
+//            debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit
+//                    | DebugDraw.e_aabbBit);
+//            debugDraw.setCamera(0, 0, 1f / physUnitPerScreenUnit);
+//            world.setDebugDraw(debugDraw);
+//        }
         System.out.println("End of init");
         initBoards();
     }
