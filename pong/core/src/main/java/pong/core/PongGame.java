@@ -36,7 +36,7 @@ public class PongGame implements Game {
     // main layer that holds the world. note: this gets scaled to world space
     GroupLayer worldLayer;
     // main world
-    public static int WINNING_SCORE = 6;    // added JT
+    public static int WINNING_SCORE = 2;    // added JT
     PongWorld world = null;
     boolean worldLoaded = false;
     public Bat bat;
@@ -69,12 +69,21 @@ public class PongGame implements Game {
     }
 
     public void autoServe() {
-        resetBatPos();
+        boolean ended = false;
+        try {
+            ended = world.arbiter.checkForGameEnding();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ball.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2);
-        startGame();
+        resetBatPos();
+        if (ended) {
+            reset();
+        } else {
+            startGame();
+        }
     }
 
-    
     @Override
     public void init() {
         System.out.println("Hello");
@@ -108,7 +117,7 @@ public class PongGame implements Game {
             world.add(ball);
             ballLoaded = true;
             aiBot = new DealWithAiBot(ball, world, botBat);
-            
+
             // hook up our pointer listener
             pointer().setListener(new Pointer.Adapter() {
 
@@ -142,9 +151,7 @@ public class PongGame implements Game {
                         case SPACE:
                             if (state == GameState.BeforeStart) {
                                 startGame();
-                            } 
-                            else 
-                                if (state == GameState.GameOver) {
+                            } else if (state == GameState.GameOver) {
                                 reset();
                                 startGame();
                             }
@@ -236,15 +243,15 @@ public class PongGame implements Game {
     }
 
     public void pauseGame() {
-            
+
         stopMovingParts();
         if (state == GameState.Paused) {
             world.messageBoard.setMessage("Paused");
         } else {
             world.messageBoard.setMessage("       ");
-        }        
+        }
     }
-    
+
     public void stopMovingParts() {
         if (state == GameState.GameOver || state == GameState.BeforeStart) {
             return;
@@ -254,7 +261,7 @@ public class PongGame implements Game {
             System.out.println("Before speeed");
             ballSpeedOrig = new Vec2(ball.getBody().getLinearVelocity());
             botBatSpeedOrig = new Vec2(botBat.getBody().getLinearVelocity());
-     
+
             bat.setLinearVelocity(0, 0);
             ball.setLinearVelocity(0, 0);
             botBat.setLinearVelocity(0, 0);
@@ -275,17 +282,15 @@ public class PongGame implements Game {
         bat.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT - BAT_MARGIN);
         botBat.setPos(PongWorld.WIDTH / 2, BAT_MARGIN);
     }
-    
+
     public void setGameState(GameState state) {
         this.state = state;
     }
 
     public int getBatMargin() {
         return this.BAT_MARGIN;
-    }    
+    }
 
-    
-    
     @Override
     public void paint(float alpha) {
         if (worldLoaded) {
@@ -323,8 +328,6 @@ public class PongGame implements Game {
 //            }
 //        }
 //    }
-
-    
     public void gameOver() {
         world.messageBoard.setMessage("Game over Insert coin");
         stopMovingParts();
