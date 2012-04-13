@@ -47,13 +47,13 @@ public class PongWorld implements ContactListener {
     public GroupLayer staticLayerBack;
     public GroupLayer dynamicLayer;
     // scale difference between screen space (pixels) and world space (physics).
-    public static final float physUnitPerScreenUnit = (float)1.0/(640.0f/40.0f);
+    public static final float physUnitPerScreenUnit = (float) 1.0 / (640.0f / 40.0f);
     // size of world
     static public final int WIDTH = 40;
     static public final int HEIGHT = 30;
     // box2d object containing physics world
     protected World world;
-    public Ground  ground;
+    public Ground ground;
     public Ceiling ceiling;
     public ScoreBoard playerScoreBoard;
     public ScoreBoard botScoreBoard;
@@ -64,6 +64,7 @@ public class PongWorld implements ContactListener {
     private static boolean showDebugDraw = false;
     private DebugDrawBox2D debugDraw;
     private final PongGame game;
+    public final Arbiter arbiter;
 
     public PongWorld(PongGame game, GroupLayer scaledLayer) {
         this.game = game;
@@ -80,13 +81,13 @@ public class PongWorld implements ContactListener {
         world.setContactListener(this);
 
         // create the ground
-        ground = new Ground(this, world, WIDTH/2 , HEIGHT, 0);
+        ground = new Ground(this, world, WIDTH / 2, HEIGHT, 0);
         add(ground);
         ground.setGame(game);
-        
-        
+
+
         //create the ceiling
-        ceiling = new Ceiling(this, world, WIDTH/2, 0f, 0f);
+        ceiling = new Ceiling(this, world, WIDTH / 2, 0f, 0f);
         add(ceiling);
         ceiling.setGame(game);
         // create the ceil
@@ -121,13 +122,17 @@ public class PongWorld implements ContactListener {
 //            debugDraw.setCamera(0, 0, 1f / physUnitPerScreenUnit);
 //            world.setDebugDraw(debugDraw);
 //        }
-        System.out.println("End of init");
         initBoards();
+        arbiter = new Arbiter();
+        arbiter.game = game;
+        arbiter.botScoreBoard = botScoreBoard;
+        arbiter.playerScoreBoard = playerScoreBoard;
+        System.out.println("End of init");
     }
-  
+
     private void initBoards() {
         Font font = graphics().createFont("Helvetica", Font.Style.PLAIN, 64);
-        messageBoard = new MessageBoard(font, new Vec2(14,7), 15f, 20f, 0xFFCCCCCC);
+        messageBoard = new MessageBoard(font, new Vec2(14, 7), 15f, 20f, 0xFFCCCCCC);
         font = graphics().createFont("Helvetica", Font.Style.PLAIN, 36);
         playerScoreBoard = new ScoreBoard(font, new Vec2(17, 2), 2f, 3f, 0xFFCCCCCC);
         botScoreBoard = new ScoreBoard(font, new Vec2(21, 2), 2f, 3f, 0xFFCCCCCC);
@@ -141,7 +146,7 @@ public class PongWorld implements ContactListener {
     public PongGame getGame() {
         return this.game;
     }
-    
+
     public void update(float delta) {
         for (Entity e : entities) {
             e.update(delta);

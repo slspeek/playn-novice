@@ -108,23 +108,7 @@ public class Bat extends DynamicPhysicsEntity implements
     @Override
     public void contact(PhysicsEntity other) {
         ding.play();
-        // added JT: stop score counting and set GameState op GameOver
-        if (pongWorld.botScoreBoard.getScore()    == PongGame.WINNING_SCORE ||
-            pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE   ) 
-        {
-            game.stopMovingParts();
-            game.setGameState(GameState.GameOver);
-            game.resetBatPos();
-
-            if (pongWorld.playerScoreBoard.getScore() == PongGame.WINNING_SCORE) {
-                Playerwinssnd.play();
-                return;
-            }
-        }
-        
-        //scoreBoard.increaseScore();
-        
-        if (this == game.bat) 
+      if (this == game.bat) 
         {
             System.out.println("player bat contacted, AI started");
             //Give the computer a chance
