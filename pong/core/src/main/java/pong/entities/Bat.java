@@ -20,10 +20,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import static playn.core.PlayN.assetManager;
 import playn.core.Sound;
-import pong.core.GameState;
-import pong.core.PongGame;
-import pong.core.PongWorld;
-import pong.core.ScoreBoard;
+import pong.core.*;
 
 /**
  * Our Bat who bounces the Ball.
@@ -32,24 +29,18 @@ import pong.core.ScoreBoard;
 public class Bat extends DynamicPhysicsEntity implements
         PhysicsEntity.HasContactListener {
 
-    public static String TYPE = "Bat";
-    Sound ding, Playerwinssnd;
-    PongWorld   pongWorld;
-    ScoreBoard  scoreBoard;
-    private PongGame    game;
+    private static String TYPE = "Bat";
+    private final Sound ding;
+    private final boolean isPlayer;
+    private final DealWithAiBot dealAI;
 
     public Bat(final PongWorld pongWorld, World world, float x, float y,
-            float angle) {
+            float angle, DealWithAiBot dealAI, boolean isPlayer) {
         super(pongWorld, world, x, y, angle);
-        this.pongWorld = pongWorld;
-        this.game = pongWorld.getGame();
         // load a sound that we'll play when placing sprites
         ding = assetManager().getSound("images/Pong-Bathit"); // ball hits bat
-        Playerwinssnd = assetManager().getSound("images/Pong-Playerwin"); // Player wins sound
-    }
-    
-    public void setScoreBoard(ScoreBoard board) {
-        this.scoreBoard = board;
+        this.isPlayer  = isPlayer;
+        this.dealAI = dealAI;
     }
 
     @Override
@@ -101,22 +92,17 @@ public class Bat extends DynamicPhysicsEntity implements
     @Override
     public void paint(float alpha) {
         canvas.setFillColor(0xFFFF0000);
-        canvas.fillRect(-getWidth()/2, 0, getWidth(), getHeight());
+        canvas.fillRect(-getWidth() / 2, 0, getWidth(), getHeight());
         super.paint(alpha);
     }
 
     @Override
     public void contact(PhysicsEntity other) {
         ding.play();
-      if (this == game.bat) 
-        {
+        if (isPlayer) {
             System.out.println("player bat contacted, AI started");
-            //Give the computer a chance
-            game.aiBot.calcAiBot();
-            
+            dealAI.calcAiBot();
         }
-        
-        
         Vec2 velocity = other.getBody().getLinearVelocity();
         Vec2 newSpeed = newSpeed(velocity);
         other.getBody().setLinearVelocity(newSpeed);

@@ -1,19 +1,12 @@
 package pong.core;
 
-import static playn.core.PlayN.assetManager;
-import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.pointer;
 
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.joints.LineJoint;
-import org.jbox2d.dynamics.joints.LineJointDef;
 
 import playn.core.Game;
-import playn.core.GroupLayer;
-import playn.core.Image;
-import playn.core.ImageLayer;
 import playn.core.Keyboard;
 import playn.core.PlayN;
 import playn.core.Pointer;
@@ -26,27 +19,39 @@ import pong.entities.Bat;
  * @author youssef
  *
  */
-public class PongGame implements Game {
+public class PongGame implements Game, IPongGame {
 
-    public static final float MAXBATSPEED = 12;
-    public static final int DELTA = 6;
-    public Vec2 ballSpeedOrig, batSpeedOrig, botBatSpeedOrig;
-    ImageLayer bgLayer;
-    float INITIAL_BALL_SPEED = 10f;
-    // main layer that holds the world. note: this gets scaled to world space
-    GroupLayer worldLayer;
-    // main world
-    public static int WINNING_SCORE = 2;    // added JT
-    PongWorld world = null;
-    boolean worldLoaded = false;
-    public Bat bat;
-    Bat botBat;    ////////////
-    Ball ball;
-    LineJoint joint;
-    protected boolean ballLoaded;
-    private int BAT_MARGIN = 1;
+    private static final float MAXBATSPEED = 12;
+    private static final int DELTA = 6;
+    private final float INITIAL_BALL_SPEED = 10f;
+    private final static int WINNING_SCORE = 2;    
+    private final Paintable world;
+    private final Bat playerBat;
+    private final Bat botBat;  
+    private final Ball ball;
+    private final int BAT_MARGIN = 1;
+    private final DealWithAiBot aiBot;
+    private final Arbiter arbiter;
+    private Vec2 ballSpeedOrig, batSpeedOrig, botBatSpeedOrig;
+    private boolean ballLoaded;
     private GameState state = GameState.BeforeStart;
-    public DealWithAiBot aiBot;
+    private final MessageBoard messageBoard;
+    
+    public PongGame(DealWithAiBot aiBot,
+            Arbiter arbiter,
+            Bat botBat, 
+            Bat playerBat,
+            Ball ball,
+            Paintable pongWorld,
+            MessageBoard messageBoard) {
+        this.arbiter = arbiter;
+        this.aiBot = aiBot;
+        this.botBat = botBat;
+        this.playerBat = playerBat;
+        this.ball = ball;
+        this.world = pongWorld;
+        this.messageBoard = messageBoard;
+    }
 
     private void startGame() {
         Random r = new Random();
@@ -55,23 +60,22 @@ public class PongGame implements Game {
         float vy = (float) (INITIAL_BALL_SPEED * Math.sin(Math.PI / 4 + alfa));
 
         ball.setLinearVelocity(vx, vy);
-        world.messageBoard.setMessage("                  ");
+        setMessage("                  ");
         state = GameState.Running;
     }
 
     private void reset() {
-        world.botScoreBoard.resetScore();
-        world.playerScoreBoard.resetScore();
-        resetBatPos();
+        arbiter.resetScoreBoards();
         ball.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2);
-        world.messageBoard.setMessage("Press space to begin");
+        setMessage("Press space to begin");
         state = GameState.BeforeStart;
     }
 
+    @Override
     public void autoServe() {
         boolean ended = false;
         try {
-            ended = world.arbiter.checkForGameEnding();
+            ended = arbiter.checkForGameEnding();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,36 +92,6 @@ public class PongGame implements Game {
     public void init() {
         System.out.println("Hello");
         try {
-            // load and show our background image
-            Image bgImage = assetManager().getImage("images/Horizontal_Line.png");
-            bgLayer = graphics().createImageLayer(bgImage);
-            graphics().rootLayer().add(bgLayer);
-
-            // create our world layer (scaled to "world space")
-            worldLayer = graphics().createGroupLayer();
-            worldLayer.setScale(1f / PongWorld.physUnitPerScreenUnit);
-            graphics().rootLayer().add(worldLayer);
-
-            world = new PongWorld(this, worldLayer);
-            worldLoaded = true;
-
-            bat = new Bat(world, world.world, PongWorld.WIDTH / 2,
-                    PongWorld.HEIGHT - BAT_MARGIN, 0);
-            world.add(bat);
-            bat.setScoreBoard(world.playerScoreBoard);
-
-            botBat = new Bat(world, world.world, PongWorld.WIDTH / 2,
-                    BAT_MARGIN, 0);
-            world.add(botBat);
-            botBat.setScoreBoard(world.botScoreBoard);
-
-
-            ball = new Ball(world, world.world,
-                    PongWorld.WIDTH / 2, PongWorld.HEIGHT / 2, 0);
-            world.add(ball);
-            ballLoaded = true;
-            aiBot = new DealWithAiBot(ball, world, botBat);
-
             // hook up our pointer listener
             pointer().setListener(new Pointer.Adapter() {
 
@@ -128,17 +102,17 @@ public class PongGame implements Game {
                         reset();
                     }
                     float x = event.x();
-                    Vec2 oldPos = bat.getBody().getPosition();
+                    Vec2 oldPos = playerBat.getBody().getPosition();
                     Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
-                    bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
+                    playerBat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
                 }
 
                 @Override
                 public void onPointerDrag(Pointer.Event event) {
                     float x = event.x();
-                    Vec2 oldPos = bat.getBody().getPosition();
+                    Vec2 oldPos = playerBat.getBody().getPosition();
                     Vec2 newPos = new Vec2(Math.max(0, x), oldPos.y);
-                    bat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
+                    playerBat.setPos(newPos.x * PongWorld.physUnitPerScreenUnit, newPos.y);
 
                 }
             });
@@ -157,13 +131,13 @@ public class PongGame implements Game {
                             }
                             break;
                         case LEFT:
-                            increaseSpeed(false, bat);
+                            increaseSpeed(false, playerBat);
                             break;
                         case RIGHT:
-                            increaseSpeed(true, bat);
+                            increaseSpeed(true, playerBat);
                             break;
                         case X:
-                            bat.getBody().setLinearVelocity(new Vec2(0, 0));
+                            playerBat.getBody().setLinearVelocity(new Vec2(0, 0));
                             break;
                         case Q:
                             quit();
@@ -180,8 +154,6 @@ public class PongGame implements Game {
                 public void onKeyUp(Keyboard.Event event) {
                 }
             });
-            initPlayerBatJoint();
-            initBotBatJoint();
             reset();
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,72 +176,36 @@ public class PongGame implements Game {
         return new Vec2(newVx, oldSpeed.y);
     }
 
-    private void initPlayerBatJoint() {
-        LineJointDef jd = new LineJointDef();
-
-        // Bouncy limit
-        Vec2 axis = new Vec2(1.0f, 0.0f);
-        axis.normalize();
-        jd.initialize(world.ground.getBody(), bat.getBody(), new Vec2(0.0f,
-                8.5f), axis);
-
-        jd.motorSpeed = 0.0f;
-        jd.maxMotorForce = 100.0f;
-        jd.enableMotor = true;
-        jd.lowerTranslation = -4.0f;
-        jd.upperTranslation = 4.0f;
-        // jd.enableLimit = true;
-        joint = (LineJoint) world.world.createJoint(jd);
-
-    }
-
-    private void initBotBatJoint() {
-        LineJointDef jd = new LineJointDef();
-
-        // Bouncy limit
-        Vec2 axis = new Vec2(1.0f, 0.0f);
-        axis.normalize();
-        jd.initialize(world.ceiling.getBody(), botBat.getBody(), new Vec2(0.0f,
-                8.5f), axis);
-
-        jd.motorSpeed = 0.0f;
-        jd.maxMotorForce = 100.0f;
-        jd.enableMotor = true;
-        jd.lowerTranslation = -4.0f;
-        jd.upperTranslation = 4.0f;
-        // jd.enableLimit = true;
-        joint = (LineJoint) world.world.createJoint(jd);
-
-    }
-
+    @Override
     public void pauseGame() {
 
         stopMovingParts();
         if (state == GameState.Paused) {
-            world.messageBoard.setMessage("Paused");
+            setMessage("Paused");
         } else {
-            world.messageBoard.setMessage("       ");
+            setMessage("       ");
         }
     }
 
+    @Override
     public void stopMovingParts() {
         if (state == GameState.GameOver || state == GameState.BeforeStart) {
             return;
         }
         if (state != GameState.Paused) {
-            batSpeedOrig = new Vec2(bat.getBody().getLinearVelocity());
+            batSpeedOrig = new Vec2(playerBat.getBody().getLinearVelocity());
             System.out.println("Before speeed");
             ballSpeedOrig = new Vec2(ball.getBody().getLinearVelocity());
             botBatSpeedOrig = new Vec2(botBat.getBody().getLinearVelocity());
 
-            bat.setLinearVelocity(0, 0);
+            playerBat.setLinearVelocity(0, 0);
             ball.setLinearVelocity(0, 0);
             botBat.setLinearVelocity(0, 0);
             System.out.println("gamePaused true: " + ballSpeedOrig);
             //world.messageBoard.setMessage("Paused");
             state = GameState.Paused;
         } else {
-            bat.setLinearVelocity(batSpeedOrig.x, batSpeedOrig.y);
+            playerBat.setLinearVelocity(batSpeedOrig.x, batSpeedOrig.y);
             ball.setLinearVelocity(ballSpeedOrig.x, ballSpeedOrig.y);
             botBat.setLinearVelocity(botBatSpeedOrig.x, botBatSpeedOrig.y);
             System.out.println("gamePaused false: " + ballSpeedOrig);
@@ -278,11 +214,13 @@ public class PongGame implements Game {
         }
     }
 
+    @Override
     public void resetBatPos() {
-        bat.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT - BAT_MARGIN);
+        playerBat.setPos(PongWorld.WIDTH / 2, PongWorld.HEIGHT - BAT_MARGIN);
         botBat.setPos(PongWorld.WIDTH / 2, BAT_MARGIN);
     }
 
+    @Override
     public void setGameState(GameState state) {
         this.state = state;
     }
@@ -293,16 +231,12 @@ public class PongGame implements Game {
 
     @Override
     public void paint(float alpha) {
-        if (worldLoaded) {
             world.paint(alpha);
-        }
     }
 
     @Override
     public void update(float delta) {
-        if (worldLoaded) {
             world.update(delta);
-        }
     }
 
     @Override
@@ -313,24 +247,30 @@ public class PongGame implements Game {
     protected void quit() {
     }
 
-//    This method has been replaced by a class which method to calc ai for batBot
-//    is called in public method PongGame.update(float delta)    
-//    private void dealWithAIBotBat() {
-//        if (ball != null) {
-//            InterSector ai = new InterSector(PongWorld.WIDTH, PongWorld.HEIGHT);
-//            final Body body = ball.getBody();
-//            final Vec2 position = body.getPosition();
-//            final Vec2 linearVelocity = body.getLinearVelocity();
-//            if (linearVelocity.y < 0 && position.y > BAT_MARGIN && position.y < PongWorld.HEIGHT - 4 * BAT_MARGIN) 
-//            {
-//                Collision coll = ai.getCollision(position, linearVelocity, BAT_MARGIN);
-//                botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
-//            }
-//        }
-//    }
+    @Override
     public void gameOver() {
-        world.messageBoard.setMessage("Game over Insert coin");
+        setMessage("Game over Insert coin");
         stopMovingParts();
         state = GameState.GameOver;
+    }
+
+    @Override
+    public void increaseBotScore() {
+        arbiter.increaseBotScore();
+    }
+
+    @Override
+    public void increasePlayerScore() {
+        arbiter.increasePlayerScore();
+    }
+
+    @Override
+    public void resetScoreBoards() {
+        arbiter.resetScoreBoards();
+    }
+
+    @Override
+    public void setMessage(String message) {
+        messageBoard.setMessage(message);
     }
 }

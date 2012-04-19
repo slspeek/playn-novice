@@ -13,24 +13,31 @@ import static playn.core.PlayN.assetManager;
  */
 public class Arbiter {
 
-    ScoreBoard playerScoreBoard;
-    ScoreBoard botScoreBoard;
-    PongGame game;
-    Sound playerWins;
+    private final ScoreBoard playerScoreBoard;
+    private final ScoreBoard botScoreBoard;
+    private final Sound playerWins;
+    private final int WINNING_SCORE;
+    private IPongGame game;
 
-    Arbiter() {
+    public Arbiter(ScoreBoard playerScoreBoard, ScoreBoard botScoreBoard, int WINNING_SCORE) {
         playerWins = assetManager().getSound("images/Pong-Playerwin"); // Player wins sound
+        this.playerScoreBoard = playerScoreBoard;
+        this.botScoreBoard = botScoreBoard;
+        this.WINNING_SCORE = WINNING_SCORE;
     }
 
+    public void setGame(IPongGame game) {
+        this.game = game;
+    }
+    
     public boolean checkForGameEnding() {
-        // added JT: stop score counting and set GameState op GameOver
-        if (botScoreBoard.getScore() >= PongGame.WINNING_SCORE
-                || playerScoreBoard.getScore() >= PongGame.WINNING_SCORE) {
+        if (botScoreBoard.getScore() >= WINNING_SCORE
+                || playerScoreBoard.getScore() >= WINNING_SCORE) {
             game.stopMovingParts();
             game.setGameState(GameState.GameOver);
             game.resetBatPos();
 
-            if (playerScoreBoard.getScore() == PongGame.WINNING_SCORE) {
+            if (playerScoreBoard.getScore() == WINNING_SCORE) {
                 playerWins.play();
             }
             return true;
@@ -38,4 +45,18 @@ public class Arbiter {
             return false;
         }
     }
+    
+     public void increaseBotScore() {
+         botScoreBoard.increaseScore();
+     }
+    
+    public void increasePlayerScore() {
+        playerScoreBoard.increaseScore();
+    }
+    
+    public void resetScoreBoards() {
+        playerScoreBoard.resetScore();
+        botScoreBoard.resetScore();
+    }
+    
 }

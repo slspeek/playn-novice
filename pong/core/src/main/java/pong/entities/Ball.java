@@ -36,13 +36,15 @@ import pong.core.PongWorld;
 public class Ball extends DynamicPhysicsEntity implements
         PhysicsEntity.HasContactListener {
 
-    public static String TYPE = "Ball";
-    Sound Ballsidesnd;  // added JT for side-edge sound
+    private final static String TYPE = "Ball";
+    private final Sound ballHitsSideSound;
+    private  float radius = 2;
     
-    public Ball(PongWorld pongWorld, World world, float x, float y, float angle) {
+    public Ball(PongWorld pongWorld, World world, float x, float y, float angle, float radius) {
         super(pongWorld, world, x, y, angle);
-        Ballsidesnd = assetManager().getSound("images/Pong-Ballside"); // added JT for side-edge sound
-        
+        ballHitsSideSound = assetManager().getSound("images/Pong-Ballside"); // added JT for side-edge sound
+        this.radius = radius;
+        System.out.println("getRadius: " + getRadius() + " in UNITS " + getRadiusInUnits());
     }
 
     @Override
@@ -74,11 +76,12 @@ public class Ball extends DynamicPhysicsEntity implements
         canvas.fillCircle(getWidth()/2, getHeight()/2, getRadius());
         layer.setScale(PongWorld.physUnitPerScreenUnit);
         
+        //FIXME: move to contact of wall object
         // added JT for side-edge sound (next 3 code lines)
         float ballX = this.getBody().getPosition().x;
         if (ballX == 0.629375f || (ballX <= 39.07626f && ballX >= 38.852028f)) {    
         //if (ballX == (float) this.getBody().getWidth()/2) {    
-            Ballsidesnd.play();
+            ballHitsSideSound.play();
             // System.out.println("Ball hits edge: " + this.getBody().getPosition().x);
         }    
 
@@ -101,7 +104,7 @@ public class Ball extends DynamicPhysicsEntity implements
     }
 
     public float getRadiusInUnits() {
-        return 2f;
+        return Math.max(1,radius);
     }
     @Override
     public void contact(PhysicsEntity other) {
