@@ -29,6 +29,7 @@ public abstract class Entity {
         this.x = px;
         this.y = py;
         this.angle = pangle;
+        System.out.println("Grootes: " + getWidth() + "  " + getHeight());
         CanvasImage image = graphics().createImage((int)getWidth(), (int)getHeight());
         canvas = image.canvas();
         layer = graphics().createImageLayer(image);

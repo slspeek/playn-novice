@@ -21,17 +21,12 @@ import java.util.List;
 import java.util.Stack;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
-import org.jbox2d.callbacks.DebugDraw;
 import org.jbox2d.collision.Manifold;
-import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
-import playn.core.CanvasLayer;
 import playn.core.DebugDrawBox2D;
-import playn.core.Font;
 import playn.core.GroupLayer;
 import static playn.core.PlayN.graphics;
 import pong.entities.*;
@@ -42,32 +37,27 @@ import pong.entities.*;
  * @author youssef
  *
  */
-public class PongWorld implements ContactListener {
+public class PongWorld implements ContactListener, Paintable {
 
     public GroupLayer staticLayerBack;
     public GroupLayer dynamicLayer;
-    // scale difference between screen space (pixels) and world space (physics).
-    public static final float physUnitPerScreenUnit = (float) 1.0 / (640.0f / 40.0f);
-    // size of world
+    public static final float physUnitPerScreenUnit = (float) (1.0f / (640.0f / 40.0f));
     static public final int WIDTH = 40;
     static public final int HEIGHT = 30;
-    // box2d object containing physics world
-    protected World world;
-    public Ground ground;
-    public Ceiling ceiling;
-    public ScoreBoard playerScoreBoard;
-    public ScoreBoard botScoreBoard;
-    public MessageBoard messageBoard;
+    final private World world;
+
+    public World getWorld() {
+        return world;
+    }
+
     private List<Entity> entities = new ArrayList<Entity>(0);
     private HashMap<Body, PhysicsEntity> bodyEntityLUT = new HashMap<Body, PhysicsEntity>();
     private Stack<Contact> contacts = new Stack<Contact>();
     private static boolean showDebugDraw = false;
     private DebugDrawBox2D debugDraw;
-    private final PongGame game;
-    public final Arbiter arbiter;
+    
 
-    public PongWorld(PongGame game, GroupLayer scaledLayer) {
-        this.game = game;
+    public PongWorld(GroupLayer scaledLayer, int screenWidth, int screenHeight) {
         staticLayerBack = graphics().createGroupLayer();
         scaledLayer.add(staticLayerBack);
         dynamicLayer = graphics().createGroupLayer();
@@ -79,74 +69,9 @@ public class PongWorld implements ContactListener {
         world.setWarmStarting(true);
         world.setAutoClearForces(true);
         world.setContactListener(this);
-
-        // create the ground
-        ground = new Ground(this, world, WIDTH / 2, HEIGHT, 0);
-        add(ground);
-        ground.setGame(game);
-
-
-        //create the ceiling
-        ceiling = new Ceiling(this, world, WIDTH / 2, 0f, 0f);
-        add(ceiling);
-        ceiling.setGame(game);
-        // create the ceil
-//        Body ceiling = world.createBody(new BodyDef());
-//        PolygonShape ceilingShape = new PolygonShape();
-//        ceilingShape.setAsEdge(new Vec2(0, 1), new Vec2(WIDTH, 1));
-//        ceiling.createFixture(ceilingShape, 0.0f);
-
-        // create the walls
-        Body wallLeft = world.createBody(new BodyDef());
-        PolygonShape wallLeftShape = new PolygonShape();
-        wallLeftShape.setAsEdge(new Vec2(0, 0), new Vec2(0, HEIGHT));
-        wallLeft.createFixture(wallLeftShape, 0.0f);
-        Body wallRight = world.createBody(new BodyDef());
-        PolygonShape wallRightShape = new PolygonShape();
-        wallRightShape.setAsEdge(new Vec2(WIDTH, 0), new Vec2(WIDTH, HEIGHT));
-        wallRight.createFixture(wallRightShape, 0.0f);
-
-//        if (showDebugDraw) {
-//            CanvasLayer canvasLayer = graphics().createCanvasLayer(
-//                    (int) (WIDTH / physUnitPerScreenUnit),
-//                    (int) (HEIGHT / physUnitPerScreenUnit));
-//            graphics().rootLayer().add(canvasLayer);
-//            debugDraw = new DebugDrawBox2D();
-//            debugDraw.setCanvas(canvasLayer);
-//            debugDraw.setFlipY(false);
-//            debugDraw.setStrokeAlpha(150);
-//            debugDraw.setFillAlpha(75);
-//            debugDraw.setStrokeWidth(2.0f);
-//            debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit
-//                    | DebugDraw.e_aabbBit);
-//            debugDraw.setCamera(0, 0, 1f / physUnitPerScreenUnit);
-//            world.setDebugDraw(debugDraw);
-//        }
-        initBoards();
-        arbiter = new Arbiter();
-        arbiter.game = game;
-        arbiter.botScoreBoard = botScoreBoard;
-        arbiter.playerScoreBoard = playerScoreBoard;
-        System.out.println("End of init");
     }
 
-    private void initBoards() {
-        Font font = graphics().createFont("Helvetica", Font.Style.PLAIN, 64);
-        messageBoard = new MessageBoard(font, new Vec2(14, 7), 15f, 20f, 0xFFCCCCCC);
-        font = graphics().createFont("Helvetica", Font.Style.PLAIN, 36);
-        playerScoreBoard = new ScoreBoard(font, new Vec2(17, 2), 2f, 3f, 0xFFCCCCCC);
-        botScoreBoard = new ScoreBoard(font, new Vec2(21, 2), 2f, 3f, 0xFFCCCCCC);
-        dynamicLayer.add(playerScoreBoard.getLayer());
-        dynamicLayer.add(messageBoard.getLayer());
-        dynamicLayer.add(botScoreBoard.getLayer());
-        //messageBoard.setMessage("Press space to begin");
-    }
-
-    // added JT
-    public PongGame getGame() {
-        return this.game;
-    }
-
+    @Override
     public void update(float delta) {
         for (Entity e : entities) {
             e.update(delta);
@@ -156,11 +81,8 @@ public class PongWorld implements ContactListener {
         processContacts();
     }
 
+    @Override
     public void paint(float delta) {
-//        if (showDebugDraw) {
-//            debugDraw.getCanvas().canvas().clear();
-//            world.drawDebugData();
-//        }
         for (Entity e : entities) {
             e.paint(delta);
         }
@@ -174,7 +96,6 @@ public class PongWorld implements ContactListener {
         }
     }
 
-    // handle contacts out of physics loop
     public void processContacts() {
         while (!contacts.isEmpty()) {
             Contact contact = contacts.pop();
@@ -194,23 +115,19 @@ public class PongWorld implements ContactListener {
         }
     }
 
-    // Box2d's begin contact
     @Override
     public void beginContact(Contact contact) {
         contacts.push(contact);
     }
 
-    // Box2d's end contact
     @Override
     public void endContact(Contact contact) {
     }
 
-    // Box2d's pre solve
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
     }
 
-    // Box2d's post solve
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
     }

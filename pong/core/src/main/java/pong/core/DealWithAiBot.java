@@ -15,21 +15,28 @@ import pong.entities.Bat;
  */
 public class DealWithAiBot {
 
-    private PongGame game;
-    private PongWorld pongWorld;
+    final private int BAT_MARGIN;
+    final private InterSector interSector;
     private Ball ball;
     private Bat botBat;
-    public int BAT_MARGIN;
 
-    public DealWithAiBot(Ball ball, PongWorld pongWorld, Bat botBat) {
-        this.game = pongWorld.getGame();
-        this.pongWorld = pongWorld;
+    public void setBall(Ball ball) {
         this.ball = ball;
+    }
+
+    public void setBotBat(Bat botBat) {
         this.botBat = botBat;
-        BAT_MARGIN = game.getBatMargin();
+    }
+
+    public DealWithAiBot(int BAT_MARGIN, InterSector interSector) {
+        this.BAT_MARGIN = BAT_MARGIN;
+        this.interSector = interSector;
     }
 
     public void calcAiBot() {
+        if (botBat == null || ball == null) {
+            throw new IllegalStateException("First set ball and botbat in DealWithAiBot");
+        }
         try {
             Random random = new Random();
             int i = random.nextInt(6);
@@ -37,11 +44,11 @@ public class DealWithAiBot {
                 System.out.println("Skipping AI");
                 return;
             }
-            InterSector ai = new InterSector(pongWorld.WIDTH, pongWorld.HEIGHT, ball.getRadiusInUnits());
+            //InterSector ai = new InterSector(pongWorld.WIDTH, pongWorld.HEIGHT, ball.getRadiusInUnits());
             final Body body = ball.getBody();
             final Vec2 position = body.getPosition();
             final Vec2 linearVelocity = body.getLinearVelocity();
-            Collision coll = ai.getPrediction(position, linearVelocity, BAT_MARGIN);
+            Collision coll = interSector.getPrediction(position, linearVelocity, BAT_MARGIN);
             botBat.setPos(coll.getPosition().x, botBat.getBody().getPosition().y);
         } catch (Exception e) {
             e.printStackTrace();

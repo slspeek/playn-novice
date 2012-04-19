@@ -2,7 +2,6 @@ package pong.core;
 
 import static playn.core.PlayN.graphics;
 
-import java.awt.Color;
 import org.jbox2d.common.Vec2;
 
 import playn.core.CanvasLayer;
@@ -23,7 +22,6 @@ public class TextField {
     private final float height;
     private final int color;
     private CanvasLayer layer;
-    private String message;
     private TextLayout layout;
 
     public TextField(Font font, Vec2 position, float width, float height, int color) {
@@ -40,9 +38,7 @@ public class TextField {
     }
 
     public void setMessage(String message) {
-        this.message = message;
-        TextFormat format = new TextFormat().withFont(font).withTextColor(color)
-                .withWrapping(width/PongWorld.physUnitPerScreenUnit, TextFormat.Alignment.CENTER);
+        TextFormat format = new TextFormat().withFont(font).withTextColor(color).withWrapping(width / PongWorld.physUnitPerScreenUnit, TextFormat.Alignment.CENTER);
         layout = graphics().layoutText(message, format);
         layer.canvas().clear();
         layer.canvas().setFillColor(0xFFFFFFFF);
@@ -56,10 +52,10 @@ public class TextField {
 
     private CanvasLayer createTextLayer() {
         layer = graphics().createCanvasLayer(
-                (int) Math.ceil(width/PongWorld.physUnitPerScreenUnit),
-                (int) Math.ceil(height/PongWorld.physUnitPerScreenUnit));
+                (int) Math.ceil(width / PongWorld.physUnitPerScreenUnit),
+                (int) Math.ceil(height / PongWorld.physUnitPerScreenUnit));
         layer.setTranslation(position.x, position.y);
-        
+
         layer.setScale(PongWorld.physUnitPerScreenUnit);
         return layer;
     }
