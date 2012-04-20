@@ -39,7 +39,7 @@ public class PongGameFactory {
     private final int WIDTH = 40;
     private final int HEIGHT = 30;
     private final int BAT_MARGIN = 1;
-    private final float BALL_RADIUS = 2f;
+    private final float BALL_RADIUS = 1f;
     private int WINNING_SCORE = 3;
 
     public PongGame get() {
@@ -84,7 +84,7 @@ public class PongGameFactory {
         botBat = new Bat(pongWorld, pongWorld.getWorld(), WIDTH / 2, BAT_MARGIN, 0, aiBot, false);
         pongWorld.add(botBat);
 
-        ball = new Ball(pongWorld, pongWorld.getWorld(), WIDTH / 2, HEIGHT / 2, 0, 10);
+        ball = new Ball(pongWorld, pongWorld.getWorld(), WIDTH / 2, HEIGHT / 2, 0, BALL_RADIUS);
         pongWorld.add(ball);
 
         aiBot.setBall(ball);

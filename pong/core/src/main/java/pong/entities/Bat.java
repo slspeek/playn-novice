@@ -41,6 +41,8 @@ public class Bat extends DynamicPhysicsEntity implements
         ding = assetManager().getSound("images/Pong-Bathit"); // ball hits bat
         this.isPlayer  = isPlayer;
         this.dealAI = dealAI;
+         postConstructionInit(pongWorld);
+        postPhysicsContructorInit(world, x, y, angle);
     }
 
     @Override
