@@ -24,16 +24,22 @@ public abstract class Entity {
     ImageLayer layer;
     Canvas canvas;
     float x, y, angle;
+    private final PongWorld pongWorld;
 
-    public Entity(final PongWorld peaWorld, float px, float py, float pangle) {
+    public Entity(final PongWorld pongWorld, float px, float py, float pangle) {
         this.x = px;
         this.y = py;
         this.angle = pangle;
+        this.pongWorld = pongWorld;
+        //postConstructionInit(pongWorld);
+    }
+
+    protected void postConstructionInit(final PongWorld pongWorld) {
         System.out.println("Grootes: " + getWidth() + "  " + getHeight());
         CanvasImage image = graphics().createImage((int)getWidth(), (int)getHeight());
         canvas = image.canvas();
         layer = graphics().createImageLayer(image);
-        initPreLoad(peaWorld);
+        initPreLoad(pongWorld);
                 
         canvas.setFillColor(0xFFE00EEE);
         canvas.fillRect(0, 0, canvas.width(), canvas.height());

@@ -28,9 +28,13 @@ public abstract class DynamicPhysicsEntity extends Entity implements PhysicsEnti
 
   public DynamicPhysicsEntity(PongWorld peaWorld, World world, float x, float y, float angle) {
     super(peaWorld, x, y, angle);
-    body = initPhysicsBody(world, x, y, angle);
-    setPos(x, y);
-    setAngle(angle);
+    //postContructorInit(world, x, y, angle);
+  }
+
+  protected void postPhysicsContructorInit(World world, float x, float y, float angle) {
+        body = initPhysicsBody(world, x, y, angle);
+        setPos(x, y);
+        setAngle(angle);
   }
 
   abstract Body initPhysicsBody(World world, float x, float y, float angle);

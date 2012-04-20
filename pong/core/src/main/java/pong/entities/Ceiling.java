@@ -23,6 +23,8 @@ public class Ceiling extends StaticPhysicsEntity implements
     public Ceiling(PongWorld pongWorld, World world, float x, float y,
             float angle) {
         super(pongWorld, world, x, y, angle);
+         postConstructionInit(pongWorld);
+        //postPhysicsContructorInit(world, x, y, angle);
     }
 
     private IPongGame game;

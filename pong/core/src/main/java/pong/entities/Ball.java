@@ -44,6 +44,8 @@ public class Ball extends DynamicPhysicsEntity implements
         super(pongWorld, world, x, y, angle);
         ballHitsSideSound = assetManager().getSound("images/Pong-Ballside"); // added JT for side-edge sound
         this.radius = radius;
+        postConstructionInit(pongWorld);
+        postPhysicsContructorInit(world, x, y, angle);
         System.out.println("getRadius: " + getRadius() + " in UNITS " + getRadiusInUnits());
     }
 
@@ -104,7 +106,7 @@ public class Ball extends DynamicPhysicsEntity implements
     }
 
     public float getRadiusInUnits() {
-        return Math.max(1,radius);
+        return radius;
     }
     @Override
     public void contact(PhysicsEntity other) {
