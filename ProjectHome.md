@@ -1,0 +1,1 @@
+We zullen in kleine stapjes Java, Maven, Eclipse en Mercurial leren gebruiken, om zo een eenvoudig spelletje in Playn te schrijven.
